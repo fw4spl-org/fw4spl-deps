@@ -93,4 +93,10 @@ ExternalProject_Add(
     BUILD_COMMAND ${ENV_WRAPPER} ${MAKE_QT} -f Makefile
     INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE_QT} -j1 -f Makefile install
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    STEP_TARGETS CopyConfigFileToInstall
     )
+
+ExternalProject_Add_Step(qt CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt4.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt4.cmake
+    COMMENT "Install configuration file"
+)

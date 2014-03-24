@@ -34,5 +34,10 @@ ExternalProject_Add(
     ${PATCH}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${HDF5_CMAKE_ARGS}
+    STEP_TARGETS CopyConfigFileToInstall
 )
 
+ExternalProject_Add_Step(hdf5 CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindHDF5.cmake ${CMAKE_INSTALL_PREFIX}/FindHDF5.cmake
+    COMMENT "Install Configuration file"
+)

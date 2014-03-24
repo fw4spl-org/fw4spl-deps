@@ -30,6 +30,7 @@ ENDIF()
 
 GET_CACHED_URL(http://freefr.dl.sourceforge.net/project/itk/itk/3.20/InsightToolkit-3.20.1.tar.gz CACHED_URL)
 SET(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+
 ExternalProject_Add(
     itk
     URL ${CACHED_URL}
@@ -38,6 +39,10 @@ ExternalProject_Add(
     DEPENDS zlib jpeg libpng tiff libxml vxl gdcm vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
+    STEP_TARGETS CopyConfigFileToInstall
 )
 
-
+ExternalProject_Add_Step(itk CopyConfigFileToInstall 
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-ITK.cmake ${CMAKE_INSTALL_PREFIX}/fw-ITK.cmake
+    COMMENT "Install configuration file"
+)

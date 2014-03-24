@@ -77,6 +77,7 @@ IF(WIN32)
         BINARY_DIR ${WX_SRC_DIR}/build/msw/
         BUILD_COMMAND ${MAKE} ${BUILD_CMD}
         INSTALL_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/install.bat
+	STEP_TARGETS CopyConfigFileToInstall
     )
 
 ELSE(WIN32)
@@ -105,6 +106,11 @@ ELSE(WIN32)
         BUILD_IN_SOURCE 1
         BUILD_COMMAND ${MAKE} install
         INSTALL_COMMAND ""
+        STEP_TARGETS CopyConfigFileToInstall
     )
 ENDIF(WIN32)
 
+ExternalProject_Add_Step(wxWidgets CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/fw-wxWidgets.cmake ${CMAKE_INSTALL_PREFIX}/fw-wxWidgets.cmake
+    COMMENT "Install configuration file"
+)

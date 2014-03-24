@@ -22,5 +22,12 @@ ExternalProject_Add(
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${CRYPTOPP_PATCH_DIR}/" "<SOURCE_DIR>/"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${CRYPTOPP_CMAKE_ARGS}
+    STEP_TARGETS CopyConfigFileToInstall
 )
+
+ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCryptoPP.cmake ${CMAKE_INSTALL_PREFIX}/FindCryptoPP.cmake
+    COMMENT "Install Configuration file"
+)
+
 

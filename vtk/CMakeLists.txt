@@ -59,6 +59,10 @@ ExternalProject_Add(
     DEPENDS zlib jpeg libpng tiff expat libxml qt
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${VTK_CMAKE_ARGS}
+    STEP_TARGETS CopyConfigFileToInstall
 )
 
-
+ExternalProject_Add_Step(vtk CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-VTK.cmake
+    COMMENT "Install configuration file"
+)

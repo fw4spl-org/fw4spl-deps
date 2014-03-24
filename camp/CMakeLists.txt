@@ -20,6 +20,12 @@ ExternalProject_Add(
     DEPENDS boost
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${CAMP_CMAKE_ARGS}
+    STEP_TARGETS CopyConfigFileToInstall
+)
+
+ExternalProject_Add_Step(camp CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/FindCAMP.cmake ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
+    COMMENT "Install configuration file"
 )
 
 

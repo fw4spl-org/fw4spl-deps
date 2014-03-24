@@ -31,6 +31,12 @@ ExternalProject_Add(
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${DCMTK_CMAKE_ARGS}
     DEPENDS tiff libpng 
+    STEP_TARGETS CopyConfigFileToInstall
+)
+
+ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindDCMTK.cmake ${CMAKE_INSTALL_PREFIX}/FindDCMTK.cmake
+    COMMENT "Install Configuration file"
 )
 
 

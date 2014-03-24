@@ -19,6 +19,7 @@ IF(WIN32)
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${CPPUNIT_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${CPPUNIT_CMAKE_ARGS}
+	STEP_TARGETS CopyConfigFileToInstall
     )
 ELSE()
     set(FIX_CONFIGURE)
@@ -40,6 +41,11 @@ ELSE()
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    )
+	STEP_TARGETS CopyConfigFileToInstall 
+   )
 ENDIF()
 
+ExternalProject_Add_Step(cppunit CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCppUnit.cmake ${CMAKE_INSTALL_PREFIX}/FindCppUnit.cmake
+    COMMENT "Install configuration file"
+)
