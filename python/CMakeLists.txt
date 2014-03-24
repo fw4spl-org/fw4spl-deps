@@ -29,6 +29,7 @@ IF(WIN32)
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${PYTHON_PATCH_DIR}/" "<SOURCE_DIR>/"
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${PYTHON_CMAKE_ARGS}
+        STEP_TARGETS CopyConfigFileToInstall
     )
 ELSE(WIN32)
     SET(CONFIGURE_CMD <SOURCE_DIR>/configure
@@ -54,5 +55,12 @@ ELSE(WIN32)
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
+        STEP_TARGETS CopyConfigFileToInstall
     )
 ENDIF(WIN32)
+
+
+ExternalProject_Add_Step(python CopyConfigFileToInstall
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-python.cmake ${CMAKE_INSTALL_PREFIX}/fw-python.cmake
+    COMMENT "Install configuration file"
+)

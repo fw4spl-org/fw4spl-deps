@@ -118,4 +118,11 @@ ExternalProject_Add(
     CONFIGURE_COMMAND ${BOOTSTRAP_CMD}
     BUILD_COMMAND <SOURCE_DIR>/b2 -j${NUMBER_OF_PARALLEL_BUILD} ${BOOST_ARGS} -sHOME=<SOURCE_DIR> install
     INSTALL_COMMAND ${BOOST_MOVE_DLL_CMD}
+    STEP_TARGETS CopyConfigFileToInstall
+)
+
+
+ExternalProject_Add_Step(boost CopyConfigFileToInstall
+    COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake
+    COMMENT "Install configuration file"
 )
