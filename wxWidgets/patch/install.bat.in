@@ -1,0 +1,7 @@
+REM copy dll
+xcopy.exe @WX_SRC_WINDIR@\lib\vc_dll\*.dll @WX_INSTALL_WINDIR@\bin\ /I /Y /S
+REM copy lib
+xcopy.exe @WX_SRC_WINDIR@\lib\vc_dll\*.lib @WX_INSTALL_WINDIR@\lib\ /I /Y /S
+REM copy include file
+xcopy.exe @WX_SRC_WINDIR@\include\* @WX_INSTALL_WINDIR@\include\ /I /Y /S
+xcopy.exe @WX_SRC_WINDIR@\lib\vc_dll\mswu@WX_DEBUG_FLAG@ @WX_INSTALL_WINDIR@\lib\mswu@WX_DEBUG_FLAG@\ /I /Y /S

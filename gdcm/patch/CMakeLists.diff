@@ -1,0 +1,11 @@
+363a364
+>   INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIRS})
+383a385
+>   INCLUDE_DIRECTORIES(${EXPAT_INCLUDE_DIRS})
+573,578d574
+< if(GDCM_USE_VTK)
+< if(WIN32)
+< include(CMake/InstallRequiredVTKLibraries.cmake)
+< endif()
+< endif()
+< 
