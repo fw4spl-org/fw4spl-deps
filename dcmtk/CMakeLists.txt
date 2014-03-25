@@ -35,7 +35,7 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindDCMTK.cmake ${CMAKE_INSTALL_PREFIX}/FindDCMTK.cmake
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-DCMTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-DCMTK.cmake
     COMMENT "Install Configuration file"
 )
 

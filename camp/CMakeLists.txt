@@ -24,7 +24,7 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add_Step(camp CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/FindCAMP.cmake ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCAMP.cmake ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
     COMMENT "Install configuration file"
 )
 

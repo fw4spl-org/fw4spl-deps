@@ -46,7 +46,7 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add_Step(vxl CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/fw-VXL.cmake ${CMAKE_INSTALL_PREFIX}/fw-VXL.cmake
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VXL.cmake ${CMAKE_INSTALL_PREFIX}/fw-VXL.cmake
     COMMENT "Install configuration file"
 )
 
