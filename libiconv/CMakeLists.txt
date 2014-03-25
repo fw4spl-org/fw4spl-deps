@@ -46,4 +46,4 @@ ENDIF()
 ExternalProject_Add_Step(libiconv CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
     COMMENT "Install configuration file"
-
+)
