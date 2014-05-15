@@ -1,11 +1,11 @@
-VP Binpkgs
+fw4spl deps
 ==========
 
 About
 -----
 
-VP Binpkgs are the dependencies necessary to build the VP applications.
-They need to be built in order to compile anything from VP.
+fw4spl deps are the dependencies necessary to build the fw4spl applications.
+They need to be built in order to compile anything from fw4spl.
 
 Requirements
 ------------
@@ -25,7 +25,7 @@ Build steps
 With
 
     * <build_type> being Debug or Release as used by cmake
-    * <install_prefix> being a directory where all libs and exe from the binpkgs will be installed (better to be a personnal folder right now, don't use /usr/local or other)
+    * <install_prefix> being a directory where all libs and exe from the deps will be installed (better to be a personnal folder right now, don't use /usr/local or other)
 
 * do a
 
@@ -33,7 +33,7 @@ With
 
     $ make itk json-spirit camp dcmtk hdf5 ann cryptopp -j <number of parallel compilation tasks to run>
 
-Use from VP
+Use from fw4spl
 -----------
 
-When compiling VP applications, in the cmake, you should inform that the binpkgs are available in their <install_prefix> defined in the `build steps`_
+When compiling fw4spl applications, in the cmake, you should inform that the deps are available in their <install_prefix> defined in the `build steps`_
