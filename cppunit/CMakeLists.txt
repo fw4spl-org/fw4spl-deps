@@ -39,10 +39,14 @@ ELSE()
                         --prefix=${CMAKE_INSTALL_PREFIX}
                         ${FIX_CONFIGURE}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
-        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_cppunit} install
 	STEP_TARGETS CopyConfigFileToInstall 
-   )
+    )
+
+    ExternalProject_Add_Step(cppunit COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_cppunit} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
+    )
 ENDIF()
 
 ExternalProject_Add_Step(cppunit CopyConfigFileToInstall

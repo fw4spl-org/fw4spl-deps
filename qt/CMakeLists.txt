@@ -102,8 +102,10 @@ ENDIF(WIN32)
 
 IF(NOT WIN32)
     SET(JOBS "-j${NUMBER_OF_PARALLEL_BUILD}")
+    SET(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
 ELSE(NOT WIN32)
     SET(JOBS "")
+    SET(INSTALL_ROOT "")
 ENDIF(NOT WIN32) 
 
 ExternalProject_Add(
@@ -116,10 +118,16 @@ ExternalProject_Add(
     DEPENDS zlib jpeg libpng tiff icu4c freetype ${EXTRA_DEPENDS} 
     CONFIGURE_COMMAND ${ENV_WRAPPER} ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${ENV_WRAPPER} ${MAKE_QT} ${JOBS} -f Makefile
-    INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE_QT} ${JOBS} -f Makefile install
-    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE_QT} ${JOBS} -f Makefile ${INSTALL_ROOT} install
     STEP_TARGETS CopyConfigFileToInstall
 )
+
+IF(NOT WIN32)
+    ExternalProject_Add_Step(qt COPY_FILES
+            COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_qt} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
+    )
+ENDIF()
 
 ExternalProject_Add_Step(qt CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake

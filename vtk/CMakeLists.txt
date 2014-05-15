@@ -5,9 +5,9 @@ PROJECT(vtkBuilder)
 INCLUDE(ExternalProject)
 
 #TODO : currently using macport's tiff png and jpeg on osx
-SET(VTK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-                   -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+SET(VTK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+                   -DCMAKE_BUILD_TYPE:PATH=${CMAKE_BUILD_TYPE}
+                   -DCMAKE_PREFIX_PATH:PATH=${CMAKE_INSTALL_PREFIX}
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_SHARED_LIBS:BOOL=ON
                    -DBUILD_TESTING:BOOL=OFF
@@ -62,6 +62,14 @@ SET(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 SET(VTK_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/IO_Import_CMakeLists.txt" "<SOURCE_DIR>/IO/Import/CMakeLists.txt"
     COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/Main_CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt")
 
+SET(VTK_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk)
+IF(NOT WIN32)    
+    SET(PKG_EXPORT export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+    SET(VTK_CONFIGURE_CMD ${PKG_EXPORT} && ${CMAKE_COMMAND} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
+ELSE()
+    SET(VTK_CONFIGURE_CMD ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
+ENDIF()
+
 ExternalProject_Add(
     vtk
     URL ${CACHED_URL}
@@ -69,7 +77,8 @@ ExternalProject_Add(
     PATCH_COMMAND ${VTK_PATCH_CMD}
     DEPENDS zlib jpeg libpng tiff expat libxml freetype qt
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-    CMAKE_ARGS ${VTK_CMAKE_ARGS}
+    CONFIGURE_COMMAND ${VTK_CONFIGURE_CMD}
+    BUILD_COMMAND ${MAKE} ${VTK_SRC_DIR}
     STEP_TARGETS CopyConfigFileToInstall
 )
 

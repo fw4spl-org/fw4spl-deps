@@ -35,7 +35,11 @@ ELSE(WIN32)
         #BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/source/Makefile
         #INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/source/Makefile install
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ${MAKE}
-        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ${MAKE} install
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ${MAKE} DESTDIR=${INSTALL_PREFIX_icu4c} install
+    )
+
+    ExternalProject_Add_Step(icu4c COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_icu4c} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
     )
 ENDIF(WIN32)

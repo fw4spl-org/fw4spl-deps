@@ -12,11 +12,19 @@ IF(BUILD_TYPE MATCHES "release")
     SET(BOOST_BUILD_TYPE release)
 ENDIF()
 
+IF(NOT WIN32)
+    SET(BOOST_ARGS 
+        --prefix=${INSTALL_PREFIX_boost}/${CMAKE_INSTALL_PREFIX})
+ELSE()
+    SET(BOOST_ARGS
+        --prefix=${CMAKE_INSTALL_PREFIX}
+        --libdir=${CMAKE_INSTALL_PREFIX}/lib
+        --includedir=${CMAKE_INSTALL_PREFIX}/include)
+ENDIF()
+
 SET(BOOST_ARGS
-    --prefix=${CMAKE_INSTALL_PREFIX}
+    ${BOOST_ARGS}
     --exec-prefix=${CMAKE_INSTALL_PREFIX}/bin
-    --libdir=${CMAKE_INSTALL_PREFIX}/lib
-    --includedir=${CMAKE_INSTALL_PREFIX}/include
     -sZLIB_INCLUDE=${CMAKE_INSTALL_PREFIX}/include
     -sZLIB_LIBPATH=${CMAKE_INSTALL_PREFIX}/lib
     #-sZLIB_SOURCE=${CMAKE_INSTALL_PREFIX}
@@ -26,7 +34,6 @@ SET(BOOST_ARGS
     --layout=versioned
     --build-type=minimal
     --without-test
-    #--with-python=${CMAKE_INSTALL_PREFIX}
     variant=${BOOST_BUILD_TYPE}
     link=shared
     address-model=64
@@ -84,7 +91,7 @@ ELSE(WIN32)
     SET(BOOTSTRAP_CMD bash
                       bootstrap.sh
                       --with-icu=${CMAKE_INSTALL_PREFIX}
-                      --with-python=${CMAKE_INSTALL_PREFIX}
+                      --with-python-root=${CMAKE_INSTALL_PREFIX}
     )
 ENDIF(WIN32)
 
@@ -107,6 +114,11 @@ IF(NOT APPLE)
     SET(EXTRA_DEPENDS libiconv)
 ENDIF()
 
+
+IF(UNIX)
+    SET(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} )  
+ENDIF()
+
 ExternalProject_Add(
     boost
     DEPENDS zlib python ${EXTRA_DEPENDS}
@@ -115,13 +127,18 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     BUILD_IN_SOURCE 1
     PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam <SOURCE_DIR>/user-config.jam
-    CONFIGURE_COMMAND ${BOOTSTRAP_CMD}
+    CONFIGURE_COMMAND  ${BOOTSTRAP_CMD}
     STEP_TARGETS CopyConfigFileToInstall
     BUILD_COMMAND <SOURCE_DIR>/b2 -j${NUMBER_OF_PARALLEL_BUILD} ${BOOST_ARGS} -sHOME=<SOURCE_DIR> install
     INSTALL_COMMAND ${BOOST_MOVE_DLL_CMD}
-    
 )
 
+IF(NOT WIN32)
+    ExternalProject_Add_Step(boost COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_boost} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
+    )
+ENDIF()
 
 ExternalProject_Add_Step(boost CopyConfigFileToInstall
     COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake

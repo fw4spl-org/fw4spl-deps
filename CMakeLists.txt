@@ -34,41 +34,58 @@ ENDIF()
 
 SET(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
 
-ADD_SUBDIRECTORY(jpeg)
-ADD_SUBDIRECTORY(zlib)
-ADD_SUBDIRECTORY(tiff)
-ADD_SUBDIRECTORY(png)
-ADD_SUBDIRECTORY(libiconv)
-ADD_SUBDIRECTORY(libxml)
-ADD_SUBDIRECTORY(expat)
-ADD_SUBDIRECTORY(python)
-ADD_SUBDIRECTORY(boost)
-ADD_SUBDIRECTORY(freetype)
-ADD_SUBDIRECTORY(icu4c)
+list(APPEND SUBDIRECTORIES jpeg)
+list(APPEND SUBDIRECTORIES zlib)
+list(APPEND SUBDIRECTORIES tiff)
+list(APPEND SUBDIRECTORIES png)
+list(APPEND SUBDIRECTORIES libiconv)
+list(APPEND SUBDIRECTORIES libxml)
+list(APPEND SUBDIRECTORIES expat)
+list(APPEND SUBDIRECTORIES python)
+list(APPEND SUBDIRECTORIES boost)
+list(APPEND SUBDIRECTORIES freetype)
+list(APPEND SUBDIRECTORIES icu4c)
 
 IF(NOT APPLE)
-    ADD_SUBDIRECTORY(curl)
-    ADD_SUBDIRECTORY(numpy)
+    list(APPEND SUBDIRECTORIES curl)
 ENDIF()
 
-ADD_SUBDIRECTORY(qt)
-ADD_SUBDIRECTORY(vtk)
-ADD_SUBDIRECTORY(vxl)
-ADD_SUBDIRECTORY(gdcm)
-ADD_SUBDIRECTORY(hdf5)
-ADD_SUBDIRECTORY(itk)
-ADD_SUBDIRECTORY(camp)
-ADD_SUBDIRECTORY(cppunit)
-ADD_SUBDIRECTORY(ann)
-ADD_SUBDIRECTORY(dcmtk)
+list(APPEND SUBDIRECTORIES qt)
+list(APPEND SUBDIRECTORIES vtk)
+list(APPEND SUBDIRECTORIES vxl)
+list(APPEND SUBDIRECTORIES gdcm)
+list(APPEND SUBDIRECTORIES hdf5)
+list(APPEND SUBDIRECTORIES itk)
+list(APPEND SUBDIRECTORIES camp)
+list(APPEND SUBDIRECTORIES cppunit)
+list(APPEND SUBDIRECTORIES ann)
+list(APPEND SUBDIRECTORIES dcmtk)
 
 IF(NOT APPLE)
-    ADD_SUBDIRECTORY(wxWidgets)
+    list(APPEND SUBDIRECTORIES wxWidgets)
 ENDIF() 
 
-ADD_SUBDIRECTORY(cryptopp)
-ADD_SUBDIRECTORY(tetgen)
-ADD_SUBDIRECTORY(json-spirit)
+list(APPEND SUBDIRECTORIES cryptopp)
+list(APPEND SUBDIRECTORIES tetgen)
+list(APPEND SUBDIRECTORIES json-spirit)
+
+FOREACH(subdir ${SUBDIRECTORIES})
+    # define an uninstall target for each project
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${subdir}/cmake_uninstall.cmake"
+        IMMEDIATE @ONLY)
+
+    add_custom_target(${subdir}_uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/cmake_uninstall.cmake)
+
+    # define the standard location for the intermediate install directory
+    SET(INSTALL_PREFIX_${subdir} ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/${subdir}-prefix/src/${subdir}-install-tmp)
+
+    ADD_SUBDIRECTORY(${subdir})
+ENDFOREACH()
+
+set(SUBDIRECTORIES "")
 
 IF(ADDITIONAL_DEPS)
 
@@ -78,4 +95,3 @@ IF(ADDITIONAL_DEPS)
     ENDFOREACH()
     
 ENDIF()
-

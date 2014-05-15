@@ -32,14 +32,17 @@ IF(WIN32)
         STEP_TARGETS CopyConfigFileToInstall
     )
 ELSE(WIN32)
+
+    IF(NOT APPLE)
+        IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+            SET(SETENV export CC=clang CXX=clang++ CFLAGS=-Wno-unused-value &&)  
+        ENDIF()
+    ENDIF()
+
     SET(CONFIGURE_CMD <SOURCE_DIR>/configure
                       --enable-shared
                       --disable-static
                       --prefix=${CMAKE_INSTALL_PREFIX}
-                      --without-curses #do not have nany effect
-                      --without-panel  #do not have nany effect
-                      --without-x11    #do not have nany effect
-                      --without-tcl8.5 #do not have nany effect
     )
     IF(${IS_DEBUG})
         SET(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug --with-pydebug)
@@ -51,11 +54,14 @@ ELSE(WIN32)
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND ${CONFIGURE_CMD}
-        BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
+        CONFIGURE_COMMAND ${SETENV} ${CONFIGURE_CMD}
+        BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile -j${NUMBER_OF_PARALLEL_BUILD}
+        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_python} install
         STEP_TARGETS CopyConfigFileToInstall
+    )
+    ExternalProject_Add_Step(python COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_python} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
     )
 ENDIF(WIN32)
 

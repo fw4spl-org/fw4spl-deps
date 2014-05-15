@@ -4,18 +4,20 @@ PROJECT(expatBuilder)
 
 INCLUDE(ExternalProject)
 
-SET(EXPAT_CMAKE_ARGS 
-    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-    -DBUILD_tools=FALSE
-    -DBUILD_examples=FALSE
-    -DBUILD_tests=FALSE
-    -DBUILD_shared=TRUE
-)
-SET(EXPAT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 GET_CACHED_URL(http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz CACHED_URL)
 IF(WIN32)
+
+    SET(EXPAT_CMAKE_ARGS 
+        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+        -DBUILD_tools=FALSE
+        -DBUILD_examples=FALSE
+        -DBUILD_tests=FALSE
+        -DBUILD_shared=TRUE
+    )
+    SET(EXPAT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+
     ExternalProject_Add(
         expat
         URL ${CACHED_URL}
@@ -38,7 +40,11 @@ ELSE(WIN32)
                           --disable-static
                           --prefix=${CMAKE_INSTALL_PREFIX}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
+        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_expat} install
+    )
+
+    ExternalProject_Add_Step(expat COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_expat} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
     )
 ENDIF(WIN32)

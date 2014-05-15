@@ -37,9 +37,13 @@ ELSE()
                           --prefix=${CMAKE_INSTALL_PREFIX}
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBICONV_PATCH_DIR}/" "<SOURCE_DIR>/" ${LIBICONV_PATCH_CMD}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
+        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_libiconv} install
         STEP_TARGETS CopyConfigFileToInstall
+    )
+
+    ExternalProject_Add_Step(libiconv COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libiconv} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
     )
 ENDIF()
 

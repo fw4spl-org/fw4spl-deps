@@ -26,7 +26,13 @@ ENDIF()
 
 IF(APPLE)
     set(Boost_COMPILER -clang-darwin42)
+ELSE()
+    IF(UNIX)
+        IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+            string(REPLACE "." "" VERSION ${CMAKE_CXX_COMPILER_VERSION})
+            string(SUBSTRING ${VERSION} 0 2 VERSION)
+            set(Boost_COMPILER -clang${VERSION})
+        ENDIF()
+    ENDIF()
 ENDIF()
-
-
 

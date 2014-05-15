@@ -4,12 +4,12 @@ PROJECT(jpegBuilder)
 
 INCLUDE(ExternalProject)
 
-SET(JPEG_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-SET(JPEG_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
-
 GET_CACHED_URL(http://www.ijg.org/files/jpegsrc.v8d.tar.gz CACHED_URL)
 
 IF(WIN32)
+    SET(JPEG_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    SET(JPEG_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+
     ExternalProject_Add(
         jpeg
         URL ${CACHED_URL}
@@ -30,13 +30,18 @@ ELSE()
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
-                        --enable-shared
+                        --enable-shared 
                         --disable-static
                         --prefix=${CMAKE_INSTALL_PREFIX}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
-        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_jpeg} install
     )
+
+    ExternalProject_Add_Step(jpeg COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_jpeg} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
+    )
+
 ENDIF()
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")

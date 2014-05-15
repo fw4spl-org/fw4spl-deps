@@ -35,8 +35,13 @@ ELSE(WIN32)
                         --with-jpeg-include-dir=${CMAKE_INSTALL_PREFIX}/include
                         --prefix=${CMAKE_INSTALL_PREFIX}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
-        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_tiff} install
     )
+
+    ExternalProject_Add_Step(tiff COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_tiff} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        DEPENDEES install
+    )
+
 ENDIF(WIN32)
 
