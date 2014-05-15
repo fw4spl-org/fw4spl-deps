@@ -4,7 +4,7 @@ PROJECT(tiffBuilder)
 
 INCLUDE(ExternalProject)
 
-GET_CACHED_URL(http://download.osgeo.org/libtiff/tiff-3.9.7.zip CACHED_URL)
+GET_CACHED_URL(http://download.osgeo.org/libtiff/tiff-4.0.3.zip CACHED_URL)
 
 if(WIN32)
     SET(TIFF_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
