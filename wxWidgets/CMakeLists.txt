@@ -81,8 +81,9 @@ IF(WIN32)
     )
 
 ELSE(WIN32)
+    SET(WX_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/wxWidgets-prefix/src/wxWidgets)
     SET(WX_CONFIGURE
-            configure
+            ${WX_SRC_DIR}/configure
             --enable-shared
             --disable-static
             --enable-unicode
