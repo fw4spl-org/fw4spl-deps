@@ -113,7 +113,6 @@ SET(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DModule_ITKSpatialFunction:BOOL=ON
                    -DModule_ITKThresholding:BOOL=ON
                    
-                   -DModule_ITKVideoBridgeVXL:BOOL=ON
                    -DModule_ITKVideoCore:BOOL=ON
                    -DModule_ITKVideoFiltering:BOOL=ON
                    -DModule_ITKVideoIO:BOOL=ON
@@ -125,6 +124,9 @@ SET(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    # Disabled on Linux (link errors)
                    -DModule_ITKLevelSetsv4Visualization:BOOL=OFF
                    -DModule_ITKVtkGlue:BOOL=OFF
+                   
+                   # Disabled because Vxl vidl is not build anymore
+                   -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
 

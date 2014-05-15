@@ -9,6 +9,7 @@ SET(VXL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DBUILD_TESTING:BOOL=OFF
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_CONTRIB_VIDL2:BOOL=OFF
+                   -DBUILD_CORE_VIDEO=OFF
                    -DBUILD_CONTRIB=OFF
                    -DVXL_BUILD_DCMTK:BOOL=OFF
                    #-DVXL_FORCE_V3P_DCMTK:BOOL=OFF
