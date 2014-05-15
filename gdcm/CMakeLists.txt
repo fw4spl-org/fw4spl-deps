@@ -21,18 +21,20 @@ SET(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                     -DGDCM_BUILD_APPLICATIONS:BOOL=OFF
                     -DGDCM_USE_WXWIDGETS:BOOL=OFF
                     -DUSE_ITK:BOOL=OFF
-                    #-DGDCMV2_0_COMPATIBILITY::BOOL=ON # for GDCM2.2.0 to keep compatibility of origin 
 )
 
-GET_CACHED_URL(https://github.com/malaterre/GDCM/archive/v2.2.1.tar.gz CACHED_URL)
+GET_CACHED_URL(http://switch.dl.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.2/gdcm-2.4.2.tar.gz CACHED_URL)
 
 SET(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+SET(GDCM_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
+    COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/VTK/CMakeLists.txt" "<SOURCE_DIR>/Utilities/VTK/CMakeLists.txt")
+
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt" 
-    DEPENDS zlib expat libxml vtk #MacOS -> libxslt ?
+    PATCH_COMMAND ${GDCM_PATCH_CMD}
+    DEPENDS zlib expat libxml vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${GDCM_CMAKE_ARGS}
 )
