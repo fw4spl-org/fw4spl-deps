@@ -20,24 +20,30 @@ SET(VTK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DVTK_USE_SYSTEM_PNG:BOOL=ON
                    -DVTK_USE_SYSTEM_TIFF:BOOL=ON
                    -DVTK_USE_SYSTEM_ZLIB:BOOL=ON
+                   -DVTK_USE_SYSTEM_FREETYPE:BOOL=ON
                    -DVTK_USE_TK:BOOL=OFF
                    -DVTK_LEGACY_REMOVE:BOOL=OFF
                    -DVTK_USE_PARALLEL:BOOL=ON
                    -DVTK_USE_HYBRID:BOOL=ON
-                   -DVTK_USE_QT:BOOL=ON
-                   -DVTK_USE_QVTK_QTOPENGL:BOOL=ON  #QVTKWidget2 for compatibility with Ogre
-                   -DVTK_QT_USE_WEBKIT:BOOL=OFF
+                   -DVTK_Group_Qt:BOOL=OFF
                    -DVTK_WRAP_PYTHON:BOOL=OFF
+                   -DVTK_MAKE_INSTANTIATORS:BOOL=ON
+                   -DVTK_QT_VERSION:STRING=5
+                   -DModule_vtkGUISupportQt:BOOL=ON
+                   -DModule_vtkGUISupportQtOpenGL:BOOL=ON
+                   -DModule_vtkGUISupportQtWebkit:BOOL=OFF
+                   -DModule_vtkGUISupportQtSQL:BOOL=ON
+                   -DModule_vtkRenderingQt:BOOL=ON
+                   -DModule_vtkViewsQt:BOOL=ON
+                   -DVTK_Group_StandAlone:BOOL=OFF #disabled hdf5 module
+                   -DModule_vtkIOExport:BOOL=ON
+                   -DModule_vtkImagingStencil:BOOL=ON
+                   -DModule_vtkImagingStatistics:BOOL=ON
+                   -DModule_vtkIOImport:BOOL=ON
 )
 
-IF("${CMAKE_SYSTEM}" MATCHES "Linux")
-           LIST(APPEND VTK_CMAKE_ARGS 
-                   -DQT_QMAKE_EXECUTABLE=${CMAKE_INSTALL_PREFIX}/bin/qmake
-            )
-ENDIF("${CMAKE_SYSTEM}" MATCHES "Linux")
-
 IF(APPLE)
-    IF(CMAKE_SIZEOF_VOID_P EQUAL 8) #x64
+   IF(CMAKE_SIZEOF_VOID_P EQUAL 8) #x64
            LIST(APPEND VTK_CMAKE_ARGS 
                    -DVTK_USE_CARBON:BOOL=OFF
                    -DVTK_USE_COCOA:BOOL=ON
@@ -50,13 +56,18 @@ IF(APPLE)
     ENDIF()
 ENDIF(APPLE)
 
-GET_CACHED_URL(http://www.vtk.org/files/release/5.10/vtk-5.10.1.tar.gz CACHED_URL)
+GET_CACHED_URL(http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz CACHED_URL)
+
+SET(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+SET(VTK_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/IO_Import_CMakeLists.txt" "<SOURCE_DIR>/IO/Import/CMakeLists.txt"
+    COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/Main_CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt")
 
 ExternalProject_Add(
     vtk
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DEPENDS zlib jpeg libpng tiff expat libxml qt
+    PATCH_COMMAND ${VTK_PATCH_CMD}
+    DEPENDS zlib jpeg libpng tiff expat libxml freetype qt
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${VTK_CMAKE_ARGS}
     STEP_TARGETS CopyConfigFileToInstall
@@ -66,3 +77,5 @@ ExternalProject_Add_Step(vtk CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-VTK.cmake
     COMMENT "Install configuration file"
 )
+
+
