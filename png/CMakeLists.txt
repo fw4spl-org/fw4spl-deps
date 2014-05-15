@@ -12,7 +12,7 @@ SET(PNG_CMAKE_ARGS
     -DPNG_TESTS:BOOL=OFF
 )
 
-GET_CACHED_URL(http://freefr.dl.sourceforge.net/libpng/libpng-1.5.11.tar.gz CACHED_URL)
+GET_CACHED_URL(http://freefr.dl.sourceforge.net/libpng/libpng-1.6.2.tar.gz CACHED_URL)
 
 ExternalProject_Add(
     libpng
@@ -25,9 +25,9 @@ ExternalProject_Add(
 
 IF(WIN32)
     IF(${IS_DEBUG})
-        SET(LIBPNG_LIB_NAME "libpng15d")
+        SET(LIBPNG_LIB_NAME "libpng16d")
     ELSE(${IS_DEBUG})
-        SET(LIBPNG_LIB_NAME "libpng15")
+        SET(LIBPNG_LIB_NAME "libpng16")
     ENDIF(${IS_DEBUG})
         SET(LIBPNG_LIB_NAME ${LIBPNG_LIB_NAME} PARENT_SCOPE)
 
