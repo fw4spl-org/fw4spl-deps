@@ -1,33 +1,72 @@
-set(ITK_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/InsightToolkit/)
+set(ITK_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/)
 
 SET(ITK_LIBS ITKAlgorithms
-    ITKBasicFilters
+    ITKBiasCorrection
+    ITKBioCell
     ITKCommon
     ITKDICOMParser
     ITKEXPAT
     ITKFEM
-    ITKIO
-    ITKIOReview
-    ITKMetaIO
-    ITKNrrdIO
-    ITKNumerics
-    ITKQuadEdgeMesh
-    ITKSpatialObject
-    ITKStatistics
-    ITKniftiio
-    ITKznz
-    itkNetlibSlatec
-    itkjpeg12
-    itkjpeg16
-    itkjpeg8
-    itkopenjpeg
+    itkdouble-conversion
+    ITKGDCM
+    ITKgiftiio
+    ITKIOBioRad
+    ITKIOBMP
+    ITKIOCSV
+    ITKIOGDCM
+    ITKIOGE
+    ITKIOGIPL
+    ITKIOHDF5
+    ITKIOImageBase
+    ITKIOIPL
+    ITKIOJPEG
     itksys
-    itkvnl_inst
+    ITKVNLInstantiation
+    itkNetlibSlatec
+    ITKStatistics
+    ITKMesh
+    ITKMetaIO
+    ITKSpatialObjects
+    ITKPath
+    ITKLabelMap
+    ITKQuadEdgeMesh
+    ITKOptimizers
+    ITKPolynomials
+    ITKIOXML
+    ITKIOSpatialObjects
+    ITKznz
+    ITKniftiio
+    ITKIOMesh
+    ITKIOMeta
+    ITKIONIFTI
+    ITKNrrdIO
+    ITKIONRRD
+    ITKIOPNG
+    ITKIOPhilipsREC
+    ITKIOSiemens
+    ITKIOStimulate
+    ITKIOTIFF
+    ITKIOTransformBase
+    ITKIOTransformHDF5
+    ITKIOTransformInsightLegacy
+    ITKIOTransformMatlab
+    ITKIOVTK
+    ITKIOLSM
+    ITKKLMRegionGrowing
+    ITKOptimizersv4
+    itkopenjpeg
+    ITKVTK
+    ITKWatersheds
+    ITKReview
+    itkTestDriver
+    ITKVideoCore
+    ITKVideoIO
+    ITKVideoBridgeVXL
     )
 
 
 foreach(LIB ${ITK_LIBS})
-    find_library(${LIB}_LIB ${LIB} ${ITK_DIR} )
+    find_library(${LIB}_LIB ${LIB}-4.5 ${ITK_DIR} )
     add_library(${LIB} UNKNOWN IMPORTED)
     set_target_properties(${LIB} PROPERTIES IMPORTED_LOCATION "${${LIB}_LIB}")
     set(ITK_LIBRARIES ${ITK_LIBRARIES} ${${LIB}_LIB})
