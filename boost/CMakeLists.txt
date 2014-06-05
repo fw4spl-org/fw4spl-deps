@@ -95,10 +95,12 @@ ELSE(WIN32)
     )
 ENDIF(WIN32)
 
-SET(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-CONFIGURE_FILE(${BOOST_PATCH_DIR}/user-config.jam.cmake 
-               ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam @ONLY
-)
+IF(NOT APPLE)
+    SET(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    CONFIGURE_FILE(${BOOST_PATCH_DIR}/user-config.jam.cmake 
+                  ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam @ONLY
+          )
+ENDIF()
 
 IF(WIN32)
     SET(BOOST_MOVE_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib/)
@@ -126,12 +128,17 @@ ExternalProject_Add(
     URL_MD5 efbfbff5a85a9330951f243d0a46e4b9
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     BUILD_IN_SOURCE 1
-    PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam <SOURCE_DIR>/user-config.jam
     CONFIGURE_COMMAND ${SETENV} ${BOOTSTRAP_CMD}
     STEP_TARGETS CopyConfigFileToInstall
     BUILD_COMMAND ${SETENV} <SOURCE_DIR>/b2 -j${NUMBER_OF_PARALLEL_BUILD} ${BOOST_ARGS} -sHOME=<SOURCE_DIR> install
     INSTALL_COMMAND ${BOOST_MOVE_DLL_CMD}
 )
+
+IF(NOT APPLE)
+    ExternalProject_Add_Step(
+        PATCH_COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam <SOURCE_DIR>/user-config.jam
+    )
+ENDIF()
 
 IF(NOT WIN32)
     ExternalProject_Add_Step(boost COPY_FILES
