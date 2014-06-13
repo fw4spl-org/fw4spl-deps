@@ -4,7 +4,7 @@ PROJECT(qtBuilder)
 
 INCLUDE(ExternalProject)
 
-GET_CACHED_URL(http://download.qt-project.org/official_releases/qt/4.8/4.8.5/qt-everywhere-opensource-src-4.8.5.tar.gz CACHED_URL)
+GET_CACHED_URL(http://download.qt-project.org/archive/qt/4.8/4.8.5/qt-everywhere-opensource-src-4.8.5.tar.gz CACHED_URL)
 
 FIND_PROGRAM(MAKE_QT jom)
 IF(NOT MAKE_QT)
