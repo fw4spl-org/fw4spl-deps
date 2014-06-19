@@ -24,14 +24,14 @@ SET(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                     #-DGDCMV2_0_COMPATIBILITY::BOOL=ON # for GDCM2.2.0 to keep compatibility of origin 
 )
 
-GET_CACHED_URL(https://github.com/malaterre/GDCM/archive/v2.2.1.tar.gz CACHED_URL)
+GET_CACHED_URL(https://github.com/malaterre/GDCM/archive/v2.2.5.tar.gz CACHED_URL)
 
 SET(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt" 
+    # PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt" 
     DEPENDS zlib expat libxml vtk #MacOS -> libxslt ?
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${GDCM_CMAKE_ARGS}
