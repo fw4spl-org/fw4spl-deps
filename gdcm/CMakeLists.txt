@@ -10,8 +10,6 @@ SET(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                     -DBUILD_SHARED_LIBS:BOOL=ON
                     -DGDCM_USE_VTK:BOOL=ON
                     -DGDCM_BUILD_SHARED_LIBS:BOOL=ON
-                    -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON
-                    -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON
                     #-DGDCM_USE_SYSTEM_LJPEG:BOOL=ON    #Lossless JPEG
                     #-DGDCM_USE_SYSTEM_OPENJPEG:BOOL=ON #Open-source C-Library for JPEG 2000
                     -DGDCM_WRAP_PYTHON:BOOL=OFF
@@ -24,17 +22,41 @@ SET(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                     #-DGDCMV2_0_COMPATIBILITY::BOOL=ON # for GDCM2.2.0 to keep compatibility of origin 
 )
 
+if(WIN32)
+list(APPEND GDCM_CMAKE_ARGS 
+                -DGDCM_USE_SYSTEM_ZLIB:BOOL=OFF
+                -DGDCM_USE_SYSTEM_EXPAT:BOOL=OFF
+)
+else()
+list(APPEND GDCM_CMAKE_ARGS 
+                -DGDCM_USE_SYSTEM_ZLIB:BOOL=ON
+                -DGDCM_USE_SYSTEM_EXPAT:BOOL=ON
+)
+endif()
+
 GET_CACHED_URL(https://github.com/malaterre/GDCM/archive/v2.2.5.tar.gz CACHED_URL)
 
 SET(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+if(WIN32)
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    # PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt" 
+    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt" 
     DEPENDS zlib expat libxml vtk #MacOS -> libxslt ?
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${GDCM_CMAKE_ARGS}
 )
+else()
+ExternalProject_Add(
+    gdcm
+    URL ${CACHED_URL}
+    DOWNLOAD_DIR ${ARCHIVE_DIR}
+    DEPENDS zlib expat libxml vtk #MacOS -> libxslt ?
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CMAKE_ARGS ${GDCM_CMAKE_ARGS}
+)
+endif()
+
 
 
