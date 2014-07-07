@@ -22,8 +22,11 @@ IF(WIN32)
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${FREETYPE_CMAKE_ARGS}
     )
-ELSE(WIN32)
+ELSE()
     #@TODO: need zlib?
+    IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        set(EXTRA_OPT --without-png)
+    ENDIF()
     ExternalProject_Add(
         freetype
         URL ${CACHED_URL}
@@ -33,9 +36,10 @@ ELSE(WIN32)
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
                         --enable-shared
                         --disable-static
+                        ${EXTRA_OPT}
                         --prefix=${CMAKE_INSTALL_PREFIX}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile install
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     )
-ENDIF(WIN32)
+ENDIF()
