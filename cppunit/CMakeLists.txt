@@ -27,11 +27,14 @@ ELSE()
         # cppunit's configure return an error on osx, but configure worked well
         set(FIX_CONFIGURE || echo fix...)
     ENDIF()
+
+    SET(PATCH_COMMAND patch -t -N -p0 < ${CMAKE_CURRENT_SOURCE_DIR}/patch/demangle.patch && autoconf )
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
+        PATCH_COMMAND ${PATCH_COMMAND}
         CONFIGURE_COMMAND <SOURCE_DIR>/configure
                         --enable-shared
                         --disable-static

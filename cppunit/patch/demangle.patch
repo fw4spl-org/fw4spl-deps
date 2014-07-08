@@ -1,0 +1,20 @@
+--- config/ax_cxx_gcc_abi_demangle.m4	2009-05-25 14:19:44.000000000 -0400
++++ config/ax_cxx_gcc_abi_demangle.m4	2009-05-25 14:20:02.000000000 -0400
+@@ -15,6 +15,7 @@
+  AC_LANG_CPLUSPLUS
+  AC_TRY_COMPILE([#include <typeinfo>
+ #include <cxxabi.h>
++#include <stdlib.h>
+ #include <string>
+ 
+ template<typename TYPE>
+--- src/cppunit/TypeInfoHelper.cpp	2009-05-25 15:59:50.000000000 -0400
++++ src/cppunit/TypeInfoHelper.cpp	2009-05-25 16:00:34.000000000 -0400
+@@ -6,6 +6,7 @@
+ #include <string>
+ 
+ #if CPPUNIT_HAVE_GCC_ABI_DEMANGLE
++#include <stdlib.h>
+ #include <cxxabi.h>
+ #endif
+ 
