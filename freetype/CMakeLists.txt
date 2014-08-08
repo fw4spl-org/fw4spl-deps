@@ -24,9 +24,7 @@ IF(WIN32)
     )
 ELSE()
     #@TODO: need zlib?
-    IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        set(EXTRA_OPT --without-png)
-    ENDIF()
+    set(EXTRA_OPT --without-png)
     ExternalProject_Add(
         freetype
         URL ${CACHED_URL}
