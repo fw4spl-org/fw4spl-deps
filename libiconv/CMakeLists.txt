@@ -1,13 +1,13 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(libiconvBuilder)
+project(libiconvBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-IF(WIN32)
-    GET_CACHED_URL(https://win-iconv.googlecode.com/files/win-iconv-0.0.6.tar.bz2 CACHED_URL)
+if(WIN32)
+    getCachedUrl(https://win-iconv.googlecode.com/files/win-iconv-0.0.6.tar.bz2 CACHED_URL)
 
-    SET(LIBICONV_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    set(LIBICONV_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
     ExternalProject_Add(
         libiconv
         URL ${CACHED_URL}
@@ -16,13 +16,13 @@ IF(WIN32)
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}
         STEP_TARGETS CopyConfigFileToInstall
     )
-ELSE()
-    SET(LIBICONV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    GET_CACHED_URL(http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz CACHED_URL)
+else()
+    set(LIBICONV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    getCachedUrl(http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz CACHED_URL)
 
-    IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-        SET(LIBICONV_PATCH_CMD && patch -t -N -p1 < ${LIBICONV_PATCH_DIR}/linux-remove-gets.patch )
-    ENDIF()
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+        set(LIBICONV_PATCH_CMD && patch -t -N -p1 < ${LIBICONV_PATCH_DIR}/linux-remove-gets.patch )
+    endif()
 
     ExternalProject_Add(
         libiconv
@@ -45,7 +45,7 @@ ELSE()
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libiconv} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF()
+endif()
 
 ExternalProject_Add_Step(libiconv CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake

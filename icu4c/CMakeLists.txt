@@ -1,15 +1,15 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icu4cBuilder)
+project(icu4cBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://download.icu-project.org/files/icu4c/51.2/icu4c-51_2-src.tgz CACHED_URL)
+getCachedUrl(http://download.icu-project.org/files/icu4c/51.2/icu4c-51_2-src.tgz CACHED_URL)
 
-IF(WIN32)
+if(WIN32)
 
-    SET(ICU4C_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(ICU4C_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
+    set(ICU4C_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(ICU4C_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
                          -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     )
     ExternalProject_Add(
@@ -21,7 +21,7 @@ IF(WIN32)
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${ICU4C_CMAKE_ARGS}
     )
-ELSE(WIN32)
+else(WIN32)
     ExternalProject_Add(
         icu4c
         URL ${CACHED_URL}
@@ -42,4 +42,4 @@ ELSE(WIN32)
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_icu4c} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF(WIN32)
+endif(WIN32)

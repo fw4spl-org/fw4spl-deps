@@ -1,15 +1,15 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(freetypeBuilder)
+project(freetypeBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://download.savannah.gnu.org/releases/freetype/freetype-2.5.0.1.tar.gz CACHED_URL)
+getCachedUrl(http://download.savannah.gnu.org/releases/freetype/freetype-2.5.0.1.tar.gz CACHED_URL)
 
-IF(WIN32)
+if(WIN32)
 
-    SET(FREETYPE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(FREETYPE_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+    set(FREETYPE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(FREETYPE_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                             -DCMAKE_PREFIX_PATH:PATH=${CMAKE_INSTALL_PREFIX}
                             -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                             -DBUILD_SHARED_LIBS:BOOL=ON
@@ -23,9 +23,9 @@ IF(WIN32)
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${FREETYPE_CMAKE_ARGS}
     )
-ELSE(WIN32)
+else(WIN32)
     #set path for zlib and png
-    SET(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} )   
+    set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} )   
 
     ExternalProject_Add(
         freetype
@@ -45,5 +45,5 @@ ELSE(WIN32)
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_freetype} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF(WIN32)
+endif(WIN32)
 

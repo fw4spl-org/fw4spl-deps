@@ -1,40 +1,40 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(qtBuilder)
+project(qtBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(QT5_URL "http://download.qt-project.org/official_releases/qt/5.2/5.2.1/single/qt-everywhere-opensource-src-5.2.1.tar.gz")
-GET_CACHED_URL(${QT5_URL} CACHED_URL)
+set(QT5_URL "http://download.qt-project.org/official_releases/qt/5.2/5.2.1/single/qt-everywhere-opensource-src-5.2.1.tar.gz")
+getCachedUrl(${QT5_URL} CACHED_URL)
 
 
 
-FIND_PROGRAM(MAKE_QT jom)
-IF(NOT MAKE_QT)
-    SET(MAKE_QT ${MAKE})
-ENDIF()
+find_program(MAKE_QT jom)
+if(NOT MAKE_QT)
+    set(MAKE_QT ${MAKE})
+endif()
 
-STRING(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
-SET(QT_BUILD_TYPE debug)
-IF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-    SET(QT_BUILD_TYPE release)
-ENDIF()
+string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
+set(QT_BUILD_TYPE debug)
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+    set(QT_BUILD_TYPE release)
+endif()
 
-SET(ENV_WRAPPER)
-IF(NOT WIN32)
-    IF(UNIX AND NOT APPLE)
-        SET(MKSPEC linux-g++)
-    ELSEIF(APPLE)
-        SET(MKSPEC macx-clang)
-    ENDIF()
-    CONFIGURE_FILE(envwrapper/env.sh.in 
+set(ENV_WRAPPER)
+if(NOT WIN32)
+    if(UNIX AND NOT APPLE)
+        set(MKSPEC linux-g++)
+    elseif(APPLE)
+        set(MKSPEC macx-clang)
+    endif()
+    configure_file(envwrapper/env.sh.in 
         ${CMAKE_CURRENT_BINARY_DIR}/env.sh @ONLY
         )
-    SET(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
-ENDIF()
+    set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
+endif()
 
 # qt's configure is not an autotool configure
-SET(QT_CONFIGURE_CMD ./configure
+set(QT_CONFIGURE_CMD ./configure
                      -shared
                      -opensource
                      -confirm-license
@@ -52,37 +52,37 @@ SET(QT_CONFIGURE_CMD ./configure
 )
 
 
-IF(APPLE)
-    LIST(APPEND QT_CONFIGURE_CMD 
+if(APPLE)
+    list(APPEND QT_CONFIGURE_CMD 
         -no-glib
         -no-rpath
         -separate-debug-info
         -skip webkit
         -framework
         )
-    IF(${QT_BUILD_TYPE} MATCHES "release")
-        LIST(APPEND QT_CONFIGURE_CMD 
+    if(${QT_BUILD_TYPE} MATCHES "release")
+        list(APPEND QT_CONFIGURE_CMD 
             -release
             )
-    ENDIF()
-ELSEIF(WIN32)
-    SET(EXTRA_DEPENDS icu4c)
-    LIST(APPEND QT_CONFIGURE_CMD 
+    endif()
+elseif(WIN32)
+    set(EXTRA_DEPENDS icu4c)
+    list(APPEND QT_CONFIGURE_CMD 
         -${QT_BUILD_TYPE}
         -I ${CMAKE_INSTALL_PREFIX}/include/icu
         )
-ELSEIF(UNIX)
-        LIST(APPEND QT_CONFIGURE_CMD 
+elseif(UNIX)
+        list(APPEND QT_CONFIGURE_CMD 
         -${QT_BUILD_TYPE}
         -system-xcb
 
         )
-ENDIF()
+endif()
 
-SET(QT_PATCH_CMD)
+set(QT_PATCH_CMD)
 
-IF(WIN32)
-    LIST(APPEND QT_CONFIGURE_CMD
+if(WIN32)
+    list(APPEND QT_CONFIGURE_CMD
         -arch windows
         -no-angle
         -no-vcproj
@@ -92,21 +92,21 @@ IF(WIN32)
         -l png
         -l freetype
     )
-    SET(QT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(QT_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/qt-prefix/src/qt)
+    set(QT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(QT_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/qt-prefix/src/qt)
     #hack: rcc.exe need zlib in path
-    SET(QT_PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different ${QT_PATCH_DIR}/configure.bat ${QT_SRC_DIR}/qtbase/configure.bat
+    set(QT_PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different ${QT_PATCH_DIR}/configure.bat ${QT_SRC_DIR}/qtbase/configure.bat
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll ${QT_SRC_DIR}/qtbase/bin/${ZLIB_LIB_NAME}.dll
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll ${QT_SRC_DIR}/qttools/bin/${ZLIB_LIB_NAME}.dll)
-ENDIF(WIN32)
+endif(WIN32)
 
-IF(NOT WIN32)
-    SET(JOBS "-j${NUMBER_OF_PARALLEL_BUILD}")
-    SET(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
-ELSE(NOT WIN32)
-    SET(JOBS "")
-    SET(INSTALL_ROOT "")
-ENDIF(NOT WIN32) 
+if(NOT WIN32)
+    set(JOBS "-j${NUMBER_OF_PARALLEL_BUILD}")
+    set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
+else(NOT WIN32)
+    set(JOBS "")
+    set(INSTALL_ROOT "")
+endif(NOT WIN32) 
 
 ExternalProject_Add(
     qt
@@ -122,12 +122,12 @@ ExternalProject_Add(
     STEP_TARGETS CopyConfigFileToInstall
 )
 
-IF(NOT WIN32)
+if(NOT WIN32)
     ExternalProject_Add_Step(qt COPY_FILES
             COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_qt} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF()
+endif()
 
 ExternalProject_Add_Step(qt CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake

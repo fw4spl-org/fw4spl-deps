@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icule)
+project(icule)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ../common
   )
 
-SET (ICULE_SOURCE_FILES
+set(ICULE_SOURCE_FILES
     AlternateSubstSubtables.cpp
     AnchorTables.cpp
     ArabicLayoutEngine.cpp
@@ -97,7 +97,7 @@ SET (ICULE_SOURCE_FILES
     ValueRecords.cpp
 )
 
-SET(ICULE_HEADER_FILES
+set(ICULE_HEADER_FILES
     AlternateSubstSubtables.h
     AnchorTables.h
     ArabicLayoutEngine.h
@@ -189,22 +189,22 @@ SET(ICULE_HEADER_FILES
     ValueRecords.h
     )
 
-SOURCE_GROUP("Source Files" FILES ${ICULE_SOURCE_FILES})
-SOURCE_GROUP("Header Files" FILES ${ICULE_HEADER_FILES})
+source_group("Source Files" FILES ${ICULE_SOURCE_FILES})
+source_group("Header Files" FILES ${ICULE_HEADER_FILES})
 
-SET_SOURCE_FILES_PROPERTIES(ICULE_HEADER_FILES
+set_source_files_properties(ICULE_HEADER_FILES
                             PROPERTIES HEADER_FILE_ONLY TRUE)
-LIST(APPEND ICULE_SOURCE_FILES ${ICULE_HEADER_FILES})
+list(APPEND ICULE_SOURCE_FILES ${ICULE_HEADER_FILES})
 
-ADD_DEFINITIONS(
+add_definitions(
     -DU_LAYOUT_IMPLEMENTATION
 )
 
-ADD_LIBRARY(icule SHARED ${ICULE_SOURCE_FILES} )
-TARGET_LINK_LIBRARIES(icule icuuc)
+add_library(icule SHARED ${ICULE_SOURCE_FILES} )
+target_link_libraries(icule icuuc)
 
-INSTALL(TARGETS icule
+install(TARGETS icule
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )
-INSTALL(FILES ${ICULE_HEADER_FILES} DESTINATION "${INSTALL_INC_DIR}/layout")
+install(FILES ${ICULE_HEADER_FILES} DESTINATION "${INSTALL_INC_DIR}/layout")

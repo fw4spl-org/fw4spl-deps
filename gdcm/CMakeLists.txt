@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(gdcmBuilder)
+project(gdcmBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
+set(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
                     -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX} 
                     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                     -DBUILD_SHARED_LIBS:BOOL=ON
@@ -23,10 +23,10 @@ SET(GDCM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                     -DUSE_ITK:BOOL=OFF
 )
 
-GET_CACHED_URL(http://switch.dl.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.2/gdcm-2.4.2.tar.gz CACHED_URL)
+getCachedUrl(http://switch.dl.sourceforge.net/project/gdcm/gdcm%202.x/GDCM%202.4.2/gdcm-2.4.2.tar.gz CACHED_URL)
 
-SET(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-SET(GDCM_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
+set(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(GDCM_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
     COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/VTK/CMakeLists.txt" "<SOURCE_DIR>/Utilities/VTK/CMakeLists.txt")
 
 ExternalProject_Add(

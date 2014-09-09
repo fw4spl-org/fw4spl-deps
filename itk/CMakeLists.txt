@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(itkBuilder)
+project(itkBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
+set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
                    -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX} 
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    -DBUILD_EXAMPLES:BOOL=OFF
@@ -130,8 +130,8 @@ SET(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
 )
 
 
-GET_CACHED_URL(http://freefr.dl.sourceforge.net/project/itk/itk/4.5/InsightToolkit-4.5.1.tar.gz CACHED_URL)
-SET(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+getCachedUrl(http://freefr.dl.sourceforge.net/project/itk/itk/4.5/InsightToolkit-4.5.1.tar.gz CACHED_URL)
+set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 ExternalProject_Add(
     itk

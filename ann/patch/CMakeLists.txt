@@ -1,15 +1,15 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(ANN)
+project(ANN)
 
-SET(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
-SET(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
-SET(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation directory for headers")
+set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
+set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" CACHE PATH "Installation directory for libraries")
+set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include" CACHE PATH "Installation directory for headers")
 
-SET(ANN_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src )
-SET(ANN_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/ )
+set(ANN_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src )
+set(ANN_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include/ )
 
-SET(ANN_SRC ${ANN_SRC_DIR}/ANN.cpp                    
+set(ANN_SRC ${ANN_SRC_DIR}/ANN.cpp                    
             ${ANN_SRC_DIR}/bd_fix_rad_search.cpp      
             ${ANN_SRC_DIR}/bd_pr_search.cpp         
             ${ANN_SRC_DIR}/bd_search.cpp            
@@ -25,26 +25,26 @@ SET(ANN_SRC ${ANN_SRC_DIR}/ANN.cpp
             ${ANN_SRC_DIR}/perf.cpp )
     
 
-SET(ANN_HEADERS ${ANN_INC_DIR}/ANN/ANN.h
+set(ANN_HEADERS ${ANN_INC_DIR}/ANN/ANN.h
                 ${ANN_INC_DIR}/ANN/ANNperf.h
                 ${ANN_INC_DIR}/ANN/ANNx.h)
 
-INCLUDE_DIRECTORIES(${ANN_INC_DIR})
+include_directories(${ANN_INC_DIR})
 
-IF(BUILD_SHARED_LIBS)
-    ADD_LIBRARY(ANN SHARED ${ANN_SRC} ${ANN_HEADERS})
-    ADD_DEFINITIONS(-DDLL_EXPORTS)
-ELSE(BUILD_SHARED_LIBS)
+if(BUILD_SHARED_LIBS)
+    add_library(ANN SHARED ${ANN_SRC} ${ANN_HEADERS})
+    add_definitions(-DDLL_EXPORTS)
+else(BUILD_SHARED_LIBS)
     add_library(ANN STATIC ${ANN_SRC} ${ANN_HEADERS})
-ENDIF(BUILD_SHARED_LIBS)
+endif(BUILD_SHARED_LIBS)
 
-IF(CMAKE_COMPILER_IS_GNUCXX AND UNIX)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") 
-ENDIF(CMAKE_COMPILER_IS_GNUCXX AND UNIX)
+if(CMAKE_COMPILER_IS_GNUCXX AND UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") 
+endif(CMAKE_COMPILER_IS_GNUCXX AND UNIX)
 
-INSTALL(TARGETS ANN
+install(TARGETS ANN
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )
         
-INSTALL(FILES ${ANN_HEADERS} DESTINATION "${INSTALL_INC_DIR}/ANN")
+install(FILES ${ANN_HEADERS} DESTINATION "${INSTALL_INC_DIR}/ANN")

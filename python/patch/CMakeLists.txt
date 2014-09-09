@@ -21,16 +21,16 @@ option(ENABLE_SHARED "Build a shared libpython library" ON)
 option(ENABLE_STATIC "Build a static libpython library" OFF)
 option(USE_LIB64 "Search for dependencies and install to prefix/lib64 instead of prefix/lib" OFF)
 
-if (NOT ENABLE_SHARED AND NOT ENABLE_STATIC)
+if(NOT ENABLE_SHARED AND NOT ENABLE_STATIC)
     message(FATAL_ERROR "One or both of ENABLE_SHARED or ENABLE_STATIC must be set")
-endif (NOT ENABLE_SHARED AND NOT ENABLE_STATIC)
+endif(NOT ENABLE_SHARED AND NOT ENABLE_STATIC)
 
-if (USE_LIB64)
+if(USE_LIB64)
     set_property(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS ON)
     set(LIBDIR "lib64")
-else (USE_LIB64)
+else(USE_LIB64)
     set(LIBDIR "lib")
-endif (USE_LIB64)
+endif(USE_LIB64)
 
 set(EXTRA_PYTHONPATH "" CACHE STRING
     "A colon (:) separated list of extra paths to add to the PYTHONPATH")

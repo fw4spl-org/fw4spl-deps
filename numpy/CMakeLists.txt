@@ -1,61 +1,61 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(numpyBuilder)
+project(numpyBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
 
-GET_CACHED_URL(http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6.2.tar.gz CACHED_URL)
+getCachedUrl(http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6.2.tar.gz CACHED_URL)
 
-SET(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
-SET(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
-SET(PYTHON_INTERPRETER ${PYTHON_DIR}/bin/python)
+set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
+set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
+set(PYTHON_INTERPRETER ${PYTHON_DIR}/bin/python)
 
-FILE(TO_CMAKE_PATH ${CMAKE_INSTALL_PREFIX} NUMPY_INSTALL_PATH)
-SET(ENV_WRAPPER)
-IF(WIN32)
-    CONFIGURE_FILE(envwrapper/env.bat.in 
+file(TO_CMAKE_PATH ${CMAKE_INSTALL_PREFIX} NUMPY_INSTALL_PATH)
+set(ENV_WRAPPER)
+if(WIN32)
+    configure_file(envwrapper/env.bat.in 
         ${CMAKE_CURRENT_BINARY_DIR}/env.bat @ONLY
         )
-    SET(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.bat)
-    STRING(REGEX REPLACE "/" "\\\\" NUMPY_INSTALL_PATH ${NUMPY_INSTALL_PATH})
-ELSE(WIN32)
-    CONFIGURE_FILE(envwrapper/env.sh.in
+    set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.bat)
+    string(REGEX REPLACE "/" "\\\\" NUMPY_INSTALL_PATH ${NUMPY_INSTALL_PATH})
+else(WIN32)
+    configure_file(envwrapper/env.sh.in
         ${CMAKE_CURRENT_BINARY_DIR}/env.sh @ONLY
         )
-    EXECUTE_PROCESS(COMMAND chmod u+x ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
+    execute_process(COMMAND chmod u+x ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
 
-    SET(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
-ENDIF()
+    set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
+endif()
 
-SET(SETUP ${PYTHON_INTERPRETER}
+set(SETUP ${PYTHON_INTERPRETER}
           setup.py
           build_ext
           --library-dirs=${PYTHON_DIR}/lib
 )
 
-IF(IS_DEBUG)
-    LIST(APPEND SETUP --debug
+if(IS_DEBUG)
+    list(APPEND SETUP --debug
                       build --debug
     )
-ENDIF()
+endif()
 
 
-LIST(APPEND SETUP install
+list(APPEND SETUP install
                   --prefix ${NUMPY_INSTALL_PATH}
 )
 
 
-SET(NUMPY_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-IF(WIN32)
+set(NUMPY_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+if(WIN32)
 
-    SET(NUMPY_PATCH_CMD ${CMAKE_COMMAND} -E copy_directory "${NUMPY_PATCH_DIR}/" "<SOURCE_DIR>/")
+    set(NUMPY_PATCH_CMD ${CMAKE_COMMAND} -E copy_directory "${NUMPY_PATCH_DIR}/" "<SOURCE_DIR>/")
 
-ELSE(WIN32)
+else(WIN32)
 
-    SET(NUMPY_PATCH_CMD "")
+    set(NUMPY_PATCH_CMD "")
 
-ENDIF(WIN32)
+endif(WIN32)
 
 ExternalProject_Add(
     numpy

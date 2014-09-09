@@ -1,14 +1,14 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(expatBuilder)
+project(expatBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
 
-GET_CACHED_URL(http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz CACHED_URL)
-IF(WIN32)
+getCachedUrl(http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz CACHED_URL)
+if(WIN32)
 
-    SET(EXPAT_CMAKE_ARGS 
+    set(EXPAT_CMAKE_ARGS 
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
         -DBUILD_tools=FALSE
@@ -16,7 +16,7 @@ IF(WIN32)
         -DBUILD_tests=FALSE
         -DBUILD_shared=TRUE
     )
-    SET(EXPAT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(EXPAT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
     ExternalProject_Add(
         expat
@@ -28,7 +28,7 @@ IF(WIN32)
         CMAKE_ARGS ${EXPAT_CMAKE_ARGS}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     )
-ELSE(WIN32)
+else(WIN32)
     ExternalProject_Add(
         expat
         URL ${CACHED_URL}
@@ -47,4 +47,4 @@ ELSE(WIN32)
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_expat} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF(WIN32)
+endif(WIN32)

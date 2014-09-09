@@ -1,28 +1,28 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(boostBuilder)
+project(boostBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://freefr.dl.sourceforge.net/boost/boost_1_54_0.tar.gz CACHED_URL)
+getCachedUrl(http://freefr.dl.sourceforge.net/boost/boost_1_54_0.tar.gz CACHED_URL)
 
-STRING(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
-SET(BOOST_BUILD_TYPE debug)
-IF(BUILD_TYPE MATCHES "release")
-    SET(BOOST_BUILD_TYPE release)
-ENDIF()
+string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
+set(BOOST_BUILD_TYPE debug)
+if(BUILD_TYPE MATCHES "release")
+    set(BOOST_BUILD_TYPE release)
+endif()
 
-IF(NOT WIN32)
-    SET(BOOST_ARGS 
+if(NOT WIN32)
+    set(BOOST_ARGS 
         --prefix=${INSTALL_PREFIX_boost}/${CMAKE_INSTALL_PREFIX})
-ELSE()
-    SET(BOOST_ARGS
+else()
+    set(BOOST_ARGS
         --prefix=${CMAKE_INSTALL_PREFIX}
         --libdir=${CMAKE_INSTALL_PREFIX}/lib
         --includedir=${CMAKE_INSTALL_PREFIX}/include)
-ENDIF()
+endif()
 
-SET(BOOST_ARGS
+set(BOOST_ARGS
     ${BOOST_ARGS}
     --exec-prefix=${CMAKE_INSTALL_PREFIX}/bin
     -sZLIB_INCLUDE=${CMAKE_INSTALL_PREFIX}/include
@@ -40,16 +40,16 @@ SET(BOOST_ARGS
     threading=multi
 )
 
-SET(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
-SET(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
+set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
+set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
 
 
 set(BOOST_USER_CONFIG)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   set( BOOST_USER_CONFIG "using clang : : ${CMAKE_CXX_COMPILER} ;")
   list(APPEND BOOST_ARGS toolset=clang)
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if(APPLE AND ${CMAKE_CXX_COMPILER_VERSION} VERSION_LESS "4.3")
     message(
         WARNING 
@@ -60,26 +60,26 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     endif()
 
 #  # using GCC
-#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+#elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
 #  # using Intel C++
-#elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+#elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 #  # using Visual Studio C++
 endif()
 
-IF(NOT WIN32)
+if(NOT WIN32)
     list(APPEND BOOST_ARGS cxxflags=-ftemplate-depth=256)
-ENDIF()
+endif()
 
 
-IF(${IS_DEBUG})
-    SET(BOOST_ARGS ${BOOST_ARGS} python-debugging=on)
-    SET(PYTHON_DEBUGGING "<python-debugging>on")
-ENDIF()
+if(${IS_DEBUG})
+    set(BOOST_ARGS ${BOOST_ARGS} python-debugging=on)
+    set(PYTHON_DEBUGGING "<python-debugging>on")
+endif()
 
-IF(WIN32)
-    SET(BOOTSTRAP_CMD ./bootstrap.bat)
+if(WIN32)
+    set(BOOTSTRAP_CMD ./bootstrap.bat)
     #ZLIB_LIB_NAME is defined in zlib BinPkgs script
-    SET(BOOST_ARGS 
+    set(BOOST_ARGS 
         ${BOOST_ARGS}
         --abbreviate-paths
         --without-mpi
@@ -87,41 +87,41 @@ IF(WIN32)
         architecture=x86
         -sZLIB_BINARY=${ZLIB_LIB_NAME}
     )
-ELSE(WIN32)
-    SET(BOOTSTRAP_CMD bash
+else(WIN32)
+    set(BOOTSTRAP_CMD bash
                       bootstrap.sh
                       --with-icu=${CMAKE_INSTALL_PREFIX}
                       --with-python-root=${CMAKE_INSTALL_PREFIX}
     )
-ENDIF(WIN32)
+endif(WIN32)
 
-IF(NOT APPLE)
-    SET(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    CONFIGURE_FILE(${BOOST_PATCH_DIR}/user-config.jam.cmake 
+if(NOT APPLE)
+    set(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    configure_file(${BOOST_PATCH_DIR}/user-config.jam.cmake 
                   ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam @ONLY
           )
-ENDIF()
+endif()
 
-IF(WIN32)
-    SET(BOOST_MOVE_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib/)
-    SET(BOOST_MOVE_BIN_DIR ${CMAKE_INSTALL_PREFIX}/bin/)
-    FILE(TO_NATIVE_PATH ${BOOST_MOVE_LIB_DIR}  BOOST_MOVE_LIB_DIR)
-    FILE(TO_NATIVE_PATH ${BOOST_MOVE_BIN_DIR}  BOOST_MOVE_BIN_DIR)
-    SET(BOOST_MOVE_DLL_CMD ${CMAKE_COMMAND} -E comspec "cmd /C move /Y ${BOOST_MOVE_LIB_DIR}*.dll ${BOOST_MOVE_BIN_DIR}")
-ELSE(WIN32)
-    SET(BOOST_MOVE_DLL_CMD ${CMAKE_COMMAND} -E echo "Nothing to do")
-ENDIF(WIN32)
+if(WIN32)
+    set(BOOST_MOVE_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib/)
+    set(BOOST_MOVE_BIN_DIR ${CMAKE_INSTALL_PREFIX}/bin/)
+    file(TO_NATIVE_PATH ${BOOST_MOVE_LIB_DIR}  BOOST_MOVE_LIB_DIR)
+    file(TO_NATIVE_PATH ${BOOST_MOVE_BIN_DIR}  BOOST_MOVE_BIN_DIR)
+    set(BOOST_MOVE_DLL_CMD ${CMAKE_COMMAND} -E comspec "cmd /C move /Y ${BOOST_MOVE_LIB_DIR}*.dll ${BOOST_MOVE_BIN_DIR}")
+else(WIN32)
+    set(BOOST_MOVE_DLL_CMD ${CMAKE_COMMAND} -E echo "Nothing to do")
+endif(WIN32)
 
-IF(NOT APPLE)
-    SET(EXTRA_DEPENDS libiconv)
-    SET(PATCH_CMD ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/user-config.jam" "<SOURCE_DIR>/user-config.jam")
-ELSE(NOT APPLE)
-    SET(PATCH_CMD)
-ENDIF(NOT APPLE)
+if(NOT APPLE)
+    set(EXTRA_DEPENDS libiconv)
+    set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/user-config.jam" "<SOURCE_DIR>/user-config.jam")
+else(NOT APPLE)
+    set(PATCH_CMD)
+endif(NOT APPLE)
 
-IF(UNIX)
-    SET(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&)  
-ENDIF()
+if(UNIX)
+    set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&)  
+endif()
 
 ExternalProject_Add(
     boost
@@ -137,12 +137,12 @@ ExternalProject_Add(
     INSTALL_COMMAND ${BOOST_MOVE_DLL_CMD}
 )
 
-IF(NOT WIN32)
+if(NOT WIN32)
     ExternalProject_Add_Step(boost COPY_FILES
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_boost} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF()
+endif()
 
 ExternalProject_Add_Step(boost CopyConfigFileToInstall
     COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake

@@ -1,6 +1,6 @@
 set(ITK_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/)
 
-SET(ITK_LIBS ITKAlgorithms
+set(ITK_LIBS ITKAlgorithms
     ITKBiasCorrection
     ITKBioCell
     ITKCommon

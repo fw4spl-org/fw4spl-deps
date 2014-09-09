@@ -1,13 +1,13 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(annBuilder)
+project(annBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://www.cs.umd.edu/~mount/ANN/Files/1.1.2/ann_1.1.2.tar.gz CACHED_URL)
+getCachedUrl(http://www.cs.umd.edu/~mount/ANN/Files/1.1.2/ann_1.1.2.tar.gz CACHED_URL)
 
-SET(ANN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-SET(ANN_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
+set(ANN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(ANN_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    -DBUILD_SHARED_LIBS:BOOL=ON
 )

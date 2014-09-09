@@ -5,7 +5,7 @@
 #  CryptoPP_INCLUDE_DIR, where to find cryptopp/config.h
 
 
-    FIND_PATH(CryptoPP_INCLUDE_DIR cryptopp/config.h
+    find_path(CryptoPP_INCLUDE_DIR cryptopp/config.h
         HINTS
         PATH_SUFFIXES include
         PATHS
@@ -19,7 +19,7 @@
         /opt
         )
 
-    FIND_LIBRARY(CryptoPP_LIBRARY 
+    find_library(CryptoPP_LIBRARY 
         NAMES cryptopp 
         HINTS
         PATH_SUFFIXES lib
@@ -34,8 +34,8 @@
         /opt
         )
 
-IF(WIN32)
-    FIND_LIBRARY(CryptoPP_LIB
+if(WIN32)
+    find_library(CryptoPP_LIB
         NAMES cryptlib 
         HINTS
         PATH_SUFFIXES lib
@@ -49,14 +49,14 @@ IF(WIN32)
         /opt/csw
         /opt
         )
-    SET(CryptoPP_LIBRARIES "${CryptoPP_LIB};${CryptoPP_LIBRARY}" CACHE LIST "CryptoPP Libraries")
-ELSE()
-    SET(CryptoPP_LIBRARIES "${CryptoPP_LIBRARY}" CACHE LIST "CryptoPP Libraries")
-ENDIF()
+    set(CryptoPP_LIBRARIES "${CryptoPP_LIB};${CryptoPP_LIBRARY}" CACHE LIST "CryptoPP Libraries")
+else()
+    set(CryptoPP_LIBRARIES "${CryptoPP_LIBRARY}" CACHE LIST "CryptoPP Libraries")
+endif()
 
 
 
-INCLUDE(FindPackageHandleStandardArgs)
+include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set CryptoPP_FOUND to TRUE if 
 # all listed variables are TRUE
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(CryptoPP DEFAULT_MSG CryptoPP_LIBRARIES CryptoPP_INCLUDE_DIR)

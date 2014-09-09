@@ -1,17 +1,17 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(campBuilder)
+project(campBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(CAMP_CMAKE_ARGS 
+set(CAMP_CMAKE_ARGS 
     -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -DBUILD_DOXYGEN:BOOL=OFF
 )
 
-GET_CACHED_URL(https://github.com/greenjava/camp/archive/0.7.1.1.tar.gz CACHED_URL)
+getCachedUrl(https://github.com/greenjava/camp/archive/0.7.1.1.tar.gz CACHED_URL)
 
 ExternalProject_Add(
     camp

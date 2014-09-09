@@ -1,14 +1,14 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(tiffBuilder)
+project(tiffBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://download.osgeo.org/libtiff/tiff-4.0.3.zip CACHED_URL)
+getCachedUrl(http://download.osgeo.org/libtiff/tiff-4.0.3.zip CACHED_URL)
 
 if(WIN32)
-    SET(TIFF_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(TIFF_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    set(TIFF_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(TIFF_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
     ExternalProject_Add(
         tiff
         URL ${CACHED_URL}
@@ -18,7 +18,7 @@ if(WIN32)
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${TIFF_CMAKE_ARGS}
     )
-ELSE(WIN32)
+else(WIN32)
     ExternalProject_Add(
         tiff
         URL ${CACHED_URL}
@@ -43,5 +43,5 @@ ELSE(WIN32)
         DEPENDEES install
     )
 
-ENDIF(WIN32)
+endif(WIN32)
 

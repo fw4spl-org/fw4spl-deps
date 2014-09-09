@@ -4,7 +4,7 @@
 #  CAMP_LIBRARIES
 #  CAMP_INCLUDE_DIR, where to find camp/version.hpp
 
-FIND_PATH(CAMP_INCLUDE_DIR camp/version.hpp
+find_path(CAMP_INCLUDE_DIR camp/version.hpp
   HINTS
   $ENV{CAMP_DIR}
   PATH_SUFFIXES include
@@ -20,7 +20,7 @@ FIND_PATH(CAMP_INCLUDE_DIR camp/version.hpp
   /opt
 )
 
-FIND_LIBRARY(CAMP_LIBRARY 
+find_library(CAMP_LIBRARY 
   NAMES camp campd
   HINTS
   $ENV{CAMP_DIR}
@@ -37,9 +37,9 @@ FIND_LIBRARY(CAMP_LIBRARY
   /opt
 )
 
-SET(CAMP_LIBRARIES "${CAMP_LIBRARY}" CACHE STRING "CAMP Libraries")
+set(CAMP_LIBRARIES "${CAMP_LIBRARY}" CACHE STRING "CAMP Libraries")
 
-INCLUDE(FindPackageHandleStandardArgs)
+include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set CAMP_FOUND to TRUE if 
 # all listed variables are TRUE
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(CAMP DEFAULT_MSG CAMP_LIBRARIES CAMP_INCLUDE_DIR)

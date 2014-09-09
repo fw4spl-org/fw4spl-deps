@@ -90,7 +90,7 @@ else(WIN32)
 endif(WIN32)
 
 # Socket is different on Windows
-if (WIN32)
+if(WIN32)
     add_python_extension(_socket
         SOURCES socketmodule.c
         DEFINITIONS EAI_ADDRFAMILY

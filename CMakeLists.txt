@@ -1,38 +1,38 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(BinPkgs)
+project(BinPkgs)
 
-IF(WIN32)
-    SET(MAKE nmake)
-ELSE()
-    SET(MAKE make)
-ENDIF()
+if(WIN32)
+    set(MAKE nmake)
+else()
+    set(MAKE make)
+endif()
 
-SET(ARCHIVE_DIR ${CMAKE_SOURCE_DIR}/archive CACHE PATH "Archive directory")
+set(ARCHIVE_DIR ${CMAKE_SOURCE_DIR}/archive CACHE PATH "Archive directory")
 
-MACRO(GET_CACHED_URL URL CACHED_URL)
-    STRING(REGEX MATCH "[^/]*$" FNAME "${URL}")
-    IF(EXISTS ${ARCHIVE_DIR}/${FNAME})
-        SET(${CACHED_URL} ${ARCHIVE_DIR}/${FNAME})
-    ELSE()
-        SET(${CACHED_URL} ${URL})
-    ENDIF()
-ENDMACRO()
+macro(getCachedUrl URL CACHED_URL)
+    string(REGEX MATCH "[^/]*$" FNAME "${URL}")
+    if(EXISTS ${ARCHIVE_DIR}/${FNAME})
+        set(${CACHED_URL} ${ARCHIVE_DIR}/${FNAME})
+    else()
+        set(${CACHED_URL} ${URL})
+    endif()
+endmacro()
 
 
 #Debug/Release
-SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build.")
-SET(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/${CMAKE_BUILD_TYPE}" CACHE PATH "Install directory")
+set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build.")
+set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/${CMAKE_BUILD_TYPE}" CACHE PATH "Install directory")
 
-SET(NUMBER_OF_PARALLEL_BUILD "1" CACHE STRING "Number of parallel build for non-make based subprojects")
+set(NUMBER_OF_PARALLEL_BUILD "1" CACHE STRING "Number of parallel build for non-make based subprojects")
 
-IF(CMAKE_BUILD_TYPE MATCHES "Release")
-    SET(IS_DEBUG FALSE)
-ELSE()
-    SET(IS_DEBUG TRUE)
-ENDIF()
+if(CMAKE_BUILD_TYPE MATCHES "Release")
+    set(IS_DEBUG FALSE)
+else()
+    set(IS_DEBUG TRUE)
+endif()
 
-SET(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
+set(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
 
 list(APPEND SUBDIRECTORIES jpeg)
 list(APPEND SUBDIRECTORIES zlib)
@@ -46,10 +46,10 @@ list(APPEND SUBDIRECTORIES boost)
 list(APPEND SUBDIRECTORIES freetype)
 list(APPEND SUBDIRECTORIES icu4c)
 
-IF(NOT APPLE)
+if(NOT APPLE)
     list(APPEND SUBDIRECTORIES curl)
     list(APPEND SUBDIRECTORIES numpy)
-ENDIF()
+endif()
 
 list(APPEND SUBDIRECTORIES qt)
 list(APPEND SUBDIRECTORIES vtk)
@@ -62,15 +62,15 @@ list(APPEND SUBDIRECTORIES cppunit)
 list(APPEND SUBDIRECTORIES ann)
 list(APPEND SUBDIRECTORIES dcmtk)
 
-IF(NOT APPLE)
+if(NOT APPLE)
     list(APPEND SUBDIRECTORIES wxWidgets)
-ENDIF() 
+endif() 
 
 list(APPEND SUBDIRECTORIES cryptopp)
 list(APPEND SUBDIRECTORIES tetgen)
 list(APPEND SUBDIRECTORIES json-spirit)
 
-FOREACH(subdir ${SUBDIRECTORIES})
+foreach(subdir ${SUBDIRECTORIES})
     # define an uninstall target for each project
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
@@ -81,18 +81,18 @@ FOREACH(subdir ${SUBDIRECTORIES})
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/cmake_uninstall.cmake)
 
     # define the standard location for the intermediate install directory
-    SET(INSTALL_PREFIX_${subdir} ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/${subdir}-prefix/src/${subdir}-install-tmp)
+    set(INSTALL_PREFIX_${subdir} ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/${subdir}-prefix/src/${subdir}-install-tmp)
 
-    ADD_SUBDIRECTORY(${subdir})
-ENDFOREACH()
+    add_subdirectory(${subdir})
+endforeach()
 
 set(SUBDIRECTORIES "")
 
-IF(ADDITIONAL_DEPS)
+if(ADDITIONAL_DEPS)
 
-    FOREACH(DEPS ${ADDITIONAL_DEPS})
-        GET_FILENAME_COMPONENT(DEPS_NAME ${DEPS} NAME)
-        ADD_SUBDIRECTORY(${DEPS} ${CMAKE_BINARY_DIR}/additional_deps/${DEPS_NAME})
-    ENDFOREACH()
+    foreach(DEPS ${ADDITIONAL_DEPS})
+        get_filename_component(DEPS_NAME ${DEPS} NAME)
+        add_subdirectory(${DEPS} ${CMAKE_BINARY_DIR}/additional_deps/${DEPS_NAME})
+    endforeach()
     
-ENDIF()
+endif()

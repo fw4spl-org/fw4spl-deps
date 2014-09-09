@@ -1,13 +1,13 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(tetgenBuilder)
+project(tetgenBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(TETGEN_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
-SET(TETGEN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(TETGEN_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+set(TETGEN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
-GET_CACHED_URL(http://tetgen.org/files/tetgen1.4.3.tar.gz CACHED_URL)
+getCachedUrl(http://tetgen.org/files/tetgen1.4.3.tar.gz CACHED_URL)
 
 ExternalProject_Add(
     tetgen

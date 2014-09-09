@@ -1,11 +1,11 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(vtkBuilder)
+project(vtkBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
 #TODO : currently using macport's tiff png and jpeg on osx
-SET(VTK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
+set(VTK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX} 
                    -DCMAKE_BUILD_TYPE:PATH=${CMAKE_BUILD_TYPE}
                    -DCMAKE_PREFIX_PATH:PATH=${CMAKE_INSTALL_PREFIX}
                    -DBUILD_EXAMPLES:BOOL=OFF
@@ -42,33 +42,33 @@ SET(VTK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
                    -DModule_vtkIOImport:BOOL=ON
 )
 
-IF(APPLE)
-   IF(CMAKE_SIZEOF_VOID_P EQUAL 8) #x64
-           LIST(APPEND VTK_CMAKE_ARGS 
+if(APPLE)
+   if(CMAKE_SIZEOF_VOID_P EQUAL 8) #x64
+           list(APPEND VTK_CMAKE_ARGS 
                    -DVTK_USE_CARBON:BOOL=OFF
                    -DVTK_USE_COCOA:BOOL=ON
             )
-    ELSE()
-        LIST(APPEND VTK_CMAKE_ARGS 
+    else()
+        list(APPEND VTK_CMAKE_ARGS 
                    -DVTK_USE_CARBON:BOOL=ON
                    -DVTK_USE_COCOA:BOOL=OFF
             )
-    ENDIF()
-ENDIF(APPLE)
+    endif()
+endif(APPLE)
 
-GET_CACHED_URL(http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz CACHED_URL)
+getCachedUrl(http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz CACHED_URL)
 
-SET(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-SET(VTK_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/IO_Import_CMakeLists.txt" "<SOURCE_DIR>/IO/Import/CMakeLists.txt"
+set(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(VTK_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/IO_Import_CMakeLists.txt" "<SOURCE_DIR>/IO/Import/CMakeLists.txt"
     COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${VTK_PATCH_DIR}/Main_CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt")
 
-SET(VTK_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk)
-IF(NOT WIN32)    
-    SET(PKG_EXPORT export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
-    SET(VTK_CONFIGURE_CMD ${PKG_EXPORT} && ${CMAKE_COMMAND} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
-ELSE()
-    SET(VTK_CONFIGURE_CMD ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
-ENDIF()
+set(VTK_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk)
+if(NOT WIN32)    
+    set(PKG_EXPORT export PKG_CONFIG_PATH=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig)
+    set(VTK_CONFIGURE_CMD ${PKG_EXPORT} && ${CMAKE_COMMAND} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
+else()
+    set(VTK_CONFIGURE_CMD ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
+endif()
 
 ExternalProject_Add(
     vtk

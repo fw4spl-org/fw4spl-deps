@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icuin)
+project(icuin)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ../common
 )
 
-SET (ICUIN_SOURCE_FILES
+set(ICUIN_SOURCE_FILES
     alphaindex.cpp
     bocsu.cpp
     coleitr.cpp
@@ -169,7 +169,7 @@ SET (ICUIN_SOURCE_FILES
     uspoof_wsconf.cpp
 )
 
-SET(ICUIN_HEADER_FILES
+set(ICUIN_HEADER_FILES
     bocsu.h
     dcfmtimp.h
     numsys_impl.h
@@ -273,7 +273,7 @@ SET(ICUIN_HEADER_FILES
     uspoof_wsconf.h
 )
 
-SOURCE_GROUP("charset detect" FILES 
+source_group("charset detect" FILES 
     csdetect.cpp
     csmatch.cpp
     csr2022.cpp
@@ -294,7 +294,7 @@ SOURCE_GROUP("charset detect" FILES
     csrutf8.h
     inputext.h
 )
-SOURCE_GROUP("collation" FILES 
+source_group("collation" FILES 
     coleitr.cpp
     coll.cpp
     search.cpp
@@ -321,7 +321,7 @@ SOURCE_GROUP("collation" FILES
     ucol_wgt.h
     usrchimp.h
 )
-SOURCE_GROUP("transforms" FILES 
+source_group("transforms" FILES 
     anytrans.cpp
     brktrans.cpp
     casetrn.cpp
@@ -376,7 +376,7 @@ SOURCE_GROUP("transforms" FILES
     unesctrn.h
     uni2name.h
 )
-SOURCE_GROUP("regex" FILES 
+source_group("regex" FILES 
     regexcmp.cpp
     regeximp.cpp
     regexst.cpp
@@ -391,11 +391,11 @@ SOURCE_GROUP("regex" FILES
     regexst.h
     regextxt.h
 )
-SOURCE_GROUP("misc" FILES 
+source_group("misc" FILES 
     ucln_in.c
     ucln_in.h
 )
-SOURCE_GROUP("formatting" FILES 
+source_group("formatting" FILES 
     astro.cpp
     basictz.cpp
     buddhcal.cpp
@@ -534,7 +534,7 @@ SOURCE_GROUP("formatting" FILES
     region_impl.h
     unicode/region.h
 )
-SOURCE_GROUP("spoof" FILES 
+source_group("spoof" FILES 
     identifier_info.cpp
     scriptset.cpp
     uspoof.cpp
@@ -550,22 +550,22 @@ SOURCE_GROUP("spoof" FILES
 )
 
 
-SET_SOURCE_FILES_PROPERTIES(ICUIN_HEADER_FILES
+set_source_files_properties(ICUIN_HEADER_FILES
                             PROPERTIES HEADER_FILE_ONLY TRUE)
-LIST(APPEND ICUIN_SOURCE_FILES ${ICUIN_HEADER_FILES})
+list(APPEND ICUIN_SOURCE_FILES ${ICUIN_HEADER_FILES})
 
-ADD_DEFINITIONS(
+add_definitions(
     -DU_ATTRIBUTE_DEPRECATED=
     -DU_I18N_IMPLEMENTATION
 )
 
-ADD_LIBRARY(icuin SHARED ${ICUIN_SOURCE_FILES} )
-TARGET_LINK_LIBRARIES(icuin icuuc)
+add_library(icuin SHARED ${ICUIN_SOURCE_FILES} )
+target_link_libraries(icuin icuuc)
 
-INSTALL(TARGETS icuin
+install(TARGETS icuin
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
         DESTINATION "${INSTALL_INC_DIR}" FILES_MATCHING PATTERN "*.h")
 

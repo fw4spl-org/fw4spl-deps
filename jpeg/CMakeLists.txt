@@ -1,14 +1,14 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(jpegBuilder)
+project(jpegBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://www.ijg.org/files/jpegsrc.v8d.tar.gz CACHED_URL)
+getCachedUrl(http://www.ijg.org/files/jpegsrc.v8d.tar.gz CACHED_URL)
 
-IF(WIN32)
-    SET(JPEG_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(JPEG_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+if(WIN32)
+    set(JPEG_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(JPEG_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
 
     ExternalProject_Add(
         jpeg
@@ -23,7 +23,7 @@ IF(WIN32)
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib
         DEPENDEES install
     )
-ELSE()
+else()
     ExternalProject_Add(
         jpeg
         URL ${CACHED_URL}
@@ -42,8 +42,8 @@ ELSE()
         DEPENDEES install
     )
 
-ENDIF()
+endif()
 
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fPIC")
-ENDIF()
+endif()

@@ -13,7 +13,7 @@ add_definitions(
         -DBOOST_THREAD_VERSION=2
         )
 
-IF(WIN32)
+if(WIN32)
     set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
 
     set(Boost_COMPILER -vc100)
@@ -22,17 +22,17 @@ IF(WIN32)
             -DNOMINMAX
             -DWIN32_LEAN_AND_MEAN
             )
-ENDIF()
+endif()
 
-IF(APPLE)
+if(APPLE)
     set(Boost_COMPILER -clang-darwin42)
-ELSE()
-    IF(UNIX)
-        IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+else()
+    if(UNIX)
+        if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
             string(REPLACE "." "" VERSION ${CMAKE_CXX_COMPILER_VERSION})
             string(SUBSTRING ${VERSION} 0 2 VERSION)
             set(Boost_COMPILER -clang${VERSION})
-        ENDIF()
-    ENDIF()
-ENDIF()
+        endif()
+    endif()
+endif()
 

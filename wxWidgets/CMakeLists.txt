@@ -1,20 +1,20 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(wxWidgetsBuilder)
+project(wxWidgetsBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://freefr.dl.sourceforge.net/wxwindows/wxWidgets-2.9.5.tar.bz2 CACHED_URL)
+getCachedUrl(http://freefr.dl.sourceforge.net/wxwindows/wxWidgets-2.9.5.tar.bz2 CACHED_URL)
 
-SET(WX_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(WX_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
-IF(WIN32)
-    IF(IS_DEBUG)
-        SET(BUILDTYPE "debug")
-    ELSE()
-        SET(BUILDTYPE "release")
-    ENDIF()
-    SET(BUILD_CMD
+if(WIN32)
+    if(IS_DEBUG)
+        set(BUILDTYPE "debug")
+    else()
+        set(BUILDTYPE "release")
+    endif()
+    set(BUILD_CMD
         -f 
         ${CMAKE_CURRENT_BINARY_DIR}/makefile.vc
         BUILD=${BUILDTYPE}
@@ -39,31 +39,31 @@ IF(WIN32)
         USE_CAIRO=0
     )
 
-    SET(INCLUDE_ZLIB  ${CMAKE_INSTALL_PREFIX}/include)
-    SET(INCLUDE_EXPAT ${CMAKE_INSTALL_PREFIX}/include)
-    SET(INCLUDE_PNG   ${CMAKE_INSTALL_PREFIX}/include)
-    SET(INCLUDE_JPEG  ${CMAKE_INSTALL_PREFIX}/include)
-    SET(INCLUDE_TIFF  ${CMAKE_INSTALL_PREFIX}/include)
+    set(INCLUDE_ZLIB  ${CMAKE_INSTALL_PREFIX}/include)
+    set(INCLUDE_EXPAT ${CMAKE_INSTALL_PREFIX}/include)
+    set(INCLUDE_PNG   ${CMAKE_INSTALL_PREFIX}/include)
+    set(INCLUDE_JPEG  ${CMAKE_INSTALL_PREFIX}/include)
+    set(INCLUDE_TIFF  ${CMAKE_INSTALL_PREFIX}/include)
     
-    SET(LIB_ZLIB  ${CMAKE_INSTALL_PREFIX}/lib/zlib.lib)
-    SET(LIB_EXPAT ${CMAKE_INSTALL_PREFIX}/lib/expat.lib)
-    SET(LIB_PNG   ${CMAKE_INSTALL_PREFIX}/lib/png.lib)
-    SET(LIB_JPEG  ${CMAKE_INSTALL_PREFIX}/lib/jpeg.lib)
-    SET(LIB_TIFF  ${CMAKE_INSTALL_PREFIX}/lib/libtiff.lib)
+    set(LIB_ZLIB  ${CMAKE_INSTALL_PREFIX}/lib/zlib.lib)
+    set(LIB_EXPAT ${CMAKE_INSTALL_PREFIX}/lib/expat.lib)
+    set(LIB_PNG   ${CMAKE_INSTALL_PREFIX}/lib/png.lib)
+    set(LIB_JPEG  ${CMAKE_INSTALL_PREFIX}/lib/jpeg.lib)
+    set(LIB_TIFF  ${CMAKE_INSTALL_PREFIX}/lib/libtiff.lib)
     
-    SET(WX_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/wxWidgets-prefix/src/wxWidgets)
-    CONFIGURE_FILE(${WX_PATCH_DIR}/makefile.vc.in 
+    set(WX_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/wxWidgets-prefix/src/wxWidgets)
+    configure_file(${WX_PATCH_DIR}/makefile.vc.in 
                    ${CMAKE_CURRENT_BINARY_DIR}/makefile.vc @ONLY
                    )
                    
-    SET(WX_DEBUG_FLAG)
-    IF(IS_DEBUG)
-        SET(WX_DEBUG_FLAG "d")
-    ENDIF(IS_DEBUG)
-    STRING(REGEX REPLACE "/" "\\\\" WX_SRC_WINDIR ${WX_SRC_DIR})
-    STRING(REGEX REPLACE "/" "\\\\" WX_INSTALL_WINDIR ${CMAKE_INSTALL_PREFIX})
+    set(WX_DEBUG_FLAG)
+    if(IS_DEBUG)
+        set(WX_DEBUG_FLAG "d")
+    endif(IS_DEBUG)
+    string(REGEX REPLACE "/" "\\\\" WX_SRC_WINDIR ${WX_SRC_DIR})
+    string(REGEX REPLACE "/" "\\\\" WX_INSTALL_WINDIR ${CMAKE_INSTALL_PREFIX})
     
-    CONFIGURE_FILE(${WX_PATCH_DIR}/install.bat.in
+    configure_file(${WX_PATCH_DIR}/install.bat.in
                    ${CMAKE_CURRENT_BINARY_DIR}/install.bat @ONLY
                    )
                    
@@ -77,12 +77,12 @@ IF(WIN32)
         BINARY_DIR ${WX_SRC_DIR}/build/msw/
         BUILD_COMMAND ${MAKE} ${BUILD_CMD}
         INSTALL_COMMAND ${CMAKE_CURRENT_BINARY_DIR}/install.bat
-	STEP_TARGETS CopyConfigFileToInstall
+        STEP_TARGETS CopyConfigFileToInstall
     )
 
-ELSE(WIN32)
-    SET(WX_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/wxWidgets-prefix/src/wxWidgets)
-    SET(WX_CONFIGURE
+else(WIN32)
+    set(WX_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/wxWidgets-prefix/src/wxWidgets)
+    set(WX_CONFIGURE
             ${WX_SRC_DIR}/configure
             --enable-shared
             --disable-static
@@ -109,7 +109,7 @@ ELSE(WIN32)
         INSTALL_COMMAND ""
         STEP_TARGETS CopyConfigFileToInstall
     )
-ENDIF(WIN32)
+endif(WIN32)
 
 ExternalProject_Add_Step(wxWidgets CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-wxWidgets.cmake ${CMAKE_INSTALL_PREFIX}/fw-wxWidgets.cmake

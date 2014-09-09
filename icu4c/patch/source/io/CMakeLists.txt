@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icuio)
+project(icuio)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ../common
     ../i18n
 )
 
-SET (ICUIO_SOURCE_FILES
+set(ICUIO_SOURCE_FILES
     locbund.cpp
     sprintf.c
     sscanf.c
@@ -22,7 +22,7 @@ SET (ICUIO_SOURCE_FILES
     ustream.cpp
 )
 
-SET(ICUIO_HEADER_FILES
+set(ICUIO_HEADER_FILES
     locbund.h
     ucln_io.h
     ufile.h
@@ -31,23 +31,23 @@ SET(ICUIO_HEADER_FILES
     uscanf.h
 )
 
-SOURCE_GROUP("Source Files" FILES ${ICUIO_SOURCE_FILES})
-SOURCE_GROUP("Header Files" FILES ${ICUIO_HEADER_FILES})
+source_group("Source Files" FILES ${ICUIO_SOURCE_FILES})
+source_group("Header Files" FILES ${ICUIO_HEADER_FILES})
 
-SET_SOURCE_FILES_PROPERTIES(ICUIO_HEADER_FILES
+set_source_files_properties(ICUIO_HEADER_FILES
                             PROPERTIES HEADER_FILE_ONLY TRUE)
-LIST(APPEND ICUIO_SOURCE_FILES ${ICUIO_HEADER_FILES})
+list(APPEND ICUIO_SOURCE_FILES ${ICUIO_HEADER_FILES})
 
-ADD_DEFINITIONS(
+add_definitions(
     -DU_IO_IMPLEMENTATION
 )
 
-ADD_LIBRARY(icuio SHARED ${ICUIO_SOURCE_FILES} )
-TARGET_LINK_LIBRARIES(icuio icuin icuuc)
+add_library(icuio SHARED ${ICUIO_SOURCE_FILES} )
+target_link_libraries(icuio icuin icuuc)
 
-INSTALL(TARGETS icuio
+install(TARGETS icuio
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
         DESTINATION "${INSTALL_INC_DIR}" FILES_MATCHING PATTERN "*.h")

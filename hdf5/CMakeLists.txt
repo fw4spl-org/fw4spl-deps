@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(hdf5Builder)
+project(hdf5Builder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(HDF5_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
+set(HDF5_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
                     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                     -DBUILD_SHARED_LIBS:BOOL=ON
                     -DHDF5_BUILD_CPP_LIB:BOOL=ON
@@ -13,7 +13,7 @@ SET(HDF5_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                     #-DHDF5_ENABLE_ZLIB_SUPPORT:BOOL=ON
 )
 
-GET_CACHED_URL(http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.9/src/hdf5-1.8.9.tar.gz CACHED_URL)
+getCachedUrl(http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.9/src/hdf5-1.8.9.tar.gz CACHED_URL)
 
 
 if( NOT WIN32 )

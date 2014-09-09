@@ -1,8 +1,8 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icuuc)
+project(icuuc)
 
-SET(LOCALES_AND_RESOURCES_INC
+set(LOCALES_AND_RESOURCES_INC
     locbased.h
     locutil.h
     ulocimp.h
@@ -11,7 +11,7 @@ SET(LOCALES_AND_RESOURCES_INC
     ureslocs.h
     localsvc.h
 )
-SET(LOCALES_AND_RESOURCES_SRC
+set(LOCALES_AND_RESOURCES_SRC
     locavailable.cpp
     locbased.cpp
     locdispnames.cpp
@@ -28,7 +28,7 @@ SET(LOCALES_AND_RESOURCES_SRC
     uresbund.cpp
     uresdata.c
 )
-SET(COLLECTIONS_INC
+set(COLLECTIONS_INC
     hash.h
     propsvec.h
     uarrsort.h
@@ -44,7 +44,7 @@ SET(COLLECTIONS_INC
     uvectr32.h
     uvectr64.h
 )
-SET(COLLECTIONS_SRC 
+set(COLLECTIONS_SRC 
     propsvec.c
     uarrsort.c
     uenum.c
@@ -67,7 +67,7 @@ SET(COLLECTIONS_SRC
     ucharstrieiterator.cpp
     stringtriebuilder.cpp
 )
-SET(BREAK_ITERATION_INC
+set(BREAK_ITERATION_INC
     brkeng.h
     dictbe.h
     rbbidata.h
@@ -80,7 +80,7 @@ SET(BREAK_ITERATION_INC
     ubrkimpl.h
     dictionarydata.h
 )
-SET(BREAK_ITERATION_SRC 
+set(BREAK_ITERATION_SRC 
     brkeng.cpp
     brkiter.cpp
     dictbe.cpp
@@ -95,24 +95,24 @@ SET(BREAK_ITERATION_SRC
     ubrk.cpp
     dictionarydata.cpp
 )
-SET(BIDI_INC
+set(BIDI_INC
     ubidi_props.h
     ubidiimp.h
     ubidi_props_data.h
 )
-SET(BIDI_SRC
+set(BIDI_SRC
     ubidi.c
     ubidi_props.c
     ubidiln.c
     ubidiwrt.c
     ushape.cpp
 )
-SET(FORMATTING_INC
+set(FORMATTING_INC
     ustrfmt.h
     util.h
     messageimpl.h
 )
-SET(FORMATTING_SRC
+set(FORMATTING_SRC
     dtintrv.cpp
     parsepos.cpp
     ustrfmt.c
@@ -121,7 +121,7 @@ SET(FORMATTING_SRC
     listformatter.cpp
     messagepattern.cpp
 )
-SET(STRINGS_INC
+set(STRINGS_INC
     charstr.h
     cstring.h
     cwchar.h
@@ -129,7 +129,7 @@ SET(STRINGS_INC
     ustr_cnv.h
     ustr_imp.h
 )
-SET(STRINGS_SRC
+set(STRINGS_SRC
     bytestream.cpp
     chariter.cpp
     charstr.cpp
@@ -159,13 +159,13 @@ SET(STRINGS_SRC
     utf_impl.c
     appendable.cpp
 )
-SET(REGISTRATION_INC
+set(REGISTRATION_INC
     icuplugimp.h
     serv.h
     servloc.h
     servnotf.h
 )
-SET(REGISTRATION_SRC
+set(REGISTRATION_SRC
     icuplug.c
     serv.cpp
     servlk.cpp
@@ -175,7 +175,7 @@ SET(REGISTRATION_SRC
     servrbf.cpp
     servslkf.cpp
 )
-SET(DATA_AND_MEMORY_INC
+set(DATA_AND_MEMORY_INC
     cmemory.h
     ucln.h
     ucln_cmn.h
@@ -185,7 +185,7 @@ SET(DATA_AND_MEMORY_INC
     udataswp.h
     umapfile.h
 )
-SET(DATA_AND_MEMORY_SRC 
+set(DATA_AND_MEMORY_SRC 
     cmemory.c
     ucln_cmn.c
     ucmndata.c
@@ -196,22 +196,22 @@ SET(DATA_AND_MEMORY_SRC
     umapfile.c
     uobject.cpp
 )
-SET(IDNA_INC
+set(IDNA_INC
     punycode.h
 )
-SET(IDNA_SRC
+set(IDNA_SRC
     punycode.cpp
     uidna.cpp
     uts46.cpp
 )
-SET(COLLATION_INC
+set(COLLATION_INC
     ucol_data.h
     ucol_swp.h
 )
-SET(COLLATION_SRC
+set(COLLATION_SRC
     ucol_swp.cpp
 )
-SET(CONFIGURATION_INC
+set(CONFIGURATION_INC
     cpputils.h
     locmap.h
     mutex.h
@@ -224,7 +224,7 @@ SET(CONFIGURATION_INC
     utypeinfo.h
     msvcres.h
 )
-SET(CONFIGURATION_SRC
+set(CONFIGURATION_SRC
     errorcode.cpp
     icudataver.c
     locmap.c
@@ -236,12 +236,12 @@ SET(CONFIGURATION_SRC
     utypes.c
     wintz.c
 )
-SET(NORMALIZATION_INC
+set(NORMALIZATION_INC
     normalizer2impl.h
     unorm_it.h
     unormimp.h
 )
-SET(NORMALIZATION_SRC
+set(NORMALIZATION_SRC
     caniter.cpp
     filterednormalizer2.cpp
     normalizer2.cpp
@@ -251,13 +251,13 @@ SET(NORMALIZATION_SRC
     unorm_it.c
     unormcmp.cpp
 )
-SET(SPREP_INC
+set(SPREP_INC
     sprpimpl.h
 )
-SET(SPREP_SRC
+set(SPREP_SRC
     usprep.cpp
 )
-SET(PROPERTIES_AND_SETS_INC
+set(PROPERTIES_AND_SETS_INC
     bmpset.h
     propname.h
     ruleiter.h
@@ -271,7 +271,7 @@ SET(PROPERTIES_AND_SETS_INC
     uchar_props_data.h
     patternprops.h
 )
-SET(PROPERTIES_AND_SETS_SRC
+set(PROPERTIES_AND_SETS_SRC
     bmpset.cpp
     propname.cpp
     ruleiter.cpp
@@ -293,7 +293,7 @@ SET(PROPERTIES_AND_SETS_SRC
     usetiter.cpp
     patternprops.cpp
 )
-SET(CONVERSION_INC
+set(CONVERSION_INC
     ucnv_bld.h
     ucnv_cnv.h
     ucnv_ext.h
@@ -301,7 +301,7 @@ SET(CONVERSION_INC
     ucnv_io.h
     ucnvmbcs.h
 )
-SET(CONVERSION_SRC
+set(CONVERSION_SRC
     ucnv.c
     ucnv2022.cpp
     ucnv_bld.cpp
@@ -327,21 +327,21 @@ SET(CONVERSION_SRC
     ucnv_ct.c
 )
     
-SOURCE_GROUP("locales and resources" FILES ${LOCALES_AND_RESOURCES_SRC} ${LOCALES_AND_RESOURCES_INC})
-SOURCE_GROUP("collections"           FILES ${COLLECTIONS_SRC} ${COLLECTIONS_INC})
-SOURCE_GROUP("break iteration"       FILES ${BREAK_ITERATION_SRC} ${BREAK_ITERATION_INC})
-SOURCE_GROUP("bidi"                  FILES ${BIDI_SRC} ${BIDI_INC})
-SOURCE_GROUP("formatting"            FILES ${FORMATTING_SRC} ${FORMATTING_INC})
-SOURCE_GROUP("strings"               FILES ${STRINGS_SRC} ${STRINGS_INC})
-SOURCE_GROUP("registration"          FILES ${REGISTRATION_SRC} ${REGISTRATION_INC})
-SOURCE_GROUP("data and memory"       FILES ${DATA_AND_MEMORY_SRC} ${DATA_AND_MEMORY_INC})
-SOURCE_GROUP("idna"                  FILES ${IDNA_SRC} ${IDNA_INC})
-SOURCE_GROUP("collation"             FILES ${COLLATION_SRC} ${COLLATION_INC})
-SOURCE_GROUP("configuration"         FILES ${CONFIGURATION_SRC} ${CONFIGURATION_INC})
-SOURCE_GROUP("normalization"         FILES ${NORMALIZATION_SRC} ${NORMALIZATION_INC})
-SOURCE_GROUP("sprep"                 FILES ${SPREP_SRC} ${SPREP_INC})
-SOURCE_GROUP("properties and sets"   FILES ${PROPERTIES_AND_SETS_SRC} ${PROPERTIES_AND_SETS_INC})
-SOURCE_GROUP("conversion"            FILES ${CONVERSION_SRC} ${CONVERSION_INC})
+source_group("locales and resources" FILES ${LOCALES_AND_RESOURCES_SRC} ${LOCALES_AND_RESOURCES_INC})
+source_group("collections"           FILES ${COLLECTIONS_SRC} ${COLLECTIONS_INC})
+source_group("break iteration"       FILES ${BREAK_ITERATION_SRC} ${BREAK_ITERATION_INC})
+source_group("bidi"                  FILES ${BIDI_SRC} ${BIDI_INC})
+source_group("formatting"            FILES ${FORMATTING_SRC} ${FORMATTING_INC})
+source_group("strings"               FILES ${STRINGS_SRC} ${STRINGS_INC})
+source_group("registration"          FILES ${REGISTRATION_SRC} ${REGISTRATION_INC})
+source_group("data and memory"       FILES ${DATA_AND_MEMORY_SRC} ${DATA_AND_MEMORY_INC})
+source_group("idna"                  FILES ${IDNA_SRC} ${IDNA_INC})
+source_group("collation"             FILES ${COLLATION_SRC} ${COLLATION_INC})
+source_group("configuration"         FILES ${CONFIGURATION_SRC} ${CONFIGURATION_INC})
+source_group("normalization"         FILES ${NORMALIZATION_SRC} ${NORMALIZATION_INC})
+source_group("sprep"                 FILES ${SPREP_SRC} ${SPREP_INC})
+source_group("properties and sets"   FILES ${PROPERTIES_AND_SETS_SRC} ${PROPERTIES_AND_SETS_INC})
+source_group("conversion"            FILES ${CONVERSION_SRC} ${CONVERSION_INC})
 
 list(APPEND ICUUC_SOURCE_FILES
     ${LOCALES_AND_RESOURCES_SRC}
@@ -377,21 +377,21 @@ list(APPEND ICUUC_HEADER_FILES
     ${PROPERTIES_AND_SETS_INC}
     ${CONVERSION_INC}
 )
-SET_SOURCE_FILES_PROPERTIES(ICUUC_HEADER_FILES PROPERTIES HEADER_FILE_ONLY TRUE)
+set_source_files_properties(ICUUC_HEADER_FILES PROPERTIES HEADER_FILE_ONLY TRUE)
 
-ADD_DEFINITIONS(
+add_definitions(
     -DU_ATTRIBUTE_DEPRECATED=
     -DU_COMMON_IMPLEMENTATION
     -DRBBI_DEBUG
     -DCYGWINMSVC
 )
 
-ADD_LIBRARY(icuuc SHARED ${ICUUC_SOURCE_FILES} ${ICUUC_HEADER_FILES})
-TARGET_LINK_LIBRARIES(icuuc icudt)
+add_library(icuuc SHARED ${ICUUC_SOURCE_FILES} ${ICUUC_HEADER_FILES})
+target_link_libraries(icuuc icudt)
 
-INSTALL(TARGETS icuuc
+install(TARGETS icuuc
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )
-INSTALL(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
         DESTINATION "${INSTALL_INC_DIR}" FILES_MATCHING PATTERN "*.h")

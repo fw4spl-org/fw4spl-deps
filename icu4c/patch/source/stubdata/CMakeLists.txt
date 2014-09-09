@@ -1,20 +1,20 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icudt)
+project(icudt)
 
-INCLUDE_DIRECTORIES(
+include_directories(
     ../common
 )
   
-SET(ICUDT_SOURCE_FILES stubdata.c)
+set(ICUDT_SOURCE_FILES stubdata.c)
 
-ADD_DEFINITIONS(
+add_definitions(
     -DSTUBDATA_BUILD
 )
 
-ADD_LIBRARY(icudt SHARED ${ICUDT_SOURCE_FILES} )
+add_library(icudt SHARED ${ICUDT_SOURCE_FILES} )
 
-INSTALL(TARGETS icudt
+install(TARGETS icudt
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )

@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(dcmtkBuilder)
+project(dcmtkBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(DCMTK_CMAKE_ARGS 
+set(DCMTK_CMAKE_ARGS 
                         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
                         -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX} 
                         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
@@ -19,9 +19,9 @@ SET(DCMTK_CMAKE_ARGS
                         -DDCMTK_WITH_ICONV:BOOL=OFF
 )
 
-GET_CACHED_URL(http://dicom.offis.de/download/dcmtk/snapshot/old/dcmtk-3.6.1_20121102.tar.gz CACHED_URL)
+getCachedUrl(http://dicom.offis.de/download/dcmtk/snapshot/old/dcmtk-3.6.1_20121102.tar.gz CACHED_URL)
 
-#SET(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+#set(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 ExternalProject_Add(
     dcmtk

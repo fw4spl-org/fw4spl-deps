@@ -1,24 +1,24 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(icu)
+project(icu)
 
-SET(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" 
+set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" 
     CACHE PATH "Installation directory for executables")
-SET(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" 
+set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib" 
     CACHE PATH "Installation directory for libraries")
-SET(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include/icu" 
+set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include/icu" 
     CACHE PATH "Installation directory for headers")
 
-SET(ICU_MAJOR_VERSION 51)
-SET(ICU_MINOR_VERSION 2)
-SET(ICU_VERSION "${ICU_MAJOR_VERSION}.${ICU_MINOR_VERSION}")
+set(ICU_MAJOR_VERSION 51)
+set(ICU_MINOR_VERSION 2)
+set(ICU_VERSION "${ICU_MAJOR_VERSION}.${ICU_MINOR_VERSION}")
     
-SET(CMAKE_DEBUG_POSTFIX "${ICU_MAJOR_VERSION}d")
-SET(CMAKE_RELEASE_POSTFIX ${ICU_MAJOR_VERSION})
+set(CMAKE_DEBUG_POSTFIX "${ICU_MAJOR_VERSION}d")
+set(CMAKE_RELEASE_POSTFIX ${ICU_MAJOR_VERSION})
  
-ADD_SUBDIRECTORY(source/stubdata)
-ADD_SUBDIRECTORY(source/common)
-ADD_SUBDIRECTORY(source/i18n)
-ADD_SUBDIRECTORY(source/io)
-ADD_SUBDIRECTORY(source/layout)
-ADD_SUBDIRECTORY(source/layoutex)
+add_subdirectory(source/stubdata)
+add_subdirectory(source/common)
+add_subdirectory(source/i18n)
+add_subdirectory(source/io)
+add_subdirectory(source/layout)
+add_subdirectory(source/layoutex)

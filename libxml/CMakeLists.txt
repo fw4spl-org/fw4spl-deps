@@ -1,49 +1,49 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(libxmlBuilder)
+project(libxmlBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
 
-GET_CACHED_URL(http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz CACHED_URL)
+getCachedUrl(http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz CACHED_URL)
 
-IF(WIN32)
-    SET(LIBXML2_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(LIBXML2_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/libxml-prefix/src/libxml)
+if(WIN32)
+    set(LIBXML2_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(LIBXML2_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/libxml-prefix/src/libxml)
     
-    FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX} LIBXML_INSTALL_DIR_WIN32)
+    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX} LIBXML_INSTALL_DIR_WIN32)
     #patch zlib name and prefix
-    CONFIGURE_FILE(${LIBXML2_PATCH_DIR}/Makefile.msvc.cmake
+    configure_file(${LIBXML2_PATCH_DIR}/Makefile.msvc.cmake
                    ${CMAKE_CURRENT_BINARY_DIR}/Makefile.msvc @ONLY
     )
     
-    SET(CONFIGURE_CMD cscript configure.js
+    set(CONFIGURE_CMD cscript configure.js
                       zlib=yes iconv=yes compiler=msvc
                       prefix="${CMAKE_INSTALL_PREFIX}"
                       include=${CMAKE_INSTALL_PREFIX}/include
                       lib=${CMAKE_INSTALL_PREFIX}/lib
     )
-    IF(IS_DEBUG)
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} debug=yes cruntime=/MDd)
-    ELSE(IS_DEBUG)
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} debug=no cruntime=/MD)
-    ENDIF(IS_DEBUG)
+    if(IS_DEBUG)
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} debug=yes cruntime=/MDd)
+    else(IS_DEBUG)
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} debug=no cruntime=/MD)
+    endif(IS_DEBUG)
 
     
     
-    FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_config.cmake
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_config.cmake
         "execute_process( COMMAND ${CONFIGURE_CMD} WORKING_DIRECTORY ${LIBXML2_SRC_DIR}/win32 )"
     )
-    FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_build.cmake 
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_build.cmake 
         "execute_process( COMMAND nmake /f Makefile.msvc WORKING_DIRECTORY ${LIBXML2_SRC_DIR}/win32)"
     )
-    FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_install.cmake 
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/libxml2_install.cmake 
         "execute_process( COMMAND nmake /f Makefile.msvc install WORKING_DIRECTORY ${LIBXML2_SRC_DIR}/win32)"
     )
     
-    SET(LIBXML2_CONFIG_CMD ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/libxml2_config.cmake)
-    SET(LIBXML2_BUILD_CMD ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/libxml2_build.cmake)
-    SET(LIBXML2_INSTALL_CMD ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/libxml2_install.cmake)
+    set(LIBXML2_CONFIG_CMD ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/libxml2_config.cmake)
+    set(LIBXML2_BUILD_CMD ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/libxml2_build.cmake)
+    set(LIBXML2_INSTALL_CMD ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/libxml2_install.cmake)
       
     ExternalProject_Add(
         libxml
@@ -56,8 +56,8 @@ IF(WIN32)
         BUILD_COMMAND ${LIBXML2_BUILD_CMD}
         INSTALL_COMMAND ${LIBXML2_INSTALL_CMD}
     )
-ELSE(WIN32)
-    SET(CONFIGURE_CMD <SOURCE_DIR>/configure
+else(WIN32)
+    set(CONFIGURE_CMD <SOURCE_DIR>/configure
                       --enable-shared --disable-static --without-libintl --enable-extra-encodings
                       # FIXME : Issue with zlib:
                       # "Undefined reference to `gzdirect@ZLIB_1.2.2.3'"
@@ -67,20 +67,20 @@ ELSE(WIN32)
                       --without-python
                       --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    IF(${IS_DEBUG})
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug)
-    ELSE(${IS_DEBUG})
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
-    ENDIF(${IS_DEBUG})
+    if(${IS_DEBUG})
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug)
+    else(${IS_DEBUG})
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
+    endif(${IS_DEBUG})
 
-    IF("${CMAKE_SYSTEM}" MATCHES "Linux")
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} --with-iconv=${CMAKE_INSTALL_PREFIX})
-    ENDIF()
+    if("${CMAKE_SYSTEM}" MATCHES "Linux")
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-iconv=${CMAKE_INSTALL_PREFIX})
+    endif()
     
 
-    IF(NOT APPLE)
-        SET(EXTRA_DEPENDS libiconv)
-    ENDIF()
+    if(NOT APPLE)
+        set(EXTRA_DEPENDS libiconv)
+    endif()
 
     ExternalProject_Add(
         libxml
@@ -97,4 +97,4 @@ ELSE(WIN32)
         DEPENDEES install
     )
 
-ENDIF(WIN32)
+endif(WIN32)

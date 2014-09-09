@@ -1,14 +1,14 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(pythonBuilder)
+project(pythonBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-GET_CACHED_URL(http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz CACHED_URL)
+getCachedUrl(http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz CACHED_URL)
 
-IF(WIN32)
-    SET(PYTHON_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    SET(PYTHON_CMAKE_ARGS 
+if(WIN32)
+    set(PYTHON_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    set(PYTHON_CMAKE_ARGS 
         -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
         -DENABLE_CURSES:BOOL=OFF
@@ -31,24 +31,24 @@ IF(WIN32)
         CMAKE_ARGS ${PYTHON_CMAKE_ARGS}
         STEP_TARGETS CopyConfigFileToInstall
     )
-ELSE(WIN32)
+else(WIN32)
 
-    IF(NOT APPLE)
-        IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-            SET(SETENV export CC=clang CXX=clang++ CFLAGS=-Wno-unused-value &&)  
-        ENDIF()
-    ENDIF()
+    if(NOT APPLE)
+        if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+            set(SETENV export CC=clang CXX=clang++ CFLAGS=-Wno-unused-value &&)  
+        endif()
+    endif()
 
-    SET(CONFIGURE_CMD <SOURCE_DIR>/configure
+    set(CONFIGURE_CMD <SOURCE_DIR>/configure
                       --enable-shared
                       --disable-static
                       --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    IF(${IS_DEBUG})
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug --with-pydebug)
-    ELSE(${IS_DEBUG})
-        SET(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
-    ENDIF(${IS_DEBUG})
+    if(${IS_DEBUG})
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug --with-pydebug)
+    else(${IS_DEBUG})
+        set(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
+    endif(${IS_DEBUG})
     ExternalProject_Add(
         python
         URL ${CACHED_URL}
@@ -63,7 +63,7 @@ ELSE(WIN32)
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_python} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-ENDIF(WIN32)
+endif(WIN32)
 
 
 ExternalProject_Add_Step(python CopyConfigFileToInstall

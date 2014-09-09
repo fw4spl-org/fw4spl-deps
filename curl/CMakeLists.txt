@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(curlBuilder)
+project(curlBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(CURL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+set(CURL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                     -DBUILD_CURL_EXE:BOOL=OFF
                     -DBUILD_CURL_TESTS:BOOL=OFF
                     -DCURL_STATICLIB:BOOL=OFF
@@ -13,7 +13,7 @@ SET(CURL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD
                     -DCURL_ZLIB:BOOL=ON
                     -DCMAKE_USE_OPENSSL:BOOL=OFF #@todo: enable openssl
 )
-GET_CACHED_URL(http://curl.haxx.se/download/curl-7.27.0.tar.gz CACHED_URL)
+getCachedUrl(http://curl.haxx.se/download/curl-7.27.0.tar.gz CACHED_URL)
 
 ExternalProject_Add(
     curl

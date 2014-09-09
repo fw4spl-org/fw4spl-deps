@@ -1,10 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8)
 
-PROJECT(vxlBuilder)
+project(vxlBuilder)
 
-INCLUDE(ExternalProject)
+include(ExternalProject)
 
-SET(VXL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+set(VXL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DCMAKE_PREFIX_PATH:PATH=${CMAKE_INSTALL_PREFIX}
                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
                    -DBUILD_TESTING:BOOL=OFF
@@ -20,22 +20,22 @@ SET(VXL_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DVXL_FORCE_V3P_ZLIB:BOOL=OFF
 )
 
-IF(WIN32)
+if(WIN32)
     #VXL does not support the CMake "Shared Library" feature on MSVC.
-    LIST(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=OFF)
-ELSE()
-    LIST(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
-ENDIF()
+    list(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=OFF)
+else()
+    list(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
+endif()
 
-GET_CACHED_URL(http://freefr.dl.sourceforge.net/project/vxl/vxl/1.17/vxl-1.17.0.tar.gz CACHED_URL)
+getCachedUrl(http://freefr.dl.sourceforge.net/project/vxl/vxl/1.17/vxl-1.17.0.tar.gz CACHED_URL)
 
-IF(APPLE)
-    SET(VXL_PATCH_CMD patch -t -N -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/patch/osx.patch )
-ENDIF()
+if(APPLE)
+    set(VXL_PATCH_CMD patch -t -N -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/patch/osx.patch )
+endif()
 
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-    SET(VXL_PATCH_CMD patch -t -N -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/patch/linux-v4l2.patch )
-ENDIF()
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+    set(VXL_PATCH_CMD patch -t -N -p1 < ${CMAKE_CURRENT_SOURCE_DIR}/patch/linux-v4l2.patch )
+endif()
 
 ExternalProject_Add(
     vxl
