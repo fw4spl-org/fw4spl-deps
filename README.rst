@@ -1,15 +1,10 @@
-VP Binpkgs
-==========
+FW4SPL Binpkgs
+==============
 
 About
 -----
 
-VP Binpkgs are the dependencies necessary to build the VP applications.
-They need to be built in order to compile anything from VP.
-
-Requirements
-------------
-
+FW4SPL Binpkgs are the dependencies necessary to build FW4SPL applications.
 
 Build steps
 -----------
@@ -33,7 +28,3 @@ With
 
     $ make itk json-spirit camp dcmtk hdf5 ann cryptopp -j <number of parallel compilation tasks to run>
 
-Use from VP
------------
-
-When compiling VP applications, in the cmake, you should inform that the binpkgs are available in their <install_prefix> defined in the `build steps`_
