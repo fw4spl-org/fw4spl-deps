@@ -1,0 +1,12 @@
+diff -ur vxl/core/vidl/vidl_v4l2_control.h vxl.b/core/vidl/vidl_v4l2_control.h
+--- vxl/core/vidl/vidl_v4l2_control.h	2011-12-21 10:49:23.000000000 +0100
++++ vxl.b/core/vidl/vidl_v4l2_control.h	2014-03-06 11:43:22.654460726 +0100
+@@ -38,7 +38,7 @@
+     static vidl_v4l2_control * new_control(const v4l2_queryctrl& ctr, int f);
+     //: Type of control
+     // \return type as indicated in v4l2 specification
+-    v4l2_ctrl_type type() const { return ctrl_.type; }
++    v4l2_ctrl_type type() const { return static_cast<v4l2_ctrl_type>(ctrl_.type); }
+     //: Name of control
+     // \return name the driver assign to the control
+     vcl_string name() const { return  (const char *) ctrl_.name; }

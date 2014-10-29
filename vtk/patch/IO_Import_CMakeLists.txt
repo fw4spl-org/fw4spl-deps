@@ -1,0 +1,16 @@
+set(Module_SRCS
+  vtk3DSImporter.cxx
+  vtkImporter.cxx
+  vtkVRMLImporter.cxx
+)
+
+install(FILES vtk3DS.h vtkVRML.h
+  DESTINATION ${VTK_INSTALL_INCLUDE_DIR}
+  )
+
+set_source_files_properties(
+  vtkImporter
+  ABSTRACT
+  )
+
+vtk_module_library(vtkIOImport ${Module_SRCS})

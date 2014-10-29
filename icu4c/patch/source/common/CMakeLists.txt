@@ -1,0 +1,397 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(icuuc)
+
+set(LOCALES_AND_RESOURCES_INC
+    locbased.h
+    locutil.h
+    ulocimp.h
+    uresdata.h
+    uresimp.h
+    ureslocs.h
+    localsvc.h
+)
+set(LOCALES_AND_RESOURCES_SRC
+    locavailable.cpp
+    locbased.cpp
+    locdispnames.cpp
+    locid.cpp
+    loclikely.cpp
+    locresdata.cpp
+    locutil.cpp
+    resbund.cpp
+    resbund_cnv.cpp
+    ucat.c
+    uloc.cpp
+    uloc_tag.c
+    ures_cnv.c
+    uresbund.cpp
+    uresdata.c
+)
+set(COLLECTIONS_INC
+    hash.h
+    propsvec.h
+    uarrsort.h
+    uelement.h
+    uenumimp.h
+    uhash.h
+    ulist.h
+    ustrenum.h
+    utrie.h
+    utrie2.h
+    utrie2_impl.h
+    uvector.h
+    uvectr32.h
+    uvectr64.h
+)
+set(COLLECTIONS_SRC 
+    propsvec.c
+    uarrsort.c
+    uenum.c
+    uhash.c
+    uhash_us.cpp
+    ulist.c
+    ustack.cpp
+    ustrenum.cpp
+    utrie.cpp
+    utrie2.cpp
+    utrie2_builder.cpp
+    uvector.cpp
+    uvectr32.cpp
+    uvectr64.cpp
+    bytestrie.cpp
+    bytestrieiterator.cpp
+    bytestriebuilder.cpp
+    ucharstrie.cpp
+    ucharstriebuilder.cpp
+    ucharstrieiterator.cpp
+    stringtriebuilder.cpp
+)
+set(BREAK_ITERATION_INC
+    brkeng.h
+    dictbe.h
+    rbbidata.h
+    rbbinode.h
+    rbbirb.h
+    rbbirpt.h
+    rbbiscan.h
+    rbbisetb.h
+    rbbitblb.h
+    ubrkimpl.h
+    dictionarydata.h
+)
+set(BREAK_ITERATION_SRC 
+    brkeng.cpp
+    brkiter.cpp
+    dictbe.cpp
+    rbbi.cpp
+    rbbidata.cpp
+    rbbinode.cpp
+    rbbirb.cpp
+    rbbiscan.cpp
+    rbbisetb.cpp
+    rbbistbl.cpp
+    rbbitblb.cpp
+    ubrk.cpp
+    dictionarydata.cpp
+)
+set(BIDI_INC
+    ubidi_props.h
+    ubidiimp.h
+    ubidi_props_data.h
+)
+set(BIDI_SRC
+    ubidi.c
+    ubidi_props.c
+    ubidiln.c
+    ubidiwrt.c
+    ushape.cpp
+)
+set(FORMATTING_INC
+    ustrfmt.h
+    util.h
+    messageimpl.h
+)
+set(FORMATTING_SRC
+    dtintrv.cpp
+    parsepos.cpp
+    ustrfmt.c
+    util.cpp
+    util_props.cpp
+    listformatter.cpp
+    messagepattern.cpp
+)
+set(STRINGS_INC
+    charstr.h
+    cstring.h
+    cwchar.h
+    uinvchar.h
+    ustr_cnv.h
+    ustr_imp.h
+)
+set(STRINGS_SRC
+    bytestream.cpp
+    chariter.cpp
+    charstr.cpp
+    cstring.c
+    cwchar.c
+    schriter.cpp
+    stringpiece.cpp
+    ucasemap.cpp
+    ucasemap_titlecase_brkiter.cpp
+    uchriter.cpp
+    uinvchar.c
+    uiter.cpp
+    unistr.cpp
+    unistr_case.cpp
+    unistr_case_locale.cpp
+    unistr_cnv.cpp
+    unistr_props.cpp
+    unistr_titlecase_brkiter.cpp
+    ustr_cnv.c
+    ustr_titlecase_brkiter.cpp
+    ustr_wcs.cpp
+    ustrcase.cpp
+    ustrcase_locale.cpp
+    ustring.cpp
+    ustrtrns.cpp
+    utext.cpp
+    utf_impl.c
+    appendable.cpp
+)
+set(REGISTRATION_INC
+    icuplugimp.h
+    serv.h
+    servloc.h
+    servnotf.h
+)
+set(REGISTRATION_SRC
+    icuplug.c
+    serv.cpp
+    servlk.cpp
+    servlkf.cpp
+    servls.cpp
+    servnotf.cpp
+    servrbf.cpp
+    servslkf.cpp
+)
+set(DATA_AND_MEMORY_INC
+    cmemory.h
+    ucln.h
+    ucln_cmn.h
+    ucln_imp.h
+    ucmndata.h
+    udatamem.h
+    udataswp.h
+    umapfile.h
+)
+set(DATA_AND_MEMORY_SRC 
+    cmemory.c
+    ucln_cmn.c
+    ucmndata.c
+    udata.cpp
+    udatamem.c
+    udataswp.c
+    uinit.c
+    umapfile.c
+    uobject.cpp
+)
+set(IDNA_INC
+    punycode.h
+)
+set(IDNA_SRC
+    punycode.cpp
+    uidna.cpp
+    uts46.cpp
+)
+set(COLLATION_INC
+    ucol_data.h
+    ucol_swp.h
+)
+set(COLLATION_SRC
+    ucol_swp.cpp
+)
+set(CONFIGURATION_INC
+    cpputils.h
+    locmap.h
+    mutex.h
+    putilimp.h
+    uassert.h
+    umutex.h
+    uposixdefs.h
+    utracimp.h
+    wintz.h
+    utypeinfo.h
+    msvcres.h
+)
+set(CONFIGURATION_SRC
+    errorcode.cpp
+    icudataver.c
+    locmap.c
+    mutex.cpp
+    putil.cpp
+    umath.c
+    umutex.cpp
+    utrace.c
+    utypes.c
+    wintz.c
+)
+set(NORMALIZATION_INC
+    normalizer2impl.h
+    unorm_it.h
+    unormimp.h
+)
+set(NORMALIZATION_SRC
+    caniter.cpp
+    filterednormalizer2.cpp
+    normalizer2.cpp
+    normalizer2impl.cpp
+    normlzr.cpp
+    unorm.cpp
+    unorm_it.c
+    unormcmp.cpp
+)
+set(SPREP_INC
+    sprpimpl.h
+)
+set(SPREP_SRC
+    usprep.cpp
+)
+set(PROPERTIES_AND_SETS_INC
+    bmpset.h
+    propname.h
+    ruleiter.h
+    ucase.h
+    unisetspan.h
+    uprops.h
+    usc_impl.h
+    uset_imp.h
+    propname_data.h
+    ucase_props_data.h
+    uchar_props_data.h
+    patternprops.h
+)
+set(PROPERTIES_AND_SETS_SRC
+    bmpset.cpp
+    propname.cpp
+    ruleiter.cpp
+    ucase.cpp
+    uchar.c
+    unames.cpp
+    unifilt.cpp
+    unifunct.cpp
+    uniset.cpp
+    uniset_closure.cpp
+    uniset_props.cpp
+    unisetspan.cpp
+    uprops.cpp
+    usc_impl.c
+    uscript.c
+    uscript_props.cpp
+    uset.cpp
+    uset_props.cpp
+    usetiter.cpp
+    patternprops.cpp
+)
+set(CONVERSION_INC
+    ucnv_bld.h
+    ucnv_cnv.h
+    ucnv_ext.h
+    ucnv_imp.h
+    ucnv_io.h
+    ucnvmbcs.h
+)
+set(CONVERSION_SRC
+    ucnv.c
+    ucnv2022.cpp
+    ucnv_bld.cpp
+    ucnv_cb.c
+    ucnv_cnv.c
+    ucnv_err.c
+    ucnv_ext.cpp
+    ucnv_io.cpp
+    ucnv_lmb.c
+    ucnv_set.c
+    ucnv_u16.c
+    ucnv_u32.c
+    ucnv_u7.c
+    ucnv_u8.c
+    ucnvbocu.cpp
+    ucnvdisp.c
+    ucnvhz.c
+    ucnvisci.c
+    ucnvlat1.c
+    ucnvmbcs.c
+    ucnvscsu.c
+    ucnvsel.cpp
+    ucnv_ct.c
+)
+    
+source_group("locales and resources" FILES ${LOCALES_AND_RESOURCES_SRC} ${LOCALES_AND_RESOURCES_INC})
+source_group("collections"           FILES ${COLLECTIONS_SRC} ${COLLECTIONS_INC})
+source_group("break iteration"       FILES ${BREAK_ITERATION_SRC} ${BREAK_ITERATION_INC})
+source_group("bidi"                  FILES ${BIDI_SRC} ${BIDI_INC})
+source_group("formatting"            FILES ${FORMATTING_SRC} ${FORMATTING_INC})
+source_group("strings"               FILES ${STRINGS_SRC} ${STRINGS_INC})
+source_group("registration"          FILES ${REGISTRATION_SRC} ${REGISTRATION_INC})
+source_group("data and memory"       FILES ${DATA_AND_MEMORY_SRC} ${DATA_AND_MEMORY_INC})
+source_group("idna"                  FILES ${IDNA_SRC} ${IDNA_INC})
+source_group("collation"             FILES ${COLLATION_SRC} ${COLLATION_INC})
+source_group("configuration"         FILES ${CONFIGURATION_SRC} ${CONFIGURATION_INC})
+source_group("normalization"         FILES ${NORMALIZATION_SRC} ${NORMALIZATION_INC})
+source_group("sprep"                 FILES ${SPREP_SRC} ${SPREP_INC})
+source_group("properties and sets"   FILES ${PROPERTIES_AND_SETS_SRC} ${PROPERTIES_AND_SETS_INC})
+source_group("conversion"            FILES ${CONVERSION_SRC} ${CONVERSION_INC})
+
+list(APPEND ICUUC_SOURCE_FILES
+    ${LOCALES_AND_RESOURCES_SRC}
+    ${COLLECTIONS_SRC}
+    ${BREAK_ITERATION_SRC}
+    ${BIDI_SRC}
+    ${FORMATTING_SRC}
+    ${STRINGS_SRC}
+    ${REGISTRATION_SRC}
+    ${DATA_AND_MEMORY_SRC}
+    ${IDNA_SRC}
+    ${COLLATION_SRC}
+    ${CONFIGURATION_SRC}
+    ${NORMALIZATION_SRC}
+    ${SPREP_SRC} ${SPREP_INC}
+    ${PROPERTIES_AND_SETS_SRC}
+    ${CONVERSION_SRC}
+)
+list(APPEND ICUUC_HEADER_FILES
+    ${LOCALES_AND_RESOURCES_INC}
+    ${COLLECTIONS_INC}
+    ${BREAK_ITERATION_INC}
+    ${BIDI_INC}
+    ${FORMATTING_INC}
+    ${STRINGS_INC}
+    ${REGISTRATION_INC}
+    ${DATA_AND_MEMORY_INC}
+    ${IDNA_INC}
+    ${COLLATION_INC}
+    ${CONFIGURATION_INC}
+    ${NORMALIZATION_INC}
+    ${SPREP_INC} ${SPREP_INC}
+    ${PROPERTIES_AND_SETS_INC}
+    ${CONVERSION_INC}
+)
+set_source_files_properties(ICUUC_HEADER_FILES PROPERTIES HEADER_FILE_ONLY TRUE)
+
+add_definitions(
+    -DU_ATTRIBUTE_DEPRECATED=
+    -DU_COMMON_IMPLEMENTATION
+    -DRBBI_DEBUG
+    -DCYGWINMSVC
+)
+
+add_library(icuuc SHARED ${ICUUC_SOURCE_FILES} ${ICUUC_HEADER_FILES})
+target_link_libraries(icuuc icudt)
+
+install(TARGETS icuuc
+        RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
+        ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
+        LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/unicode
+        DESTINATION "${INSTALL_INC_DIR}" FILES_MATCHING PATTERN "*.h")

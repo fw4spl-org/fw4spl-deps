@@ -1,0 +1,12 @@
+diff -ru a/core/vul/vul_psfile.h b/core/vul/vul_psfile.h
+--- a/core/vul/vul_psfile.h	2013-11-13 14:27:02.000000000 +0100
++++ b/core/vul/vul_psfile.h	2013-11-13 14:36:59.000000000 +0100
+@@ -37,7 +37,7 @@
+
+   vul_psfile(char const* filename, bool debug_output=false);
+   ~vul_psfile();
+-  operator bool() { return (void*)output_filestream!=(void*)0; }
++  operator bool() { return output_filestream.good(); }
+
+   void set_paper_type(vul_psfile::paper_type type){printer_paper_type = type;}
+   void set_paper_layout(vul_psfile::paper_layout layout) {printer_paper_layout = layout;}
