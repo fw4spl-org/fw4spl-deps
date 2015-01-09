@@ -4,7 +4,7 @@ project(pythonBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz CACHED_URL)
+getCachedUrl(http://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz CACHED_URL)
 
 if(WIN32)
     set(PYTHON_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
@@ -35,7 +35,7 @@ else(WIN32)
 
     if(NOT APPLE)
         if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-            set(SETENV export CC=clang CXX=clang++ CFLAGS=-Wno-unused-value &&)  
+            set(SETENV export CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS=-Wno-unused-value &&)  
         endif()
     endif()
 
