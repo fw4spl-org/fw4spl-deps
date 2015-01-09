@@ -4,14 +4,19 @@ project(zlibBuilder)
 
 include(ExternalProject)
 
-set(ZLIB_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
-
 getCachedUrl(http://zlib.net/zlib-1.2.8.tar.gz CACHED_URL)
+
+set(ZLIB_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
+set(PATCH_CMD)
+if(ANDROID)
+    set(PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/patch/android/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt")
+endif() 
 
 ExternalProject_Add(
     zlib
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
+    PATCH_COMMAND ${PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ZLIB_CMAKE_ARGS}
 )
