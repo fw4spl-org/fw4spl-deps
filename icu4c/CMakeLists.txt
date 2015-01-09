@@ -4,14 +4,13 @@ project(icu4cBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://download.icu-project.org/files/icu4c/51.2/icu4c-51_2-src.tgz CACHED_URL)
+set(MAJOR_VERSION 51)
+getCachedUrl(http://download.icu-project.org/files/icu4c/${MAJOR_VERSION}.2/icu4c-${MAJOR_VERSION}_2-src.tgz CACHED_URL)
 
 if(WIN32)
 
     set(ICU4C_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    set(ICU4C_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                         -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-    )
+    set(ICU4C_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
     ExternalProject_Add(
         icu4c
         URL ${CACHED_URL}
@@ -21,7 +20,7 @@ if(WIN32)
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${ICU4C_CMAKE_ARGS}
     )
-else(WIN32)
+else()
     ExternalProject_Add(
         icu4c
         URL ${CACHED_URL}
@@ -32,8 +31,6 @@ else(WIN32)
                         --enable-shared
                         --disable-static
                         --prefix=${CMAKE_INSTALL_PREFIX}
-        #BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/source/Makefile
-        #INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/source/Makefile install
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ${MAKE}
         INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ${MAKE} DESTDIR=${INSTALL_PREFIX_icu4c} install
     )
@@ -42,4 +39,13 @@ else(WIN32)
         COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_icu4c} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
         DEPENDEES install
     )
-endif(WIN32)
+    
+    if(APPLE)
+        set(ICU4C_SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/script)
+        ExternalProject_Add_Step(icu4c OSX_INSTALL_TOOL
+            COMMAND chmod +x ${ICU4C_SCRIPT_DIR}/install_tool_icu4c.sh 
+            COMMAND sh -c "${ICU4C_SCRIPT_DIR}/install_tool_icu4c.sh ${CMAKE_INSTALL_PREFIX}/lib ${MAJOR_VERSION}"
+            DEPENDEES COPY_FILES
+        )
+    endif()
+endif()
