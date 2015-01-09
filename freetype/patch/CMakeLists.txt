@@ -9,7 +9,7 @@ set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib"
 set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include" 
     CACHE PATH "Installation directory for headers")
 
-find_package(zlib REQUIRED)
+find_package(ZLIB REQUIRED)
 if(NOT ZLIB_FOUND)
     message(FATAL_ERROR "ZLIB not found !")
 endif()
