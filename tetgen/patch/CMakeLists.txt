@@ -4,7 +4,7 @@ project(tetgen)
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin")
 set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include/tetgen")
 
 set(TETGEN_SRCS predicates.cxx tetgen.cxx)
 set(TETGEN_INC tetgen.h)
@@ -16,7 +16,7 @@ endif(MSVC)
 add_executable(tetgen ${TETGEN_SRCS})
 
 add_library(tetlib STATIC ${TETGEN_SRCS})
-SET_TARGET_PROPERTIES(tetlib PROPERTIES COMPILE_FLAGS "-DTETLIBRARY")
+set_target_properties(tetlib PROPERTIES COMPILE_FLAGS "-DTETLIBRARY")
 
 install(TARGETS tetgen tetlib
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
