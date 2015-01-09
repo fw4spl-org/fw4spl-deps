@@ -28,7 +28,7 @@ set(LIBJPEG_DLIB
     jdmaster.c jdinput.c  jdmarker.c jdhuff.c   jdmainct.c 
     jdcoefct.c jdpostct.c jddctmgr.c jidctfst.c jidctflt.c 
     jidctint.c jdsample.c jdcolor.c  jquant1.c  jquant2.c 
-    jdmerge.c
+    jdmerge.c  transupp.c
 )
 
 configure_file(jconfig.h.cmake jconfig.h)
