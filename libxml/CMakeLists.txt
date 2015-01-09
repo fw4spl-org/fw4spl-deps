@@ -7,8 +7,25 @@ include(ExternalProject)
 
 getCachedUrl(http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz CACHED_URL)
 
-if(WIN32)
-    set(LIBXML2_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(LIBXML2_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+
+if(ANDROID)
+
+    set(LIBXML2_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
+        -DXML2_BUILD_SHARED=BOOL:ON
+    )
+    
+    ExternalProject_Add(
+        libxml
+        URL ${CACHED_URL}
+        DOWNLOAD_DIR ${ARCHIVE_DIR}
+        DEPENDS libiconv zlib
+        PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${LIBXML2_PATCH_DIR}/android" "<SOURCE_DIR>/"
+        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+        CMAKE_ARGS ${LIBXML2_CMAKE_ARGS}
+    )
+    
+elseif(WIN32)
     set(LIBXML2_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/libxml-prefix/src/libxml)
     
     file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX} LIBXML_INSTALL_DIR_WIN32)
@@ -56,7 +73,8 @@ if(WIN32)
         BUILD_COMMAND ${LIBXML2_BUILD_CMD}
         INSTALL_COMMAND ${LIBXML2_INSTALL_CMD}
     )
-else(WIN32)
+    
+else()
     set(CONFIGURE_CMD <SOURCE_DIR>/configure
                       --enable-shared --disable-static --without-libintl --enable-extra-encodings
                       # FIXME : Issue with zlib:
@@ -97,4 +115,4 @@ else(WIN32)
         DEPENDEES install
     )
 
-endif(WIN32)
+endif()
