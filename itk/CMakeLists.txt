@@ -4,9 +4,7 @@ project(itkBuilder)
 
 include(ExternalProject)
 
-set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                   -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX} 
-                   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_SHARED_LIBS:BOOL=ON
                    -DBUILD_TESTING:BOOL=OFF
@@ -23,7 +21,7 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DITK_USE_SYSTEM_JPEG:BOOL=ON
                    -DITK_USE_OPTIMIZED_REGISTRATION_METHODS:BOOL=ON
                    
-                   -DITK_BUILD_ALL_MODULES:BOOL=OFF
+                   -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF
                    -DModule_ITKDeprecated:BOOL=OFF
                    -DModule_ITKMINC:BOOL=OFF
                    -DModule_ITKIOMINC:BOOL=OFF
@@ -129,8 +127,18 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
+if(WIN32)
+    if(${IS_DEBUG})
+        set(HDF5_DEBUG_POSTFIX d)
+    endif()
+    # FindHDF5 on windows tries to link to DLL instead of lib, so we manually defining the paths
+    list(APPEND ITK_CMAKE_ARGS -DHDF5_ROOT:PATH=${CMAKE_INSTALL_PREFIX}
+                               -DHDF5_CXX_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/hdf5_cpp${HDF5_DEBUG_POSTFIX}dll.lib
+                               -DHDF5_C_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/hdf5${HDF5_DEBUG_POSTFIX}dll.lib
+    )
+endif()
 
-getCachedUrl(http://freefr.dl.sourceforge.net/project/itk/itk/4.5/InsightToolkit-4.5.1.tar.gz CACHED_URL)
+getCachedUrl(http://freefr.dl.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz CACHED_URL)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 ExternalProject_Add(
