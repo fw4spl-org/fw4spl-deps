@@ -6,19 +6,32 @@ include(ExternalProject)
 
 getCachedUrl(http://download.osgeo.org/libtiff/tiff-4.0.3.zip CACHED_URL)
 
-if(WIN32)
+if(WIN32 OR ANDROID)
+    
     set(TIFF_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    set(TIFF_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE})
+    
+    set(TIFF_PATCH_COMMAND ${CMAKE_COMMAND} -E copy "${TIFF_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/")
+    
+    if(ANDROID)
+        list(APPEND TIFF_PATCH_COMMAND
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TIFF_PATCH_DIR}/tif_config.vc.h" "<SOURCE_DIR>/libtiff"
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TIFF_PATCH_DIR}/tiffconf.vc.h" "<SOURCE_DIR>/libtiff" 
+            )
+    endif()
+             
+    set(TIFF_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
+       
     ExternalProject_Add(
         tiff
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS jpeg zlib
-        PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${TIFF_PATCH_DIR}/" "<SOURCE_DIR>/"
+        PATCH_COMMAND ${TIFF_PATCH_COMMAND}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${TIFF_CMAKE_ARGS}
     )
-else(WIN32)
+    
+else()
     ExternalProject_Add(
         tiff
         URL ${CACHED_URL}
@@ -43,5 +56,5 @@ else(WIN32)
         DEPENDEES install
     )
 
-endif(WIN32)
+endif()
 
