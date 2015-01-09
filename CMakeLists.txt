@@ -2,7 +2,19 @@ cmake_minimum_required(VERSION 2.8)
 
 project(BinPkgs)
 
-if(WIN32)
+set(CROSS_COMPILING OFF CACHE BOOL "Cross compilation option")
+
+if(CROSS_COMPILING)
+    if(NOT CMAKE_TOOLCHAIN_FILE)
+        execute_process(COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/android/clean_all.cmake)
+        set(CMAKE_TOOLCHAIN_FILE CACHE FILEPATH "Path to the toolchain file")
+    endif()
+    list(APPEND COMMON_CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+                                  -DANDROID_ABI=${ANDROID_ABI}
+                                  -DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL})
+endif()
+
+if(WIN32 OR CMAKE_HOST_WIN32 )
     set(MAKE nmake)
 else()
     set(MAKE make)
@@ -34,41 +46,60 @@ endif()
 
 set(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
 
-list(APPEND SUBDIRECTORIES jpeg)
-list(APPEND SUBDIRECTORIES zlib)
-list(APPEND SUBDIRECTORIES tiff)
-list(APPEND SUBDIRECTORIES png)
-list(APPEND SUBDIRECTORIES libiconv)
-list(APPEND SUBDIRECTORIES libxml)
-list(APPEND SUBDIRECTORIES expat)
-list(APPEND SUBDIRECTORIES python)
-list(APPEND SUBDIRECTORIES boost)
-list(APPEND SUBDIRECTORIES freetype)
-list(APPEND SUBDIRECTORIES icu4c)
+##DESKTOP DEPS ##
+if(NOT ANDROID)
+    list(APPEND SUBDIRECTORIES jpeg)
+    list(APPEND SUBDIRECTORIES zlib)
+    list(APPEND SUBDIRECTORIES tiff)
+    list(APPEND SUBDIRECTORIES png)
+    list(APPEND SUBDIRECTORIES libiconv)
+    list(APPEND SUBDIRECTORIES libxml)
+    list(APPEND SUBDIRECTORIES expat)
+    list(APPEND SUBDIRECTORIES python)
+    list(APPEND SUBDIRECTORIES boost)
+    list(APPEND SUBDIRECTORIES freetype)
+    list(APPEND SUBDIRECTORIES icu4c)
 
-if(NOT APPLE)
-    list(APPEND SUBDIRECTORIES curl)
-    list(APPEND SUBDIRECTORIES numpy)
+    if(NOT APPLE)
+        list(APPEND SUBDIRECTORIES curl)
+        list(APPEND SUBDIRECTORIES numpy)
+    endif()
+
+    list(APPEND SUBDIRECTORIES qt)
+    list(APPEND SUBDIRECTORIES vtk)
+    list(APPEND SUBDIRECTORIES vxl)
+    list(APPEND SUBDIRECTORIES gdcm)
+    list(APPEND SUBDIRECTORIES hdf5)
+    list(APPEND SUBDIRECTORIES itk)
+    list(APPEND SUBDIRECTORIES camp)
+    list(APPEND SUBDIRECTORIES cppunit)
+    list(APPEND SUBDIRECTORIES ann)
+    list(APPEND SUBDIRECTORIES dcmtk)
+
+    if(NOT APPLE)
+        list(APPEND SUBDIRECTORIES wxWidgets)
+    endif()
+
+    list(APPEND SUBDIRECTORIES cryptopp)
+    list(APPEND SUBDIRECTORIES tetgen)
+    list(APPEND SUBDIRECTORIES json-spirit)
+##ANDROID DEPS##
+else()
+    list(APPEND SUBDIRECTORIES jpeg)
+    list(APPEND SUBDIRECTORIES zlib)
+    list(APPEND SUBDIRECTORIES tiff)
+    list(APPEND SUBDIRECTORIES png)
+    list(APPEND SUBDIRECTORIES libiconv)
+    list(APPEND SUBDIRECTORIES libxml)
+    list(APPEND SUBDIRECTORIES expat)
+    list(APPEND SUBDIRECTORIES boost)
+    list(APPEND SUBDIRECTORIES freetype)
+    list(APPEND SUBDIRECTORIES vtk)
+    list(APPEND SUBDIRECTORIES camp)
+    list(APPEND SUBDIRECTORIES ann)
+    list(APPEND SUBDIRECTORIES json-spirit)
+    list(APPEND SUBDIRECTORIES android_native_app)
 endif()
-
-list(APPEND SUBDIRECTORIES qt)
-list(APPEND SUBDIRECTORIES vtk)
-list(APPEND SUBDIRECTORIES vxl)
-list(APPEND SUBDIRECTORIES gdcm)
-list(APPEND SUBDIRECTORIES hdf5)
-list(APPEND SUBDIRECTORIES itk)
-list(APPEND SUBDIRECTORIES camp)
-list(APPEND SUBDIRECTORIES cppunit)
-list(APPEND SUBDIRECTORIES ann)
-list(APPEND SUBDIRECTORIES dcmtk)
-
-if(NOT APPLE)
-    list(APPEND SUBDIRECTORIES wxWidgets)
-endif() 
-
-list(APPEND SUBDIRECTORIES cryptopp)
-list(APPEND SUBDIRECTORIES tetgen)
-list(APPEND SUBDIRECTORIES json-spirit)
 
 foreach(subdir ${SUBDIRECTORIES})
     # define an uninstall target for each project
@@ -94,5 +125,15 @@ if(ADDITIONAL_DEPS)
         get_filename_component(DEPS_NAME ${DEPS} NAME)
         add_subdirectory(${DEPS} ${CMAKE_BINARY_DIR}/additional_deps/${DEPS_NAME})
     endforeach()
-    
+
 endif()
+
+if(APPLE)
+    find_program(PYTHON_EXECUTABLE python ${PATH})
+
+    add_custom_target(install_tool
+        COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
+        WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
+    )
+                 
+endif(APPLE)
