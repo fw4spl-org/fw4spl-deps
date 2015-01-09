@@ -4,10 +4,7 @@ project(dcmtkBuilder)
 
 include(ExternalProject)
 
-set(DCMTK_CMAKE_ARGS 
-                        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                        -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX} 
-                        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+set(DCMTK_CMAKE_ARGS    ${COMMON_CMAKE_ARGS}
                         -DBUILD_SHARED_LIBS:BOOL=ON
                         -DDCMTK_WITH_XML:BOOL=ON
                         -DDCMTK_WITH_PNG:BOOL=ON

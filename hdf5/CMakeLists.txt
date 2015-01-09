@@ -4,8 +4,7 @@ project(hdf5Builder)
 
 include(ExternalProject)
 
-set(HDF5_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+set(HDF5_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DBUILD_SHARED_LIBS:BOOL=ON
                     -DHDF5_BUILD_CPP_LIB:BOOL=ON
                     -DHDF5_BUILD_HL_LIB:BOOL=OFF

@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 
 project(BinPkgs)
 
+set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+                      -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+                      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+                      -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
+                      -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
+                      -DCMAKE_LINKER=${CMAKE_LINKER}
+)
+
 set(CROSS_COMPILING OFF CACHE BOOL "Cross compilation option")
 
 if(CROSS_COMPILING)
@@ -18,6 +26,9 @@ if(WIN32 OR CMAKE_HOST_WIN32 )
     set(MAKE nmake)
 else()
     set(MAKE make)
+    if(NOT APPLE)
+        list(APPEND COMMON_CMAKE_ARGS -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON)
+    endif()
 endif()
 
 set(ARCHIVE_DIR ${CMAKE_SOURCE_DIR}/archive CACHE PATH "Archive directory")
