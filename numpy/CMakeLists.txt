@@ -5,7 +5,7 @@ project(numpyBuilder)
 include(ExternalProject)
 
 
-getCachedUrl(http://downloads.sourceforge.net/project/numpy/NumPy/1.6.2/numpy-1.6.2.tar.gz CACHED_URL)
+getCachedUrl(http://sourceforge.net/projects/numpy/files/NumPy/1.9.1/numpy-1.9.1.tar.gz/download CACHED_URL)
 
 set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
 set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
@@ -40,22 +40,9 @@ if(IS_DEBUG)
     )
 endif()
 
-
 list(APPEND SETUP install
                   --prefix ${NUMPY_INSTALL_PATH}
 )
-
-
-set(NUMPY_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-if(WIN32)
-
-    set(NUMPY_PATCH_CMD ${CMAKE_COMMAND} -E copy_directory "${NUMPY_PATCH_DIR}/" "<SOURCE_DIR>/")
-
-else(WIN32)
-
-    set(NUMPY_PATCH_CMD "")
-
-endif(WIN32)
 
 ExternalProject_Add(
     numpy
@@ -63,7 +50,6 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS python
     BUILD_IN_SOURCE 1
-    PATCH_COMMAND ${NUMPY_PATCH_CMD}
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ${ENV_WRAPPER} ${SETUP}
     INSTALL_COMMAND ""
