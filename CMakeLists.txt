@@ -87,10 +87,6 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES ann)
     list(APPEND SUBDIRECTORIES dcmtk)
 
-    if(NOT APPLE)
-        list(APPEND SUBDIRECTORIES wxWidgets)
-    endif()
-
     list(APPEND SUBDIRECTORIES cryptopp)
     list(APPEND SUBDIRECTORIES tetgen)
     list(APPEND SUBDIRECTORIES json-spirit)
