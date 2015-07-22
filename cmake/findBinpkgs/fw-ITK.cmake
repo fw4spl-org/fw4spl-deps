@@ -61,6 +61,9 @@ set(ITK_LIBS ITKAlgorithms
     itkTestDriver
     ITKVideoCore
     ITKVideoIO
+
+    itkhdf5
+    itkhdf5_cpp
     )
 
 

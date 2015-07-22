@@ -13,7 +13,6 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    
                    -DITK_USE_SYSTEM_DCMTK:BOOL=ON
                    -DITK_USE_SYSTEM_GDCM:BOOL=ON
-                   -DITK_USE_SYSTEM_HDF5:BOOL=ON
                    -DITK_USE_SYSTEM_PNG:BOOL=ON
                    -DITK_USE_SYSTEM_TIFF:BOOL=ON
                    -DITK_USE_SYSTEM_VXL:BOOL=ON
@@ -59,10 +58,8 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKGPURegistrationCommon:BOOL=ON
                    -DModule_ITKGPUSmoothing:BOOL=ON
                    -DModule_ITKGPUThresholding:BOOL=ON
-                   -DModule_ITKHDF5:BOOL=ON
                    -DModule_ITKIOCSV:BOOL=ON
                    -DModule_ITKIOGE:BOOL=ON
-                   -DModule_ITKIOHDF5:BOOL=ON
                    -DModule_ITKIOIPL:BOOL=ON
                    -DModule_ITKIOMesh:BOOL=ON
                    -DModule_ITKIOPhilipsREC:BOOL=ON
@@ -70,7 +67,6 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKIOSiemens:BOOL=ON
                    -DModule_ITKIOSpatialObjects:BOOL=ON
                    -DModule_ITKIOTransformBase:BOOL=ON
-                   -DModule_ITKIOTransformHDF5:BOOL=ON
                    -DModule_ITKIOTransformInsightLegacy:BOOL=ON
                    -DModule_ITKIOTransformMatlab:BOOL=ON
                    -DModule_ITKIOXML:BOOL=ON
@@ -127,17 +123,6 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
-if(WIN32)
-    if(${IS_DEBUG})
-        set(HDF5_DEBUG_POSTFIX d)
-    endif()
-    # FindHDF5 on windows tries to link to DLL instead of lib, so we manually defining the paths
-    list(APPEND ITK_CMAKE_ARGS -DHDF5_ROOT:PATH=${CMAKE_INSTALL_PREFIX}
-                               -DHDF5_CXX_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/hdf5_cpp${HDF5_DEBUG_POSTFIX}dll.lib
-                               -DHDF5_C_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/hdf5${HDF5_DEBUG_POSTFIX}dll.lib
-    )
-endif()
-
 getCachedUrl(http://freefr.dl.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz CACHED_URL)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
@@ -146,7 +131,7 @@ ExternalProject_Add(
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${ITK_PATCH_DIR}/" "<SOURCE_DIR>/"
-    DEPENDS zlib jpeg libpng tiff vxl gdcm vtk hdf5
+    DEPENDS zlib jpeg libpng tiff vxl gdcm vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
     STEP_TARGETS CopyConfigFileToInstall
