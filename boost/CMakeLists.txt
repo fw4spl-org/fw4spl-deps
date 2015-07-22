@@ -16,6 +16,7 @@ set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
 set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
 set(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
+math(EXPR BITS "8*${CMAKE_SIZEOF_VOID_P}")
 set(BOOST_ARGS
     --exec-prefix=${CMAKE_INSTALL_PREFIX}/bin
     -sZLIB_INCLUDE=${CMAKE_INSTALL_PREFIX}/include
@@ -28,7 +29,7 @@ set(BOOST_ARGS
     --without-test
     variant=${BOOST_BUILD_TYPE}
     link=shared
-    address-model=64
+    address-model=${BITS}
     threading=multi
 )
 
