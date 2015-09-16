@@ -1,5 +1,5 @@
 set(MKSPEC macx-clang)
-configure_file(envwrapper/env.sh.in 
+configure_file(envwrapper/env.sh.in
     ${CMAKE_CURRENT_BINARY_DIR}/env.sh @ONLY
 )
 set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
@@ -23,7 +23,7 @@ set(QT_CONFIGURE_CMD ./configure
     -no-rpath
     -framework
     -no-xcb
-    
+
     -skip qtactiveqt
     -skip qtconnectivity
     -skip qtenginio
@@ -32,7 +32,7 @@ set(QT_CONFIGURE_CMD ./configure
     -skip qtwayland
     -skip qtwebengine
     -skip qtwebchannel
-    -skip qtwebkit 
+    -skip qtwebkit
     -skip qtwebkit-examples
     -skip qtwebsockets
 )
@@ -42,9 +42,9 @@ ExternalProject_Add(
     qt
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    URL_HASH SHA256=1739633424bde3d89164ae6ff1c5c913be38b9997e451558ef873aac4bbc408a
+    URL_HASH MD5=${QT5_HASHSUM}
     BUILD_IN_SOURCE 1
-    DEPENDS zlib jpeg libpng tiff icu4c freetype 
+    DEPENDS zlib jpeg libpng tiff icu4c freetype
     CONFIGURE_COMMAND ${ENV_WRAPPER} ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${ENV_WRAPPER} ${MAKE} -j${NUMBER_OF_PARALLEL_BUILD} -f Makefile
     INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE} -j${NUMBER_OF_PARALLEL_BUILD} -f Makefile ${INSTALL_ROOT} install

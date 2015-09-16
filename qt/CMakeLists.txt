@@ -4,7 +4,8 @@ project(qtBuilder)
 
 include(ExternalProject)
 
-set(QT5_URL "http://download.qt-project.org/official_releases/qt/5.4/5.4.0/single/qt-everywhere-opensource-src-5.4.0.tar.gz")
+set(QT5_URL "http://download.qt.io/official_releases/qt/5.5/5.5.0/single/qt-everywhere-opensource-src-5.5.0.tar.gz")
+set(QT5_HASHSUM 828594c91ba736ce2cd3e1e8a6146452)
 
 getCachedUrl(${QT5_URL} CACHED_URL)
 
@@ -35,4 +36,3 @@ ExternalProject_Add_Step(qt CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
     COMMENT "Install configuration file"
 )
-

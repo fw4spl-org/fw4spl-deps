@@ -24,6 +24,19 @@ set(QT_CONFIGURE_CMD ./configure
     -nomake examples
     -no-fontconfig
     -opengl desktop
+    
+    -skip qtactiveqt
+    -skip qtconnectivity
+    -skip qtenginio
+    -skip qtsensors
+    -skip qttranslations
+    -skip qtwayland
+    -skip qtwebengine
+    -skip qtwebchannel
+    -skip qtwebkit 
+    -skip qtwebkit-examples
+    -skip qtwebsockets 
+    
     -prefix ${CMAKE_INSTALL_PREFIX}
     -I ${CMAKE_INSTALL_PREFIX}/include
     -L ${CMAKE_INSTALL_PREFIX}/lib
@@ -48,10 +61,10 @@ ExternalProject_Add(
     qt
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    URL_HASH SHA256=1739633424bde3d89164ae6ff1c5c913be38b9997e451558ef873aac4bbc408a
+    URL_HASH MD5=${QT5_HASHSUM}
     BUILD_IN_SOURCE 1
     PATCH_COMMAND ${QT_PATCH_CMD}
-    DEPENDS zlib jpeg libpng tiff icu4c freetype 
+    DEPENDS zlib jpeg libpng tiff icu4c freetype
     CONFIGURE_COMMAND ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE_QT} -f Makefile
     INSTALL_COMMAND ${MAKE_QT} -f Makefile install
