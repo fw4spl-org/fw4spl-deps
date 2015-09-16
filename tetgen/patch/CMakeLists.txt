@@ -15,7 +15,12 @@ endif(MSVC)
 
 add_executable(tetgen ${TETGEN_SRCS})
 
-add_library(tetlib STATIC ${TETGEN_SRCS})
+if(UNIX)
+    add_library(tetlib SHARED ${TETGEN_SRCS})
+else()
+    # Use static lib for windows because symbols are not exported
+    add_library(tetlib STATIC ${TETGEN_SRCS})
+endif()
 set_target_properties(tetlib PROPERTIES COMPILE_FLAGS "-DTETLIBRARY")
 
 install(TARGETS tetgen tetlib
