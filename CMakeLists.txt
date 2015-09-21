@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 2.8)
 
 project(BinPkgs)
 
+#looking for patch command
+include( ${CMAKE_SOURCE_DIR}/cmake/utils/patch.cmake)
+
 set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
@@ -141,5 +144,5 @@ if(APPLE)
         COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
     )
-                 
+
 endif(APPLE)
