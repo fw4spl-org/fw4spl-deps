@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(dcmtkBuilder)
 
@@ -16,7 +16,7 @@ set(DCMTK_CMAKE_ARGS    ${COMMON_CMAKE_ARGS}
                         -DDCMTK_WITH_ICONV:BOOL=OFF
 )
 
-getCachedUrl(http://dicom.offis.de/download/dcmtk/snapshot/old/dcmtk-3.6.1_20121102.tar.gz CACHED_URL)
+set(CACHED_URL http://dicom.offis.de/download/dcmtk/snapshot/old/dcmtk-3.6.1_20121102.tar.gz)
 
 #set(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 

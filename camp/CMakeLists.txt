@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(campBuilder)
 
@@ -19,12 +19,13 @@ set(CAMP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DCMAKE_CXX_FLAGS=${CAMP_CMAKE_CXX_FLAGS}
 )
 
-getCachedUrl(https://github.com/fw4spl-org/camp/archive/0.7.1.3.zip CACHED_URL)
+set(CACHED_URL https://github.com/fw4spl-org/camp/archive/0.7.1.3.zip)
 
 ExternalProject_Add(
     camp
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
+    DOWNLOAD_NAME camp_0.7.1.3.zip
     DEPENDS boost
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${CAMP_CMAKE_ARGS}
@@ -35,5 +36,3 @@ ExternalProject_Add_Step(camp CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCAMP.cmake ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
     COMMENT "Install configuration file"
 )
-
-

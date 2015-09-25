@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(expatBuilder)
 
 include(ExternalProject)
 
 
-getCachedUrl(http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz CACHED_URL)
+set(CACHED_URL http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz)
 
 set(EXPAT_CMAKE_ARGS 
     ${COMMON_CMAKE_ARGS}

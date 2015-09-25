@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(zlibBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://zlib.net/zlib-1.2.8.tar.gz CACHED_URL)
+set(CACHED_URL http://zlib.net/zlib-1.2.8.tar.gz)
 
 set(ZLIB_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 set(PATCH_CMD)

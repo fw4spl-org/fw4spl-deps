@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(json-spiritBuilder)
 
 include(ExternalProject)
-getCachedUrl(https://github.com/fw4spl-org/json-spirit/archive/json-spirit_4.08.tar.gz CACHED_URL)
+set(CACHED_URL https://github.com/fw4spl-org/json-spirit/archive/json-spirit_4.08.tar.gz)
 
 ExternalProject_Add(
     json-spirit

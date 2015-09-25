@@ -6,7 +6,7 @@ set(GLM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_DOXYGEN:BOOL=OFF
 )
 
-getCachedUrl(http://downloads.sourceforge.net/project/ogl-math/glm-0.9.6.3/glm-0.9.6.3.zip CACHED_URL)
+set(CACHED_URL http://downloads.sourceforge.net/project/ogl-math/glm-0.9.6.3/glm-0.9.6.3.zip)
 
 ExternalProject_Add(
     glm

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(BinPkgs)
 
@@ -36,16 +36,6 @@ endif()
 
 set(ARCHIVE_DIR ${CMAKE_SOURCE_DIR}/archive CACHE PATH "Archive directory")
 
-macro(getCachedUrl URL CACHED_URL)
-    string(REGEX MATCH "[^/]*$" FNAME "${URL}")
-    if(EXISTS ${ARCHIVE_DIR}/${FNAME})
-        set(${CACHED_URL} ${ARCHIVE_DIR}/${FNAME})
-    else()
-        set(${CACHED_URL} ${URL})
-    endif()
-endmacro()
-
-
 #Debug/Release
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build.")
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/${CMAKE_BUILD_TYPE}" CACHE PATH "Install directory")
@@ -76,9 +66,9 @@ if(NOT ANDROID)
 
     if(NOT APPLE)
         list(APPEND SUBDIRECTORIES curl)
-        list(APPEND SUBDIRECTORIES numpy)
     endif()
 
+    list(APPEND SUBDIRECTORIES numpy)
     list(APPEND SUBDIRECTORIES qt)
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES vxl)

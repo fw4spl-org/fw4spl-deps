@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(curlBuilder)
 
@@ -13,7 +13,7 @@ set(CURL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DCURL_ZLIB:BOOL=ON
                     -DCMAKE_USE_OPENSSL:BOOL=OFF #@todo: enable openssl
 )
-getCachedUrl(https://github.com/bagder/curl/archive/curl-7_38_0.tar.gz CACHED_URL)
+set(CACHED_URL https://github.com/bagder/curl/archive/curl-7_38_0.tar.gz)
 
 ExternalProject_Add(
     curl

@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(freetypeBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://download.savannah.gnu.org/releases/freetype/freetype-2.5.0.1.tar.gz CACHED_URL)
+set(CACHED_URL http://download.savannah.gnu.org/releases/freetype/freetype-2.5.0.1.tar.gz)
 
 
 set(FREETYPE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)

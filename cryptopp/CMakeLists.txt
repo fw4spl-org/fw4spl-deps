@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(cryptoppBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://www.cryptopp.com/cryptopp562.zip CACHED_URL)
+set(CACHED_URL http://www.cryptopp.com/cryptopp562.zip)
 
 set(CRYPTOPP_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(CRYPTOPP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}

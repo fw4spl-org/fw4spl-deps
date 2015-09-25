@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(libiconvBuilder)
 
@@ -8,7 +8,7 @@ set(LIBICONV_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 
 if(ANDROID)
     
-    getCachedUrl(http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz CACHED_URL)
+    set(CACHED_URL http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz)
     
     set(LIBICONV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
     set(PATCH_CMD ${CMAKE_COMMAND} -E  copy_directory "${LIBICONV_PATCH_DIR}/" "<SOURCE_DIR>/")
@@ -24,7 +24,7 @@ if(ANDROID)
     )
     
 elseif(WIN32)
-    getCachedUrl(https://win-iconv.googlecode.com/files/win-iconv-0.0.6.tar.bz2 CACHED_URL)
+    set(CACHED_URL https://win-iconv.googlecode.com/files/win-iconv-0.0.6.tar.bz2)
 
     ExternalProject_Add(
         libiconv
@@ -36,7 +36,7 @@ elseif(WIN32)
     )
 else()
     set(LIBICONV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    getCachedUrl(http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz CACHED_URL)
+    set(CACHED_URL http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz)
 
     if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
         set(LIBICONV_PATCH_CMD && patch -t -N -p1 < ${LIBICONV_PATCH_DIR}/linux-remove-gets.patch )

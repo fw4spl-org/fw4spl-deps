@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(annBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://www.cs.umd.edu/~mount/ANN/Files/1.1.2/ann_1.1.2.tar.gz CACHED_URL)
+set(CACHED_URL http://www.cs.umd.edu/~mount/ANN/Files/1.1.2/ann_1.1.2.tar.gz)
 
 set(ANN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(ANN_CMAKE_ARGS ${COMMON_CMAKE_ARGS}

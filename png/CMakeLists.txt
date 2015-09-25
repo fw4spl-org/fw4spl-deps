@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(pngBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://freefr.dl.sourceforge.net/libpng/libpng-1.6.2.tar.gz CACHED_URL)
+set(CACHED_URL http://freefr.dl.sourceforge.net/libpng/libpng-1.6.2.tar.gz)
 set(PNG_CMAKE_ARGS  ${COMMON_CMAKE_ARGS}
                     -DPNG_DEBUG:BOOL=OFF
                     -DPNG_SHARED:BOOL=ON

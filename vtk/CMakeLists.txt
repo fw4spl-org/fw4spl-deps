@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(vtkBuilder)
 
@@ -25,8 +25,8 @@ set(VTK_CMAKE_ARGS
 
 if(NOT ANDROID)
 
-    getCachedUrl(http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz CACHED_URL)
-
+    set(CACHED_URL http://www.vtk.org/files/release/6.1/VTK-6.1.0.tar.gz)
+    
     list(APPEND VTK_CMAKE_ARGS
         -DVTK_USE_GL2PS:BOOL=ON
         -DVTK_USE_GLSL_SHADERS:BOOL=ON
@@ -52,7 +52,7 @@ if(NOT ANDROID)
     )
   
 else( )
-    getCachedUrl(https://github.com/Kitware/VTK/archive/7ec662ca6e6b216e333ab5a4389c297d0f7b2c3c.tar.gz CACHED_URL)
+    set(CACHED_URL https://github.com/Kitware/VTK/archive/7ec662ca6e6b216e333ab5a4389c297d0f7b2c3c.tar.gz)
     
     list(APPEND VTK_CMAKE_ARGS
         -DVTK_Group_Rendering:BOOL=OFF

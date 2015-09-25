@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(cppunitBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://freefr.dl.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz CACHED_URL)
+set(CACHED_URL http://freefr.dl.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz)
 
 if(WIN32)
     set(CPPUNIT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)

@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(numpyBuilder)
 
 include(ExternalProject)
 
 
-getCachedUrl(http://sourceforge.net/projects/numpy/files/NumPy/1.9.1/numpy-1.9.1.tar.gz/download CACHED_URL)
+set(CACHED_URL http://sourceforge.net/projects/numpy/files/NumPy/1.9.1/numpy-1.9.1.tar.gz)
 
 set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
 set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python2.7)
@@ -14,7 +14,7 @@ set(PYTHON_INTERPRETER ${PYTHON_DIR}/bin/python)
 file(TO_CMAKE_PATH ${CMAKE_INSTALL_PREFIX} NUMPY_INSTALL_PATH)
 set(ENV_WRAPPER)
 if(WIN32)
-    configure_file(envwrapper/env.bat.in 
+    configure_file(envwrapper/env.bat.in
         ${CMAKE_CURRENT_BINARY_DIR}/env.bat @ONLY
         )
     set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.bat)

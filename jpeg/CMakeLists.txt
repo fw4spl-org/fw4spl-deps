@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(jpegBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://www.ijg.org/files/jpegsrc.v8d.tar.gz CACHED_URL)
+set(CACHED_URL http://www.ijg.org/files/jpegsrc.v8d.tar.gz)
 
 set(JPEG_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(JPEG_CMAKE_ARGS ${COMMON_CMAKE_ARGS})

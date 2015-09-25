@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(tiffBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://download.osgeo.org/libtiff/tiff-4.0.3.zip CACHED_URL)
+set(CACHED_URL http://download.osgeo.org/libtiff/tiff-4.0.3.zip)
 
 if(WIN32 OR ANDROID)
     

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(qtBuilder)
 
@@ -7,7 +7,7 @@ include(ExternalProject)
 set(QT5_URL "http://download.qt.io/official_releases/qt/5.5/5.5.0/single/qt-everywhere-opensource-src-5.5.0.tar.gz")
 set(QT5_HASHSUM 828594c91ba736ce2cd3e1e8a6146452)
 
-getCachedUrl(${QT5_URL} CACHED_URL)
+set(CACHED_URL ${QT5_URL})
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" QT_BUILD_TYPE)
 

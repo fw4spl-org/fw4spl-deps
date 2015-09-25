@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(libxmlBuilder)
 
 include(ExternalProject)
 
 
-getCachedUrl(http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz CACHED_URL)
+set(CACHED_URL http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz)
 
 set(LIBXML2_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 

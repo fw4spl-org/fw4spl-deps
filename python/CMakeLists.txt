@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(pythonBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz CACHED_URL)
+set(CACHED_URL http://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz)
 
 if(WIN32)
     set(PYTHON_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)

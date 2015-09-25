@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(vxlBuilder)
 
@@ -30,12 +30,13 @@ else()
 endif()
 
 # VXL 1.18.0 (on master)
-getCachedUrl(https://github.com/vxl/vxl/archive/fbe829dd16e4c1bdf312cf287b33c6ea845ff782.tar.gz CACHED_URL)
+set(CACHED_URL https://github.com/vxl/vxl/archive/fbe829dd16e4c1bdf312cf287b33c6ea845ff782.tar.gz)
 
 ExternalProject_Add(
     vxl
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
+    DOWNLOAD_NAME vxl_1.18.0.tar.gz
     DEPENDS zlib jpeg libpng tiff expat
     PATCH_COMMAND ${VXL_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
@@ -47,4 +48,3 @@ ExternalProject_Add_Step(vxl CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VXL.cmake ${CMAKE_INSTALL_PREFIX}/fw-VXL.cmake
     COMMENT "Install configuration file"
 )
-

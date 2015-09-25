@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(icu4cBuilder)
 
 include(ExternalProject)
 
 set(MAJOR_VERSION 51)
-getCachedUrl(http://download.icu-project.org/files/icu4c/${MAJOR_VERSION}.2/icu4c-${MAJOR_VERSION}_2-src.tgz CACHED_URL)
+set(CACHED_URL http://download.icu-project.org/files/icu4c/${MAJOR_VERSION}.2/icu4c-${MAJOR_VERSION}_2-src.tgz)
 
 if(WIN32)
 
