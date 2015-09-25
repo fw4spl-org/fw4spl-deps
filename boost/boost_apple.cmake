@@ -1,20 +1,12 @@
 list(APPEND BOOST_ARGS
     --prefix=${INSTALL_PREFIX_boost}/${CMAKE_INSTALL_PREFIX}
     cxxflags=-ftemplate-depth=256
+    linkflags=-headerpad_max_install_names
 )
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set( BOOST_USER_CONFIG "using clang : : ${CMAKE_CXX_COMPILER} ;")
-    list(APPEND BOOST_ARGS toolset=clang)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "4.3")
-        message(
-            WARNING
-            "boost current build configuration will fail with gcc ${CMAKE_CXX_COMPILER_VERSION}"
-            " on Mac OSX. Skipping boost...")
-        return()
-    endif()
-endif()
+
+set( BOOST_USER_CONFIG "using clang : : ${CMAKE_CXX_COMPILER} ;")
+list(APPEND BOOST_ARGS toolset=clang)
 
 if(${IS_DEBUG})
     list(APPEND BOOST_ARGS python-debugging=on)
@@ -28,6 +20,7 @@ set(BOOTSTRAP_CMD bash
 )
 
 set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${BOOST_PATCH_DIR}/cpp11/adjacency_list_fixed.hpp" "<SOURCE_DIR>/boost/graph/detail/adjacency_list.hpp")
+
 set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&)
 
 ExternalProject_Add(
