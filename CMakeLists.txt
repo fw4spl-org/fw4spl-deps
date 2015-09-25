@@ -28,7 +28,8 @@ endif()
 if(WIN32 OR CMAKE_HOST_WIN32 )
     set(MAKE nmake)
 else()
-    set(MAKE make)
+    # This important to use '$(MAKE)' and not just 'make' to forward the flags from the command line (-j for instance)
+    set(MAKE $(MAKE))
     if(NOT APPLE)
         list(APPEND COMMON_CMAKE_ARGS -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON)
     endif()
@@ -40,7 +41,16 @@ set(ARCHIVE_DIR ${CMAKE_SOURCE_DIR}/archive CACHE PATH "Archive directory")
 set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build.")
 set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/${CMAKE_BUILD_TYPE}" CACHE PATH "Install directory")
 
-set(NUMBER_OF_PARALLEL_BUILD "1" CACHE STRING "Number of parallel build for non-make based subprojects")
+# estimate the processor cout
+include(ProcessorCount)
+ProcessorCount(CPUS_COUNT)
+if(CPUS_COUNT EQUAL 0)
+    # default to 1 if cmake fails  
+    set(CPUS_COUNT 1)
+endif()
+
+mark_as_advanced(NUMBER_OF_PARALLEL_BUILD)
+set(NUMBER_OF_PARALLEL_BUILD ${CPUS_COUNT} CACHE STRING "Number of parallel build for non-make based subprojects (Boost for instance)")
 
 if(CMAKE_BUILD_TYPE MATCHES "Release")
     set(IS_DEBUG FALSE)

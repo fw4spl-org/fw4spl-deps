@@ -54,8 +54,8 @@ ExternalProject_Add(
     BUILD_IN_SOURCE 1
     DEPENDS zlib jpeg libpng tiff icu4c freetype
     CONFIGURE_COMMAND ${ENV_WRAPPER} ${QT_CONFIGURE_CMD}
-    BUILD_COMMAND ${ENV_WRAPPER} ${MAKE} -j${NUMBER_OF_PARALLEL_BUILD} -f Makefile
-    INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE} -j${NUMBER_OF_PARALLEL_BUILD} -f Makefile ${INSTALL_ROOT} install
+    BUILD_COMMAND ${ENV_WRAPPER} ${MAKE}
+    INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE} -f Makefile ${INSTALL_ROOT} install
     STEP_TARGETS CopyConfigFileToInstall
 )
 
