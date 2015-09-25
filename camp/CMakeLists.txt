@@ -4,12 +4,22 @@ project(campBuilder)
 
 include(ExternalProject)
 
+if(NOT WIN32)
+    set(CAMP_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
+    if(APPLE)
+       set(CAMP_CMAKE_CXX_FLAGS "${CAMP_CMAKE_CXX_FLAGS} --stdlib=libc++")
+    endif(APPLE)
+else()
+    set(CAMP_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()
+
 set(CAMP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DBUILD_DOXYGEN:BOOL=OFF
                     -DBOOST_INCLUDEDIR:PATH=${CMAKE_INSTALL_PREFIX}/include/boost-1_57
+                    -DCMAKE_CXX_FLAGS=${CAMP_CMAKE_CXX_FLAGS}
 )
 
-getCachedUrl(https://github.com/greenjava/camp/archive/0.7.1.1.tar.gz CACHED_URL)
+getCachedUrl(https://github.com/fw4spl-org/camp/archive/0.7.1.3.zip CACHED_URL)
 
 ExternalProject_Add(
     camp
