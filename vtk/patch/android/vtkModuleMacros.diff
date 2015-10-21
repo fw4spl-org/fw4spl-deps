@@ -1,0 +1,11 @@
+--- a/CMake/vtkModuleMacros.cmake	2015-08-11 19:26:47.000000000 +0200
++++ b/CMake/vtkModuleMacros.cmake	2015-08-19 17:41:33.000000000 +0200
+@@ -400,7 +400,7 @@
+ # VTK_CUSTOM_LIBRARY_SUFFIX will override the suffix.
+ function(vtk_target_name _name)
+   get_property(_type TARGET ${_name} PROPERTY TYPE)
+-  if(NOT "${_type}" STREQUAL EXECUTABLE AND NOT VTK_JAVA_INSTALL)
++  if(NOT "${_type}" STREQUAL EXECUTABLE AND NOT VTK_JAVA_INSTALL AND NOT CMAKE_CROSSCOMPILING)
+     set_property(TARGET ${_name} PROPERTY VERSION 1)
+     set_property(TARGET ${_name} PROPERTY SOVERSION 1)
+   endif()
