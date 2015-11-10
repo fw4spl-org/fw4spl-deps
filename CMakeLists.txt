@@ -110,6 +110,7 @@ else()
     list(APPEND SUBDIRECTORIES json-spirit)
     list(APPEND SUBDIRECTORIES android_native_app)
     list(APPEND SUBDIRECTORIES glm)
+    list(APPEND SUBDIRECTORIES vxl)
 endif()
 
 foreach(subdir ${SUBDIRECTORIES})
