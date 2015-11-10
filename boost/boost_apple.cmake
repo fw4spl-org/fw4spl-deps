@@ -19,7 +19,7 @@ set(BOOTSTRAP_CMD bash
                   --with-python-root=${CMAKE_INSTALL_PREFIX}
 )
 
-set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${BOOST_PATCH_DIR}/cpp11/adjacency_list_fixed.hpp" "<SOURCE_DIR>/boost/graph/detail/adjacency_list.hpp")
+set(PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${BOOST_PATCH_DIR}/cpp11/adjacency_list.hpp.diff -d <SOURCE_DIR>)
 
 set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&)
 

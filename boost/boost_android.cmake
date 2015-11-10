@@ -5,6 +5,10 @@ set(BOOST_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 
 set(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
+set(PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${BOOST_PATCH_DIR}/cpp11/adjacency_list.hpp.diff -d <SOURCE_DIR>
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${BOOST_PATCH_DIR}/android" "<SOURCE_DIR>/"
+)
+
 ExternalProject_Add(
     boost
     DEPENDS zlib libiconv
@@ -12,7 +16,7 @@ ExternalProject_Add(
     URL_HASH SHA1=55366a96bb76440ab140047065650f1d73dbfd8c
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     BUILD_IN_SOURCE 1
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${BOOST_PATCH_DIR}/android" "<SOURCE_DIR>/"
+    PATCH_COMMAND ${PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${BOOST_CMAKE_ARGS}
     STEP_TARGETS CopyConfigFileToInstall
