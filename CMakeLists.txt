@@ -146,12 +146,16 @@ if(ADDITIONAL_DEPS)
 
 endif()
 
-if(APPLE)
-    find_program(PYTHON_EXECUTABLE python ${PATH})
+find_program(PYTHON_EXECUTABLE python ${PATH})
 
+if(APPLE)
     add_custom_target(install_tool
         COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
     )
+endif()
 
-endif(APPLE)
+add_custom_target(fix_path
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/utils/fix_path.py "${CMAKE_INSTALL_PREFIX}"
+    WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
+)
