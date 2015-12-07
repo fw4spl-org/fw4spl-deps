@@ -44,10 +44,11 @@ else(WIN32)
                       --disable-static
                       --prefix=${CMAKE_INSTALL_PREFIX}
     )
+    
     if(${IS_DEBUG})
-        set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug --with-pydebug)
+        list(APPEND CONFIGURE_CMD --with-debug --with-pydebug)
     else(${IS_DEBUG})
-        set(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
+        list(APPEND CONFIGURE_CMD --without-debug)
     endif(${IS_DEBUG})
     ExternalProject_Add(
         python
