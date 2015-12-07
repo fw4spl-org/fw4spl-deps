@@ -31,7 +31,13 @@ else()
     # This important to use '$(MAKE)' and not just 'make' to forward the flags from the command line (-j for instance)
     set(MAKE $(MAKE))
     if(NOT APPLE)
-        list(APPEND COMMON_CMAKE_ARGS -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON)
+        list(APPEND COMMON_CMAKE_ARGS 
+            -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
+        )
+    else()
+        list(APPEND COMMON_CMAKE_ARGS
+            -DCMAKE_MACOSX_RPATH:BOOL=ON
+        )
     endif()
 endif()
 
