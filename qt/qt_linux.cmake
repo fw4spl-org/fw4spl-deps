@@ -40,11 +40,14 @@ set(QT_CONFIGURE_CMD ./configure
 
 set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
 
+set(QT_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/MouseEvents.diff -d <SOURCE_DIR>)
+
 ExternalProject_Add(
     qt
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     URL_HASH MD5=${QT5_HASHSUM}
+    PATCH_COMMAND ${QT_PATCH_CMD}
     BUILD_IN_SOURCE 1
     DEPENDS zlib jpeg libpng tiff icu4c freetype
     CONFIGURE_COMMAND ${ENV_WRAPPER} ${QT_CONFIGURE_CMD}
