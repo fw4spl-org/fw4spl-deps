@@ -47,7 +47,7 @@ check_include_files(sys/mman.h        HAVE_SYS_MMAN_H    )
 check_include_files(sys/select.h      HAVE_SYS_SELECT_H  )
 check_include_files(sys/socket.h      HAVE_SYS_SOCKET_H  )
 check_include_files(sys/stat.h        HAVE_SYS_STAT_H    )
-check_include_files(sys/timeb.h       HAVE_SYS_TIMEB_H   )
+# check_include_files(sys/timeb.h       HAVE_SYS_TIMEB_H   ) does not exist in the NDK
 check_include_files(sys/time.h        HAVE_SYS_TIME_H    )
 check_include_files(sys/types.h       HAVE_SYS_TYPES_H   )
 check_include_files(time.h            HAVE_TIME_H        )

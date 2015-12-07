@@ -6,6 +6,7 @@ set(BOOST_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 set(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 set(PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${BOOST_PATCH_DIR}/cpp11/adjacency_list.hpp.diff -d <SOURCE_DIR>
+    COMMAND ${PATCH_EXECUTABLE} -p1 -i ${BOOST_PATCH_DIR}/android/thread_data.diff -d <SOURCE_DIR>
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${BOOST_PATCH_DIR}/android" "<SOURCE_DIR>/"
 )
 
