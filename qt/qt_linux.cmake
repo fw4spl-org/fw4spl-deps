@@ -11,37 +11,31 @@ set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
 
 # qt's configure is not an autotool configure
 set(QT_CONFIGURE_CMD ./configure
-    -shared
-    -opensource
-    -confirm-license
-    -system-zlib
-    -system-libpng
-    -system-libjpeg
-    -system-freetype
-    -nomake examples
-    -no-fontconfig
-    -opengl desktop
     -prefix ${CMAKE_INSTALL_PREFIX}
     -I ${CMAKE_INSTALL_PREFIX}/include
     -L ${CMAKE_INSTALL_PREFIX}/lib
     -${QT_BUILD_TYPE}
-    -qt-xcb
-    -skip qtactiveqt
-    -skip qtconnectivity
-    -skip qtenginio
-    -skip qtsensors
-    -skip qttranslations
-    -skip qtwayland
-    -skip qtwebengine
-    -skip qtwebchannel
-    -skip qtwebkit
-    -skip qtwebkit-examples
-    -skip qtwebsockets
+    ${QT_SKIP_MODULES_LIST}
+    
+    -shared
+    -opensource
+    -confirm-license    
+    -system-zlib
+    -system-libpng
+    -system-libjpeg
+    -system-freetype
+    
+    -nomake examples
+    -nomake tests
+    
+    -no-fontconfig
     -no-dbus
+    
+    -opengl desktop
+    -qt-xcb
     -c++11
-    #We can now build qt with gstreamer 1.0 (be sure you have installed libgstreamer-1.0 before enabling the option)
-    #By Default gstreamer 0.10 will be used
-    #-gstreamer 1.0
+    #We now build qt with gstreamer 1.0 (be sure you have installed libgstreamer-1.0-dev and libgstreamer-plugins-base1.0-dev)
+    -gstreamer 1.0
 )
 
 set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")

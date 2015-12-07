@@ -6,6 +6,12 @@ set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
 
 # qt's configure is not an autotool configure
 set(QT_CONFIGURE_CMD ./configure
+    -prefix ${CMAKE_INSTALL_PREFIX}
+    -I ${CMAKE_INSTALL_PREFIX}/include
+    -L ${CMAKE_INSTALL_PREFIX}/lib
+    -${QT_BUILD_TYPE}
+    ${QT_SKIP_MODULES_LIST}
+    
     -shared
     -opensource
     -confirm-license
@@ -13,30 +19,21 @@ set(QT_CONFIGURE_CMD ./configure
     -system-libpng
     -system-libjpeg
     -system-freetype
-    -nomake examples
-    -no-fontconfig
     -opengl desktop
-    -prefix ${CMAKE_INSTALL_PREFIX}
-    -I ${CMAKE_INSTALL_PREFIX}/include
-    -L ${CMAKE_INSTALL_PREFIX}/lib
+      
+    -nomake examples
+    -nomake tests
+    
     -no-glib
-    -no-rpath
-    -framework
+    -no-fontconfig
     -no-xcb
-
-    -skip qtactiveqt
-    -skip qtconnectivity
-    -skip qtenginio
-    -skip qtsensors
-    -skip qttranslations
-    -skip qtwayland
-    -skip qtwebengine
-    -skip qtwebchannel
-    -skip qtwebkit
-    -skip qtwebkit-examples
-    -skip qtwebsockets
 )
 
+if(${QT_BUILD_TYPE} STREQUAL "debug")
+    list(APPEND QT_CONFIGURE_CMD
+        -no-framework
+    )
+endif()
 set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
 ExternalProject_Add(
     qt
