@@ -39,6 +39,7 @@ if(NOT ANDROID)
         -DVTK_WRAP_PYTHON:BOOL=OFF
         -DVTK_MAKE_INSTANTIATORS:BOOL=ON
         -DVTK_QT_VERSION:STRING=5
+        -DModule_vtkFiltersFlowPaths:BOOL=ON
         -DModule_vtkGUISupportQt:BOOL=ON
         -DModule_vtkGUISupportQtOpenGL:BOOL=ON
         -DModule_vtkGUISupportQtWebkit:BOOL=OFF
