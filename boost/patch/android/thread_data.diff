@@ -1,0 +1,13 @@
+--- a/boost/thread/pthread/thread_data.hpp	2015-09-21 15:55:42.000000000 +0200
++++ b/boost/thread/pthread/thread_data.hpp	2015-09-21 15:55:52.000000000 +0200
+@@ -24,10 +24,6 @@
+ #include <vector>
+ #include <utility>
+ 
+-#if defined(__ANDROID__)
+-#include <asm/page.h> // http://code.google.com/p/android/issues/detail?id=39983
+-#endif
+-
+ #include <pthread.h>
+ #include <unistd.h>
+ 

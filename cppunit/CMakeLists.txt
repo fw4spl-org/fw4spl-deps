@@ -1,15 +1,14 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(cppunitBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://freefr.dl.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz CACHED_URL)
+set(CACHED_URL http://freefr.dl.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz)
 
 if(WIN32)
     set(CPPUNIT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    set(CPPUNIT_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                           -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    set(CPPUNIT_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                            -DBUILD_SHARED_LIBS:BOOL=ON
     )
     ExternalProject_Add(

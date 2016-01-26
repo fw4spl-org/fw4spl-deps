@@ -1,12 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(itkBuilder)
 
 include(ExternalProject)
 
-set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX} 
-                   -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX} 
-                   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_SHARED_LIBS:BOOL=ON
                    -DBUILD_TESTING:BOOL=OFF
@@ -15,7 +13,6 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    
                    -DITK_USE_SYSTEM_DCMTK:BOOL=ON
                    -DITK_USE_SYSTEM_GDCM:BOOL=ON
-                   -DITK_USE_SYSTEM_HDF5:BOOL=ON
                    -DITK_USE_SYSTEM_PNG:BOOL=ON
                    -DITK_USE_SYSTEM_TIFF:BOOL=ON
                    -DITK_USE_SYSTEM_VXL:BOOL=ON
@@ -23,7 +20,7 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DITK_USE_SYSTEM_JPEG:BOOL=ON
                    -DITK_USE_OPTIMIZED_REGISTRATION_METHODS:BOOL=ON
                    
-                   -DITK_BUILD_ALL_MODULES:BOOL=OFF
+                   -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF
                    -DModule_ITKDeprecated:BOOL=OFF
                    -DModule_ITKMINC:BOOL=OFF
                    -DModule_ITKIOMINC:BOOL=OFF
@@ -61,10 +58,8 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DModule_ITKGPURegistrationCommon:BOOL=ON
                    -DModule_ITKGPUSmoothing:BOOL=ON
                    -DModule_ITKGPUThresholding:BOOL=ON
-                   -DModule_ITKHDF5:BOOL=ON
                    -DModule_ITKIOCSV:BOOL=ON
                    -DModule_ITKIOGE:BOOL=ON
-                   -DModule_ITKIOHDF5:BOOL=ON
                    -DModule_ITKIOIPL:BOOL=ON
                    -DModule_ITKIOMesh:BOOL=ON
                    -DModule_ITKIOPhilipsREC:BOOL=ON
@@ -72,7 +67,6 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DModule_ITKIOSiemens:BOOL=ON
                    -DModule_ITKIOSpatialObjects:BOOL=ON
                    -DModule_ITKIOTransformBase:BOOL=ON
-                   -DModule_ITKIOTransformHDF5:BOOL=ON
                    -DModule_ITKIOTransformInsightLegacy:BOOL=ON
                    -DModule_ITKIOTransformMatlab:BOOL=ON
                    -DModule_ITKIOXML:BOOL=ON
@@ -129,8 +123,7 @@ set(ITK_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                    -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
-
-getCachedUrl(http://freefr.dl.sourceforge.net/project/itk/itk/4.5/InsightToolkit-4.5.1.tar.gz CACHED_URL)
+set(CACHED_URL http://freefr.dl.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 ExternalProject_Add(
@@ -138,7 +131,7 @@ ExternalProject_Add(
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${ITK_PATCH_DIR}/" "<SOURCE_DIR>/"
-    DEPENDS zlib jpeg libpng tiff vxl gdcm vtk hdf5
+    DEPENDS zlib jpeg libpng tiff vxl gdcm vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
     STEP_TARGETS CopyConfigFileToInstall

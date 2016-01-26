@@ -1,10 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(pythonBuilder)
 
 include(ExternalProject)
 
-getCachedUrl(http://www.python.org/ftp/python/2.7.5/Python-2.7.5.tgz CACHED_URL)
+set(CACHED_URL http://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz)
 
 if(WIN32)
     set(PYTHON_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
@@ -35,7 +35,7 @@ else(WIN32)
 
     if(NOT APPLE)
         if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-            set(SETENV export CC=clang CXX=clang++ CFLAGS=-Wno-unused-value &&)  
+            set(SETENV export CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS=-Wno-unused-value &&)  
         endif()
     endif()
 
@@ -44,10 +44,11 @@ else(WIN32)
                       --disable-static
                       --prefix=${CMAKE_INSTALL_PREFIX}
     )
+    
     if(${IS_DEBUG})
-        set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug --with-pydebug)
+        list(APPEND CONFIGURE_CMD --with-debug --with-pydebug)
     else(${IS_DEBUG})
-        set(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
+        list(APPEND CONFIGURE_CMD --without-debug)
     endif(${IS_DEBUG})
     ExternalProject_Add(
         python

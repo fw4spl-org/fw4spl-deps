@@ -56,3 +56,10 @@ EXPORTS
   jround_up
   jcopy_sample_rows
   jcopy_block_row
+  jtransform_execute_transform
+  jcopy_markers_execute
+  jtransform_adjust_parameters
+  jtransform_request_workspace
+  jcopy_markers_setup
+  jtransform_parse_crop_spec
+  

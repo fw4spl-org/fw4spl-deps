@@ -1,14 +1,21 @@
 cmake_minimum_required(VERSION 2.8.6)
 project(libtiff C)
 
-find_package(jpeg REQUIRED)
+find_package(JPEG REQUIRED)
 if(NOT JPEG_FOUND)
     message(FATAL_ERROR "JPEG not found !")
 endif()
 
-find_package(zlib REQUIRED)
+find_package(ZLIB REQUIRED)
 if(NOT ZLIB_FOUND)
     message(FATAL_ERROR "ZLIB not found !")
+endif()
+
+if(ANDROID)
+  find_library(M_LIBRARY
+    NAMES m
+    REQUIRED
+  )
 endif()
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" 
@@ -18,14 +25,14 @@ set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib"
 set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include" 
     CACHE PATH "Installation directory for headers")
 
-if(WIN32)
+if(WIN32 OR ANDROID)
     #configure libtiff
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tif_config.vc.h
                    ${CMAKE_CURRENT_BINARY_DIR}/tif_config.h COPYONLY)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/libtiff/tiffconf.vc.h
                    ${CMAKE_CURRENT_BINARY_DIR}/tiffconf.h COPYONLY)
 else()
-    message(FATAL_ERROR "CMake script not yet available for this platform :(")
+   # message(FATAL_ERROR "CMake script not yet available for this platform :( ")
 endif()
 
 set(LIBTIFF_INC
@@ -80,21 +87,27 @@ set(LIBTIFF_SRC
     libtiff/tif_warning.c
     libtiff/tif_write.c
     libtiff/tif_zip.c
-    libtiff/tif_win32.c
+    
 )
 
 if(WIN32)
-    set(LIBTIFF_SRC ${LIBTIFF_SRC} libtiff/tif_win32.c)
+    list(APPEND LIBTIFF_SRC
+        libtiff/tif_win32.c
+    )
+else()
+    list(APPEND LIBTIFF_SRC
+        libtiff/tif_unix.c
+    )
 endif()
 
-include_directories( libtiff/ ${CMAKE_CURRENT_BINARY_DIR} ${JPEG_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${JPEG_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} )
 
 add_definitions(-DZIP_SUPPORT -DJPEG_SUPPORT)
 
-add_library(libtiff SHARED ${LIBTIFF_SRC} libtiff/libtiff.def)
-target_link_libraries(libtiff ${JPEG_LIBRARY} ${ZLIB_LIBRARY})
+add_library(tiff SHARED ${LIBTIFF_SRC} libtiff/libtiff.def)
+target_link_libraries(tiff ${JPEG_LIBRARY} ${ZLIB_LIBRARY} ${M_LIBRARY})
    
-install(TARGETS libtiff
+install(TARGETS tiff
         RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
         ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
         LIBRARY DESTINATION "${INSTALL_LIB_DIR}" )

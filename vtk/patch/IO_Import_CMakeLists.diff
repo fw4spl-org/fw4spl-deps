@@ -1,0 +1,15 @@
+diff --git a/IO/Import/CMakeLists.txt b/IO/Import/CMakeLists.txt
+index fc00885..1591bc0 100644
+--- a/IO/Import/CMakeLists.txt
++++ b/IO/Import/CMakeLists.txt
+@@ -4,6 +4,10 @@ set(Module_SRCS
+   vtkVRMLImporter.cxx
+ )
+ 
++install(FILES vtk3DS.h vtkVRML.h
++  DESTINATION ${VTK_INSTALL_INCLUDE_DIR}
++  )
++
+ set_source_files_properties(
+   vtkImporter
+   ABSTRACT

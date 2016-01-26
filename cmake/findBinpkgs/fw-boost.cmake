@@ -3,6 +3,8 @@ file(GLOB BOOST_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(Boost_NO_SYSTEM_PATHS ON)
 set(Boost_USE_DEBUG_PYTHON ON)
 set(Boost_USE_MULTITHREADED ON)
+set(BOOST_VERSION "1_57")
+set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include/boost-${BOOST_VERSION})
 
 add_definitions(
         -DBOOST_ALL_DYN_LINK
@@ -15,12 +17,19 @@ add_definitions(
 
 if(WIN32)
     set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
-
-    set(Boost_COMPILER -vc100)
+    if(MSVC12)
+        set(VERSION "120")
+    elseif(MSVC10)
+        set(VERSION "100")
+    else()
+        message(SEND_ERROR "Compiler version not supported")
+    endif()
+    set(Boost_COMPILER -vc${VERSION})
     add_definitions(
             -DBOOST_LIB_DIAGNOSTIC
             -DNOMINMAX
             -DWIN32_LEAN_AND_MEAN
+            -DBOOST_ALL_NO_LIB
             )
 endif()
 

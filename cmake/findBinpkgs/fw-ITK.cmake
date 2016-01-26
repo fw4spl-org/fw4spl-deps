@@ -61,11 +61,14 @@ set(ITK_LIBS ITKAlgorithms
     itkTestDriver
     ITKVideoCore
     ITKVideoIO
+
+    itkhdf5
+    itkhdf5_cpp
     )
 
 
 foreach(LIB ${ITK_LIBS})
-    find_library(${LIB}_LIB ${LIB}-4.5 ${ITK_DIR} )
+    find_library(${LIB}_LIB ${LIB}-4.6 ${ITK_DIR} )
     add_library(${LIB} UNKNOWN IMPORTED)
     set_target_properties(${LIB} PROPERTIES IMPORTED_LOCATION "${${LIB}_LIB}")
     set(ITK_LIBRARIES ${ITK_LIBRARIES} ${${LIB}_LIB})

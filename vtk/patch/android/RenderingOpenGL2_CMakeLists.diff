@@ -1,0 +1,24 @@
+--- a/Rendering/OpenGL2/CMakeLists.txt	2015-08-11 19:26:47.000000000 +0200
++++ b/Rendering/OpenGL2/CMakeLists.txt	2015-08-21 16:38:12.000000000 +0200
+@@ -25,10 +25,10 @@
+   vtkCompositePolyDataMapper2.cxx
+   vtkDefaultPass.cxx
+   vtkDepthPeelingPass.cxx
+-  vtkGaussianBlurPass.cxx
++  # vtkGaussianBlurPass.cxx
+   vtkGenericCompositePolyDataMapper2.cxx
+   vtkGenericOpenGLRenderWindow.cxx
+-  vtkImageProcessingPass.cxx
++  # vtkImageProcessingPass.cxx
+   vtkLightsPass.cxx
+   vtkOpaquePass.cxx
+   vtkOpenGLActor.cxx
+@@ -62,7 +62,7 @@
+   vtkSequencePass.cxx
+   vtkShader.cxx
+   vtkShaderProgram.cxx
+-  vtkSobelGradientMagnitudePass.cxx
++  # vtkSobelGradientMagnitudePass.cxx
+   vtkTextureObject.cxx
+   vtkTextureUnitManager.cxx
+   vtkTranslucentPass.cxx

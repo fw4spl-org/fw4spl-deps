@@ -1,0 +1,13 @@
+diff --git a/dcmnet/include/dcmtk/dcmnet/scp.h b/dcmnet/include/dcmtk/dcmnet/scp.h
+index 80f586e..e4818ff 100755
+--- a/dcmnet/include/dcmtk/dcmnet/scp.h
++++ b/dcmnet/include/dcmtk/dcmnet/scp.h
+@@ -988,7 +988,7 @@ protected:
+   static void callbackRECEIVEProgress(void *callbackContext,
+                                       unsigned long byteCount);
+ 
+-private:
++//private:
+ 
+   /// Current association run by this SCP
+   T_ASC_Association *m_assoc;
