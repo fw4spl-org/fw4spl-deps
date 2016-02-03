@@ -18,6 +18,7 @@ if(ANDROID)
     ExternalProject_Add(
         libxml
         URL ${CACHED_URL}
+        URL_HASH SHA256=fd3c64cb66f2c4ea27e934d275904d92cec494a8e8405613780cbc8a71680fdb
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS libiconv zlib
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${LIBXML2_PATCH_DIR}/android" "<SOURCE_DIR>/"
@@ -65,6 +66,7 @@ elseif(WIN32)
     ExternalProject_Add(
         libxml
         URL ${CACHED_URL}
+        URL_HASH SHA256=fd3c64cb66f2c4ea27e934d275904d92cec494a8e8405613780cbc8a71680fdb
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS libiconv zlib
         BUILD_IN_SOURCE 1
@@ -103,6 +105,7 @@ else()
     ExternalProject_Add(
         libxml
         URL ${CACHED_URL}
+        URL_HASH SHA256=fd3c64cb66f2c4ea27e934d275904d92cec494a8e8405613780cbc8a71680fdb
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS ${EXTRA_DEPENDS} zlib
         BUILD_IN_SOURCE 1

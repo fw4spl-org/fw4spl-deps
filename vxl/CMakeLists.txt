@@ -57,6 +57,7 @@ set(CACHED_URL https://github.com/vxl/vxl/archive/fbe829dd16e4c1bdf312cf287b33c6
 ExternalProject_Add(
     vxl
     URL ${CACHED_URL}
+    URL_HASH SHA256=f4f6315dd7905e50b11cb93bb4d81a0a18b733c17629b824265f97b1b4af2644
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME vxl_1.18.0.tar.gz
     DEPENDS zlib jpeg libpng tiff expat

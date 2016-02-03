@@ -47,6 +47,7 @@ list(APPEND SETUP install
 ExternalProject_Add(
     numpy
     URL ${CACHED_URL}
+    URL_HASH SHA256=0075bbe07e30b659ae4415446f45812dc1b96121a493a4a1f8b1ba77b75b1e1c
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS python
     BUILD_IN_SOURCE 1

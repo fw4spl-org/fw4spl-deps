@@ -24,6 +24,7 @@ if(WIN32)
     ExternalProject_Add(
         python
         URL ${CACHED_URL}
+        URL_HASH SHA256=74d70b914da4487aa1d97222b29e9554d042f825f26cb2b93abd20fdda56b557
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS zlib expat
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${PYTHON_PATCH_DIR}/" "<SOURCE_DIR>/"
@@ -53,6 +54,7 @@ else(WIN32)
     ExternalProject_Add(
         python
         URL ${CACHED_URL}
+        URL_HASH SHA256=74d70b914da4487aa1d97222b29e9554d042f825f26cb2b93abd20fdda56b557
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND ${SETENV} ${CONFIGURE_CMD}

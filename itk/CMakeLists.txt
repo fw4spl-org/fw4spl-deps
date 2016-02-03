@@ -129,6 +129,7 @@ set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 ExternalProject_Add(
     itk
     URL ${CACHED_URL}
+    URL_HASH SHA256=ed42f94c0c0efce3cc5cbcce73052db4029ff54f33aad7340badcd589805c1b6
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${ITK_PATCH_DIR}/" "<SOURCE_DIR>/"
     DEPENDS zlib jpeg libpng tiff vxl gdcm vtk

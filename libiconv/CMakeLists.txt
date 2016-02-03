@@ -29,6 +29,7 @@ elseif(WIN32)
     ExternalProject_Add(
         libiconv
         URL ${CACHED_URL}
+        URL_HASH SHA256=b54da6cb14f6930fa8bbf3bee4225e842fd6dc0b2377081f1a809ec1ab761aac
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}

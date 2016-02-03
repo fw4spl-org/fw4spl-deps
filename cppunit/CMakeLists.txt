@@ -14,6 +14,7 @@ if(WIN32)
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
+        URL_HASH SHA256=ac28a04c8e6c9217d910b0ae7122832d28d9917fa668bcc9e0b8b09acb4ea44a
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${CPPUNIT_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
@@ -29,6 +30,7 @@ else()
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
+        URL_HASH SHA256=ac28a04c8e6c9217d910b0ae7122832d28d9917fa668bcc9e0b8b09acb4ea44a
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND <SOURCE_DIR>/configure

@@ -24,6 +24,7 @@ set(CACHED_URL https://github.com/fw4spl-org/camp/archive/0.7.1.3.zip)
 ExternalProject_Add(
     camp
     URL ${CACHED_URL}
+    URL_HASH SHA256=871ee4879a131ade7ecb397e62d59ec78c8602abdad6de5349c215e929c02f8d
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME camp_0.7.1.3.zip
     DEPENDS boost

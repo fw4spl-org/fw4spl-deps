@@ -12,6 +12,7 @@ set(CACHED_URL http://tetgen.org/files/tetgen1.4.3.tar.gz)
 ExternalProject_Add(
     tetgen
     URL ${CACHED_URL}
+    URL_HASH SHA256=952711bb06b7f64fd855eb24c33f08e3faf40bdd54764de10bbe5ed5b0dce034
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${TETGEN_PATCH_DIR}/" "<SOURCE_DIR>/"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
