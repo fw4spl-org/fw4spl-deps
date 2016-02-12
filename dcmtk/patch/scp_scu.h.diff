@@ -1,0 +1,41 @@
+diff --git a/dcmnet/include/dcmtk/dcmnet/scp.h b/dcmnet/include/dcmtk/dcmnet/scp.h
+index 80f586e..e4818ff 100755
+--- a/dcmnet/include/dcmtk/dcmnet/scp.h
++++ b/dcmnet/include/dcmtk/dcmnet/scp.h
+@@ -988,7 +988,7 @@ protected:
+   static void callbackRECEIVEProgress(void *callbackContext,
+                                       unsigned long byteCount);
+ 
+-private:
++//private:
+ 
+   /// Current association run by this SCP
+   T_ASC_Association *m_assoc;
+
+diff --git a/dcmnet/include/dcmtk/dcmnet/scu.h b/dcmnet/include/dcmtk/dcmnet/scu.h
+index c1acb81..d344543 100644
+--- a/dcmnet/include/dcmtk/dcmnet/scu.h
++++ b/dcmnet/include/dcmtk/dcmnet/scu.h
+@@ -962,7 +962,7 @@ protected:
+   static void callbackRECEIVEProgress(void *callbackContext,
+                                       unsigned long byteCount);
+ 
+-private:
++//private:
+ 
+   /** Private undefined copy-constructor. Shall never be called.
+    *  @param src Source object
+
+diff --git a/dcmnet/libsrc/scu.cc b/dcmnet/libsrc/scu.cc
+index 315eec8..9af88ca 100644
+--- a/dcmnet/libsrc/scu.cc
++++ b/dcmnet/libsrc/scu.cc
+@@ -525,7 +525,7 @@ void DcmSCU::closeAssociation(const DcmCloseAssociationType closeType)
+       break;
+     case DCMSCU_ABORT_ASSOCIATION:
+       /* abort association */
+-      DCMNET_INFO("Aborting Association");
++      DCMNET_DEBUG("Aborting Association");
+       cond = ASC_abortAssociation(m_assoc);
+       if (cond.bad())
+       {

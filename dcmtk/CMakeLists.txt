@@ -18,7 +18,7 @@ set(DCMTK_CMAKE_ARGS    ${COMMON_CMAKE_ARGS}
 )
 
 set(DCMTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(DCMTK_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${DCMTK_PATCH_DIR}/scp.h.diff -d <SOURCE_DIR>)
+set(DCMTK_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${DCMTK_PATCH_DIR}/scp_scu.h.diff -d <SOURCE_DIR>)
 
 # On Linux-gcc we have a crash on the first call to ::DcmSCP::addPresentationContext() only in debug
 # This is weird but for now we keep the release version
