@@ -20,8 +20,10 @@ set(DCMTK_CMAKE_ARGS    ${COMMON_CMAKE_ARGS}
 set(DCMTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(DCMTK_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${DCMTK_PATCH_DIR}/scp.h.diff -d <SOURCE_DIR>)
 
+# On Linux-gcc we have a crash on the first call to ::DcmSCP::addPresentationContext() only in debug
+# This is weird but for now we keep the release version
 if(UNIX AND NOT APPLE AND NOT ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-    list(APPEND DCMTK_CMAKE_ARGS -DDCMTK_USE_CXX11_STL:BOOL=ON)
+    list(APPEND DCMTK_CMAKE_ARGS -DDCMTK_USE_CXX11_STL:BOOL=ON -DCMAKE_BUILD_TYPE=Release)
 endif()
 
 set(CACHED_URL http://dicom.offis.de/download/dcmtk/snapshot/old/dcmtk-3.6.1_20150217.tar.gz)
@@ -42,5 +44,6 @@ ExternalProject_Add(
 ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-DCMTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-DCMTK.cmake
     COMMENT "Install Configuration file"
+    DEPENDEES install
 )
 
