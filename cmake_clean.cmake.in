@@ -1,0 +1,16 @@
+set(REMOVE_DIR @CMAKE_CURRENT_BINARY_DIR@/@subdir@/)
+
+if(NOT EXISTS ${REMOVE_DIR})
+  message(FATAL_ERROR "Cannot find build directory: ${REMOVE_DIR} for target @subdir@")
+endif()
+
+# remove all files in the build directory
+message(STATUS "Cleaning build directory ${REMOVE_DIR}")
+exec_program(
+  "@CMAKE_COMMAND@" ARGS "-E remove_directory \"${REMOVE_DIR}\""
+  OUTPUT_VARIABLE rm_out
+  RETURN_VALUE rm_retval
+  )
+if(NOT "${rm_retval}" STREQUAL 0)
+  message(FATAL_ERROR "Problem when removing ${REMOVE_DIR}/")
+endif()
