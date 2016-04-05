@@ -77,7 +77,7 @@ elseif(WIN32)
     )
     
 else()
-    set(CONFIGURE_CMD <SOURCE_DIR>/configure
+    set(CONFIGURE_CMD ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                       --enable-shared --disable-static --without-libintl --enable-extra-encodings
                       # FIXME : Issue with zlib:
                       # "Undefined reference to `gzdirect@ZLIB_1.2.2.3'"

@@ -48,7 +48,7 @@ else()
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                 --enable-shared
                 --disable-static
                 --without-libintl

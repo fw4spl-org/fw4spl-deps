@@ -35,7 +35,7 @@ else()
         URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                           --enable-shared
                           --disable-static
                           --prefix=${CMAKE_INSTALL_PREFIX}
