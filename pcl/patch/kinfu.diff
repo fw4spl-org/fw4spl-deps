@@ -1,0 +1,76 @@
+diff --git a/gpu/kinfu/include/pcl/gpu/kinfu/kinfu.h b/gpu/kinfu/include/pcl/gpu/kinfu/kinfu.h
+index ec957f9..d9b7cda 100644
+--- a/gpu/kinfu/include/pcl/gpu/kinfu/kinfu.h
++++ b/gpu/kinfu/include/pcl/gpu/kinfu/kinfu.h
+@@ -37,7 +37,6 @@
+ 
+ #ifndef PCL_KINFU_KINFUTRACKER_HPP_
+ #define PCL_KINFU_KINFUTRACKER_HPP_
+-
+ #include <pcl/pcl_macros.h>
+ #include <pcl/gpu/containers/device_array.h>
+ #include <pcl/gpu/kinfu/pixel_rgb.h>
+@@ -71,6 +70,7 @@ namespace pcl
+         typedef pcl::gpu::PixelRGB PixelRGB;
+ 
+         typedef DeviceArray2D<PixelRGB> View;
++
+         typedef DeviceArray2D<unsigned short> DepthMap;
+ 
+         typedef pcl::PointXYZ PointType;
+@@ -107,8 +107,8 @@ namespace pcl
+         void
+         setInitalCameraPose (const Eigen::Affine3f& pose);
+                         
+-		/** \brief Sets truncation threshold for depth image for ICP step only! This helps 
+-		  *  to filter measurements that are outside tsdf volume. Pass zero to disable the truncation.
++        /** \brief Sets truncation threshold for depth image for ICP step only! This helps 
++          *  to filter measurements that are outside tsdf volume. Pass zero to disable the truncation.
+           * \param[in] max_icp_distance Maximal distance, higher values are reset to zero (means no measurement). 
+           */
+         void
+@@ -199,7 +199,9 @@ namespace pcl
+ 
+         /** \brief Disables ICP forever */
+         void disableIcp();
+-
++        /* 3D face modeling changes */
++        typedef Eigen::Matrix<float, 3, 3, Eigen::RowMajor> Matrix3frm;
++        typedef Eigen::Vector3f Vector3f;
+       private:
+         
+         /** \brief Number of pyramid levels */
+@@ -211,9 +213,11 @@ namespace pcl
+         /** \brief Vertex or Normal Map type */
+         typedef DeviceArray2D<float> MapArr;
+         
+-        typedef Eigen::Matrix<float, 3, 3, Eigen::RowMajor> Matrix3frm;
+-        typedef Eigen::Vector3f Vector3f;
+-
++        /* 3D face modeling changes */
++        //typedef Eigen::Matrix<float, 3, 3, Eigen::RowMajor> Matrix3frm;
++        //typedef Eigen::Vector3f Vector3f;
++        /****************************/
++        
+         /** \brief Height of input depth image. */
+         int rows_;
+         /** \brief Width of input depth image. */
+@@ -298,7 +302,17 @@ namespace pcl
+ 
+ public:
+ EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+-
++/* 3D face modeling changes */
++        /* Get rmats and tvec. */
++        std::vector<Matrix3frm>* getRmats() {
++            return &rmats_;
++        }
++        
++        /** \brief Array of camera translations for each moment of time. */
++        std::vector<Vector3f>* getTvecs() {
++            return &tvecs_;
++        }
++        /****************************/
+     };
+   }
+ };

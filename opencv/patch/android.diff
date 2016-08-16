@@ -1,0 +1,27 @@
+--- a/CMakeLists.txt	2015-06-03 19:21:34.000000000 +0200
++++ b/CMakeLists.txt	2015-07-28 15:33:36.000000000 +0200
+@@ -346,15 +346,15 @@
+   endif()
+ endif()
+ 
+-if(ANDROID)
+-  set(LIBRARY_OUTPUT_PATH         "${OpenCV_BINARY_DIR}/lib/${ANDROID_NDK_ABI_NAME}")
+-  set(3P_LIBRARY_OUTPUT_PATH      "${OpenCV_BINARY_DIR}/3rdparty/lib/${ANDROID_NDK_ABI_NAME}")
+-  set(OPENCV_LIB_INSTALL_PATH     sdk/native/libs/${ANDROID_NDK_ABI_NAME})
+-  set(OPENCV_3P_LIB_INSTALL_PATH  sdk/native/3rdparty/libs/${ANDROID_NDK_ABI_NAME})
+-  set(OPENCV_CONFIG_INSTALL_PATH  sdk/native/jni)
+-  set(OPENCV_INCLUDE_INSTALL_PATH sdk/native/jni/include)
+-  set(OPENCV_SAMPLES_SRC_INSTALL_PATH samples/native)
+-  set(OPENCV_OTHER_INSTALL_PATH   sdk/etc)
++if(ANDROID) 
++  set(LIBRARY_OUTPUT_PATH             ${OpenCV_BINARY_DIR}/lib)
++  set(3P_LIBRARY_OUTPUT_PATH          ${OpenCV_BINARY_DIR}/3rdparty/lib${LIB_SUFFIX})
++  set(OPENCV_LIB_INSTALL_PATH         ${CMAKE_INSTALL_PREFIX}/lib)
++  set(OPENCV_3P_LIB_INSTALL_PATH      ${CMAKE_INSTALL_PREFIX}/lib)
++  set(OPENCV_CONFIG_INSTALL_PATH      ${CMAKE_INSTALL_PREFIX}/CMake)
++  set(OPENCV_INCLUDE_INSTALL_PATH     ${CMAKE_INSTALL_PREFIX}/include)
++  set(OPENCV_SAMPLES_SRC_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/sample)
++  set(OPENCV_OTHER_INSTALL_PATH       share/OpenCV)
+ else()
+   set(LIBRARY_OUTPUT_PATH         "${OpenCV_BINARY_DIR}/lib")
+   set(3P_LIBRARY_OUTPUT_PATH      "${OpenCV_BINARY_DIR}/3rdparty/lib${LIB_SUFFIX}")

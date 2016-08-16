@@ -1,0 +1,68 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 430a5e3..1ec418f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -46,10 +46,10 @@ check_include_files(windows.h ZMQ_HAVE_WINDOWS)
+ check_include_files(sys/uio.h ZMQ_HAVE_UIO)
+ check_include_files(sys/eventfd.h ZMQ_HAVE_EVENTFD)
+ 
+-check_library_exists(ws2_32 printf "" HAVE_WS2_32) # TODO: Why doesn't something logical like WSAStartup work?
+-check_library_exists(ws2 printf "" HAVE_WS2)
+-check_library_exists(rpcrt4 printf "" HAVE_RPCRT4) # UuidCreateSequential
+-check_library_exists(iphlpapi printf "" HAVE_IPHLAPI) # GetAdaptersAddresses
++check_library_exists(ws2_32 WSAStartup "" HAVE_WS2_32)
++check_library_exists(ws2 WSAStartup "" HAVE_WS2)
++check_library_exists(rpcrt4 UuidCreateSequential "" HAVE_RPCRT4)
++check_library_exists(iphlpapi GetAdaptersAddresses "" HAVE_IPHLAPI)
+ 
+ find_library(RT_LIBRARY rt)
+ 
+@@ -160,12 +160,14 @@ endif()
+ 
+ 
+ #-----------------------------------------------------------------------------
+-zmq_check_sock_cloexec()
+-zmq_check_so_keepalive()
+-zmq_check_tcp_keepcnt()
+-zmq_check_tcp_keepidle()
+-zmq_check_tcp_keepintvl()
+-zmq_check_tcp_keepalive()
++if(NOT ANDROID)    
++    zmq_check_sock_cloexec()
++    zmq_check_so_keepalive()
++    zmq_check_tcp_keepcnt()
++    zmq_check_tcp_keepidle()
++    zmq_check_tcp_keepintvl()
++    zmq_check_tcp_keepalive()
++endif()
+ 
+ 
+ if(    CMAKE_SYSTEM_NAME MATCHES "Linux"
+@@ -497,8 +499,8 @@ if(MSVC)
+     PUBLIC_HEADER "${public_headers}"
+     RELEASE_POSTFIX "${_zmq_COMPILER}-mt-s-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}"
+     DEBUG_POSTFIX "${_zmq_COMPILER}-mt-sgd-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}"
+-    COMPILE_FLAGS "/D ZMQ_STATIC"
+-    OUTPUT_NAME "libzmq")
++    COMPILE_FLAGS "/DZMQ_STATIC"
++    OUTPUT_NAME "libzmq-static")
+ else()
+     add_library(libzmq SHARED ${sources} ${public_headers} ${html-docs} ${readme-docs} ${zmq-pkgconfig})
+     if(ZMQ_BUILD_FRAMEWORK)
+@@ -649,6 +651,7 @@ if(MSVC)
+   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+     install(TARGETS libzmq libzmq-static
+             RUNTIME DESTINATION bin
++            ARCHIVE DESTINATION lib
+             PUBLIC_HEADER DESTINATION include
+             COMPONENT SDK)
+     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib/libzmq${_zmq_COMPILER}-mt-gd-${ZMQ_VERSION_MAJOR}_${ZMQ_VERSION_MINOR}_${ZMQ_VERSION_PATCH}.pdb DESTINATION lib
+@@ -664,7 +667,7 @@ else()
+           RUNTIME DESTINATION bin
+           ARCHIVE DESTINATION lib
+           LIBRARY DESTINATION lib
+-          FRAMEWORK DESTINATION "Library/Frameworks"
++          FRAMEWORK DESTINATION lib
+           PUBLIC_HEADER DESTINATION include)
+ endif()
+ 
