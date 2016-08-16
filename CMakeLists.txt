@@ -120,6 +120,10 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES flann)
     list(APPEND SUBDIRECTORIES bullet)
     list(APPEND SUBDIRECTORIES geodesic)
+
+    list(APPEND SUBDIRECTORIES libarchive)
+    list(APPEND SUBDIRECTORIES openigtlink)
+    list(APPEND SUBDIRECTORIES zeromq)
     
     if(ENABLED_PCL_DEPS)
         if(UNIX)
@@ -171,6 +175,10 @@ else()
         list(APPEND SUBDIRECTORIES eigen)
         list(APPEND SUBDIRECTORIES pcl)
     endif()
+
+    list(APPEND SUBDIRECTORIES libarchive)
+    list(APPEND SUBDIRECTORIES openigtlink)
+    list(APPEND SUBDIRECTORIES zeromq)
 endif()
 
 macro(createUninstallTarget SUBDIR )
