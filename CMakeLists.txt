@@ -94,10 +94,6 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES freetype)
     list(APPEND SUBDIRECTORIES icu4c)
 
-    if(NOT APPLE)
-        list(APPEND SUBDIRECTORIES curl)
-    endif()
-
     list(APPEND SUBDIRECTORIES numpy)
     list(APPEND SUBDIRECTORIES qt)
     list(APPEND SUBDIRECTORIES vtk)
@@ -109,7 +105,6 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES ann)
     list(APPEND SUBDIRECTORIES dcmtk)
 
-    list(APPEND SUBDIRECTORIES cryptopp)
     list(APPEND SUBDIRECTORIES tetgen)
     list(APPEND SUBDIRECTORIES json-spirit)
     list(APPEND SUBDIRECTORIES glm)
