@@ -45,7 +45,6 @@ ExternalProject_Add(
     CONFIGURE_COMMAND ${ENV_WRAPPER} ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${ENV_WRAPPER} ${MAKE} -j${NUMBER_OF_PARALLEL_BUILD} -f Makefile
     INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE} -j${NUMBER_OF_PARALLEL_BUILD} -f Makefile ${INSTALL_ROOT} install
-    STEP_TARGETS CopyConfigFileToInstall
 )
 
 ExternalProject_Add_Step(qt COPY_FILES

@@ -41,7 +41,6 @@ ExternalProject_Add(
     PATCH_COMMAND ${PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${LIBARCHIVE_CMAKE_ARGS}
-    STEP_TARGETS CopyConfigFileToInstall
 )
 if(WIN32)
     ExternalProject_Add_Step(libarchive ZlibCopy
@@ -55,4 +54,6 @@ endif()
 
 ExternalProject_Add_Step(libarchive CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-libarchive.cmake ${CMAKE_INSTALL_PREFIX}/fw-libarchive.cmake
-    COMMENT "Install configuration file")
+    COMMENT "Install configuration file"
+    DEPENDEES install
+)

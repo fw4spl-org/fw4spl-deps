@@ -58,4 +58,5 @@ endif()
 ExternalProject_Add_Step(qt CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

@@ -17,11 +17,11 @@ ExternalProject_Add(
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${TETGEN_PATCH_DIR}/" "<SOURCE_DIR>/"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${TETGEN_CMAKE_ARGS}
-    STEP_TARGETS CopyConfigFileToInstall
 )
 
 ExternalProject_Add_Step(tetgen CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindTetgen.cmake ${CMAKE_INSTALL_PREFIX}/FindTetgen.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )
 

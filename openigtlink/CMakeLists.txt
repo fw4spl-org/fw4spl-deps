@@ -37,10 +37,10 @@ ExternalProject_Add(
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     PATCH_COMMAND ${PATCH_CMD}
     CMAKE_ARGS ${OPENIGTLINK_CMAKE_ARGS}
-    STEP_TARGETS CopyConfigFileToInstall
 )
 
 ExternalProject_Add_Step(openigtlink CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-IGTL.cmake ${CMAKE_INSTALL_PREFIX}/fw-IGTL.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

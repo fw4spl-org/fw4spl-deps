@@ -20,7 +20,6 @@ if(ANDROID)
         PATCH_COMMAND ${PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}
-        STEP_TARGETS CopyConfigFileToInstall
     )
     
 elseif(WIN32)
@@ -33,7 +32,6 @@ elseif(WIN32)
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}
-        STEP_TARGETS CopyConfigFileToInstall
     )
 else()
     set(LIBICONV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
@@ -57,7 +55,6 @@ else()
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBICONV_PATCH_DIR}/" "<SOURCE_DIR>/" ${LIBICONV_PATCH_CMD}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_libiconv} install
-        STEP_TARGETS CopyConfigFileToInstall
     )
     
 endif()
@@ -71,4 +68,5 @@ endif()
 ExternalProject_Add_Step(libiconv CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

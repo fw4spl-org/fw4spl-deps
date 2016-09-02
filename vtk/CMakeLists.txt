@@ -138,7 +138,6 @@ ExternalProject_Add(
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CONFIGURE_COMMAND ${VTK_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE} ${VTK_SRC_DIR}
-    STEP_TARGETS VtkDesktopCompile CopyConfigFileToInstall
 )
 
 if (ANDROID)
@@ -154,4 +153,5 @@ endif()
 ExternalProject_Add_Step(vtk CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-VTK.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

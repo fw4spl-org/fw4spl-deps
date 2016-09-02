@@ -26,7 +26,6 @@ ExternalProject_Add(
     PATCH_COMMAND ${ZMQ_PATCH_COMMAND}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ZEROMQ_CMAKE_ARGS}
-    STEP_TARGETS CopyConfigFileToInstall
 )
 
 ExternalProject_Add_Step(zeromq CPP_ZEROMQ
@@ -39,6 +38,7 @@ ExternalProject_Add_Step(zeromq CPP_ZEROMQ
 ExternalProject_Add_Step(zeromq CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindZEROMQ.cmake ${CMAKE_INSTALL_PREFIX}/FindZEROMQ.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")

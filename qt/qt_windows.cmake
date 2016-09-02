@@ -68,5 +68,4 @@ ExternalProject_Add(
     CONFIGURE_COMMAND ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE_QT} -f Makefile
     INSTALL_COMMAND ${MAKE_QT} -f Makefile install
-    STEP_TARGETS CopyConfigFileToInstall
 )
