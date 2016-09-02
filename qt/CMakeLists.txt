@@ -4,8 +4,8 @@ project(qtBuilder)
 
 include(ExternalProject)
 
-set(QT5_URL "http://download.qt.io/official_releases/qt/5.5/5.5.1/single/qt-everywhere-opensource-src-5.5.1.tar.gz")
-set(QT5_HASHSUM 59f0216819152b77536cf660b015d784)
+set(QT5_URL "http://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz")
+set(QT5_HASHSUM 4661905915d6265243e17fe59852930a229cf5b054ce5af5f48b34da9112ab5f)
 
 set(CACHED_URL ${QT5_URL})
 
@@ -17,18 +17,13 @@ set(QT_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/qt-prefix/src/qt)
 set(QT_SKIP_MODULES_LIST 
     -skip qtactiveqt
     -skip qtconnectivity
-    -skip qtenginio
     -skip qtsensors
     -skip qttranslations
     -skip qtwayland
     -skip qtwebengine
     -skip qtwebchannel
-    -skip qtwebkit
-    -skip qtwebkit-examples
     -skip qtwebsockets
-    -skip qt3d
     -skip qtdeclarative
-    -skip qtquick1
     -skip qtquickcontrols
     -skip qtcanvas3d
     -skip qtgraphicaleffects
@@ -58,5 +53,11 @@ endif()
 ExternalProject_Add_Step(qt CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
+)
+
+ExternalProject_Add_Step(qt CopyFonts
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/fonts ${CMAKE_INSTALL_PREFIX}/lib/fonts
+    COMMENT "Install fonts"
     DEPENDEES install
 )
