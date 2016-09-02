@@ -21,22 +21,22 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DUSE_ITK:BOOL=OFF
 )
 
-set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.4.2.tar.gz)
+set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.6.4.tar.gz)
 
+# Needed for windows to find our zlib but doesn't hurt on other platforms
 set(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(GDCM_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
-    COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${GDCM_PATCH_DIR}/VTK/CMakeLists.txt" "<SOURCE_DIR>/Utilities/VTK/CMakeLists.txt")
+set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${GDCM_PATCH_DIR}/zlib.diff -d <SOURCE_DIR>)
+
 
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
-    URL_HASH SHA256=e3577255032013dfb9a8799c2a8f278a6de759072dcb5ef54f4c470eb00c5bf3
+    URL_HASH SHA256=bbf7eeda622cf18499bd162f3b06d0c937a5379f6f3d1445d57b3d4d0070f97e
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME gdcm-2.4.2.tar.gz
-    PATCH_COMMAND ${GDCM_PATCH_CMD}
     DEPENDS zlib expat libxml vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${GDCM_CMAKE_ARGS}
+    PATCH_COMMAND ${GDCM_PATCH_CMD}
 )
 
 
