@@ -1,6 +1,6 @@
---- a/Common/Core/CMakeLists.txt	2015-02-16 19:30:42.000000000 +0100
-+++ b/Common/Core/CMakeLists.txt	2015-08-19 17:41:33.000000000 +0200
-@@ -602,4 +600,11 @@
+--- a/Common/Core/CMakeLists.txt	2016-04-18 17:54:34.000000000 +0200
++++ b/Common/Core/CMakeLists.txt	2016-04-18 17:54:57.000000000 +0200
+@@ -624,4 +624,10 @@
  
  vtk_module_library(vtkCommonCore ${Module_SRCS})
  
@@ -12,4 +12,3 @@
 +else()
 +    vtk_module_link_libraries(vtkCommonCore LINK_PRIVATE ${CMAKE_THREAD_LIBS} LINK_PUBLIC ${VTK_SMP_IMPLEMENTATION_LIBRARIES})
 +endif()
-+

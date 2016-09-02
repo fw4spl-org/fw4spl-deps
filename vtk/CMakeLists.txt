@@ -25,8 +25,8 @@ set(VTK_CMAKE_ARGS
 
 if(NOT ANDROID)
 
-    set(CACHED_URL http://www.vtk.org/files/release/6.2/VTK-6.2.0.tar.gz)
-    set(VTK_HASHSUM efa3ddfba118f3988ead08bdaf9441d33f23a4245d78511a6ce7f267b4f13277)
+    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.0.0.tar.gz)
+    set(VTK_HASHSUM 8edb4a681b948f9c7c318f50d57bc23146095464539bfd00ae09e5158de17b97)
 
     list(APPEND VTK_CMAKE_ARGS
         -DVTK_USE_GL2PS:BOOL=ON
@@ -50,17 +50,23 @@ if(NOT ANDROID)
         -DModule_vtkImagingStencil:BOOL=ON
         -DModule_vtkImagingStatistics:BOOL=ON
         -DModule_vtkIOImport:BOOL=ON
+        -DModule_vtkIOLegacy:BOOL=ON
+        -DModule_vtkIOGeometry:BOOL=ON
         -DModule_vtkIOPLY:BOOL=ON  # request for PCL
     )
-
+    set(EXTRA_DEPENDS qt)
 else( )
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v6.3.0.rc2.tar.gz)
-    set(VTK_HASHSUM 9601d3d35f61b8d1813102e2f2323736a2d4e532a4e8b4a82af929aa85d0008d)
+    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.0.0.tar.gz)
+    set(VTK_HASHSUM 8edb4a681b948f9c7c318f50d57bc23146095464539bfd00ae09e5158de17b97)
     
+    add_definitions(-DANDROID)
+
     list(APPEND VTK_CMAKE_ARGS
         -DBUILD_SHARED_LIBS:BOOL=ON
+        -DVTK_BUILD_QT_DESIGNER_PLUGIN=OFF
         -DVTK_RENDERING_BACKEND:STRING=OpenGL2
-        -DOPENGL_ES_VERSION:STRING=2.0
+        -DOPENGL_ES_VERSION:STRING=3.0
+        -DBUILD_TESTING:BOOL=OFF
         -DVTK_Group_Rendering:BOOL=OFF
         -DVTK_Group_StandAlone:BOOL=OFF
         -DVTK_Group_Imaging:BOOL=OFF
@@ -73,8 +79,6 @@ else( )
         -DModule_vtkFiltersModeling:BOOL=ON
         -DModule_vtkFiltersSources:BOOL=ON
         -DModule_vtkFiltersGeometry:BOOL=ON
-        -DModule_vtkFiltersTexture:BOOL=ON
-        -DModule_vtkFiltersHybrid:BOOL=ON
         -DModule_vtkIOGeometry:BOOL=ON
         -DModule_vtkIOLegacy:BOOL=ON
         -DModule_vtkIOImage:BOOL=OFF
@@ -85,10 +89,23 @@ else( )
         -DModule_vtkParallelCore:BOOL=ON
         -DModule_vtkRenderingCore:BOOL=ON
         -DModule_vtkRenderingFreeType:BOOL=OFF
-        -DModule_vtkImagingStencil:BOOL=ON
-        -DModule_vtkImagingStatistics:BOOL=ON
+        -DModule_vtkInteractionWidgets=ON
+        -DCMAKE_CXX_COMPILER_VERSION=${ANDROID_COMPILER_VERSION}
+        
+       -DModule_vtkFiltersTexture:BOOL=ON
+       -DModule_vtkFiltersHybrid:BOOL=ON
+        
         # Find utilities build on desktop
         -DVTKCompileTools_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk-build-desktop
+        
+        #-DVTK_QT_VERSION:STRING=5
+        -DModule_vtkGUISupportQt:BOOL=OFF
+        -DModule_vtkGUISupportQtOpenGL:BOOL=OFF
+        -DModule_vtkGUISupportQtWebkit:BOOL=OFF
+        -DModule_vtkGUISupportQtSQL:BOOL=OFF
+        -DModule_vtkRenderingQt:BOOL=OFF
+        -DModule_vtkRenderingContextOpenGL2=OFF
+        -DModule_vtkViewsQt:BOOL=OFF
         )
 endif()
 
@@ -120,10 +137,8 @@ if(ANDROID)
     list(APPEND VTK_PATCH_CMD
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/Core_CMakeLists.diff -d <SOURCE_DIR>
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkModuleMacros.diff -d <SOURCE_DIR>
-         COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/RenderingOpenGL2_CMakeLists.diff -d <SOURCE_DIR>
+         COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkEGL.diff -d <SOURCE_DIR>
     )
-else()
-    set(EXTRA_DEPENDS qt)
 endif()
 
 set(VTK_CONFIGURE_CMD ${CMAKE_COMMAND} -G ${CMAKE_GENERATOR} ${VTK_CMAKE_ARGS} ${VTK_SRC_DIR})
