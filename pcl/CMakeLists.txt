@@ -49,6 +49,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DWITH_PCAP:BOOL=OFF
                         -DCUDA_TOOLKIT_ROOT_DIR:BOOL=${CUDA_TOOLKIT_ROOT_DIR}
+                        -DWITH_RSSDK:BOOL=OFF
 )
 
 set(PCL_DEPENDS
@@ -90,7 +91,12 @@ endif()
 
 #CUDA
 find_package(CUDA)
-if(CUDA_FOUND)
+set(CUDA_HOST_COMPILER_SUPPORT TRUE)
+if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
+    # Microsoft Visual Studio 2015 Update >= 2 is not supported yet!
+    set(CUDA_HOST_COMPILER_SUPPORT FALSE)
+endif()
+if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
     #Enable GPU options
     list(APPEND PCL_CMAKE_ARGS -DBUILD_CUDA:BOOL=ON
                                -DBUILD_GPU:BOOL=ON
@@ -118,7 +124,7 @@ if(CUDA_FOUND)
         set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${NUMBER_OF_PARALLEL_BUILD})
     endif()
 else()
-    message("warning, no acceptable version of CUDA found")
+    message("warning, no acceptable version of CUDA or supported compiler found")
     list(APPEND PCL_CMAKE_ARGS -DBUILD_tracking:BOOL=OFF
                                -DBUILD_segmentation:BOOL=OFF
                                -DBUILD_simulation:BOOL=OFF

@@ -6,7 +6,7 @@ diff -uNr a/cmake/pcl_targets.cmake b/cmake/pcl_targets.cmake
      endif()
  	
 -	if(MSVC90 OR MSVC10)
-+	if(MSVC90 OR MSVC10 OR MSVC12)
++	if(MSVC90 OR MSVC10 OR MSVC12 OR MSVC14)
  	  target_link_libraries(${_name} delayimp.lib)  # because delay load is enabled for openmp.dll
  	endif()
  
