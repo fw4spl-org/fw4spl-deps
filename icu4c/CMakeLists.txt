@@ -9,16 +9,18 @@ set(CACHED_URL http://download.icu-project.org/files/icu4c/${MAJOR_VERSION}.2/ic
 
 if(WIN32)
 
-    set(ICU4C_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    set(ICU4C_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
+    set(ICU4C_CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+    set(ICU4C_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/ufile.c.diff -d <SOURCE_DIR>
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${ICU4C_CMAKE_DIR}/" "<SOURCE_DIR>")
+    
     ExternalProject_Add(
         icu4c
         URL ${CACHED_URL}
         URL_MD5 072e501b87065f3a0ca888f1b5165709
         DOWNLOAD_DIR ${ARCHIVE_DIR}
-        PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${ICU4C_PATCH_DIR}/" "<SOURCE_DIR>"
+        PATCH_COMMAND ${ICU4C_PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        CMAKE_ARGS ${ICU4C_CMAKE_ARGS}
+        CMAKE_ARGS ${COMMON_CMAKE_ARGS}
     )
 else()
     ExternalProject_Add(
