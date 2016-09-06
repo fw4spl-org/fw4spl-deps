@@ -1,5 +1,7 @@
 #ZLIB_LIB_NAME is defined in zlib BinPkgs script
-if(MSVC12)
+if(MSVC14)
+    set(TOOLSET "msvc-14.0")
+elseif(MSVC12)
     set(TOOLSET "msvc-12.0")
 elseif(MSVC10)
     set(TOOLSET "msvc-10.0")
@@ -35,7 +37,7 @@ ExternalProject_Add(
     boost
     DEPENDS zlib python libiconv
     URL ${CACHED_URL}
-    URL_HASH SHA1=55366a96bb76440ab140047065650f1d73dbfd8c
+    URL_HASH SHA256=${BOOST_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     BUILD_IN_SOURCE 1
     PATCH_COMMAND ${PATCH_CMD}

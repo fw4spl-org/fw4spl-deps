@@ -1,9 +1,9 @@
 import toolset : using ;
 
-using python : 2.7 : @PYTHON_DIR@/bin
-				   : @PYTHON_INCLUDE@
-				   : @PYTHON_DIR@/lib
-				   : @PYTHON_DEBUGGING@
+using python : 3.5 : @PYTHON_BIN@
+                   : @PYTHON_INCLUDE@
+                   : @PYTHON_LIB@
+                   : @PYTHON_DEBUGGING@
 ;
 
 @BOOST_USER_CONFIG@

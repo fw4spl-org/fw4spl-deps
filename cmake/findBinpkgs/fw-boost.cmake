@@ -3,7 +3,7 @@ file(GLOB BOOST_ROOT ${CMAKE_CURRENT_LIST_DIR})
 set(Boost_NO_SYSTEM_PATHS ON)
 set(Boost_USE_DEBUG_PYTHON ON)
 set(Boost_USE_MULTITHREADED ON)
-set(BOOST_VERSION "1_57")
+set(BOOST_VERSION "1_61")
 set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include/boost-${BOOST_VERSION})
 
 add_definitions(
@@ -17,7 +17,9 @@ add_definitions(
 
 if(WIN32)
     set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib)
-    if(MSVC12)
+    if(MSVC14)
+        set(VERSION "140")
+    elseif(MSVC12)
         set(VERSION "120")
     elseif(MSVC10)
         set(VERSION "100")
