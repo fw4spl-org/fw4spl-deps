@@ -28,6 +28,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKVideoBridgeOpenCV:BOOL=OFF
                    -DModule_ITKDCMTK:BOOL=OFF
                    -DModule_ITKIODCMTK:BOOL=OFF
+                   -DModule_ITKIOHDF5:BOOL=OFF
                    
 
                    -DModule_ITKAnisotropicSmoothing:BOOL=ON
@@ -125,13 +126,15 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 
 set(CACHED_URL http://freefr.dl.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>
+    && "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/ConfigureChecks.cmake.diff -d <SOURCE_DIR>/Modules/ThirdParty/HDF5/src/itkhdf5/config/cmake)
 
 ExternalProject_Add(
     itk
     URL ${CACHED_URL}
     URL_HASH SHA256=ed42f94c0c0efce3cc5cbcce73052db4029ff54f33aad7340badcd589805c1b6
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${ITK_PATCH_DIR}/" "<SOURCE_DIR>/"
+    PATCH_COMMAND ${ITK_PATCH_CMD}
     DEPENDS zlib jpeg libpng tiff vxl gdcm vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
