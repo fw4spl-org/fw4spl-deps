@@ -12,7 +12,7 @@ index fab378f..38ee6b4 100644
  option(SOFA_USE_MINIBOOST
  "Use the (header-only) subset of Boost distributed in the extlibs/ directory
 diff --git a/SofaFramework/CMakeLists.txt b/SofaFramework/CMakeLists.txt
-index 2020fd8..8684668 100644
+index 2020fd8..3ec62d1 100644
 --- a/SofaFramework/CMakeLists.txt
 +++ b/SofaFramework/CMakeLists.txt
 @@ -75,6 +75,7 @@ if(NOT SOFA_NO_OPENGL)
@@ -23,9 +23,7 @@ index 2020fd8..8684668 100644
          list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${GLEW_Target})
      endif()
      set(SOFA_HAVE_GLEW ${GLEW_FOUND})
---- a/SofaFramework/CMakeLists.txt
-+++ b/SofaFramework/CMakeLists.txt
-@@ -116,6 +116,11 @@ set(SOFA_HAVE_ZLIB ${ZLIB_FOUND})
+@@ -116,6 +117,11 @@ set(SOFA_HAVE_ZLIB ${ZLIB_FOUND})
  # PNG
  find_package(PNG)
  if(PNG_FOUND)
@@ -37,9 +35,7 @@ index 2020fd8..8684668 100644
      sofa_create_target(PNG SofaFramework "${PNG_LIBRARY}" "${PNG_INCLUDE_DIRS}")
  	list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${PNG_Target})
  endif()
---- a/SofaFramework/CMakeLists.txt
-+++ b/SofaFramework/CMakeLists.txt
-@@ -184,7 +184,7 @@ add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/helper ${CMAKE_CURRENT_
+@@ -184,7 +190,7 @@ add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/helper ${CMAKE_CURRENT_
  add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/defaulttype ${CMAKE_CURRENT_BINARY_DIR}/SofaDefaultType)
  add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/core ${CMAKE_CURRENT_BINARY_DIR}/SofaCore)
  if(SOFA_HAVE_GTEST)
@@ -181,7 +177,7 @@ index 5bac92c..05b6081 100644
  # These header files don't need to be processed by the moc.
  list(APPEND HEADER_FILES
 diff --git a/framework/sofa/helper/io/ImagePNG.cpp b/framework/sofa/helper/io/ImagePNG.cpp
-index 5f3db89..b0899c2 100644
+index 5f3db89..508d4ac 100644
 --- a/framework/sofa/helper/io/ImagePNG.cpp
 +++ b/framework/sofa/helper/io/ImagePNG.cpp
 @@ -29,10 +29,10 @@
@@ -197,3 +193,54 @@ index 5f3db89..b0899c2 100644
 +// #pragma comment(lib,"zlib.lib")
 +// #endif
  #endif
+ 
+ #if PNG_LIBPNG_VER >= 10209
+diff --git a/framework/sofa/helper/system/config.h b/framework/sofa/helper/system/config.h
+index 9c6beee..72c141d 100644
+--- a/framework/sofa/helper/system/config.h
++++ b/framework/sofa/helper/system/config.h
+@@ -35,8 +35,10 @@
+ #ifndef NOMINMAX
+ #define NOMINMAX
+ #endif
++#if _MSC_VER < 1900
+ #define snprintf _snprintf
+ #endif
++#endif
+ #include <windows.h>
+ #endif
+ 
+diff --git a/modules/SofaSphFluid/SpatialGridContainer.h b/modules/SofaSphFluid/SpatialGridContainer.h
+index 2ef58ba..73b5ed9 100644
+--- a/modules/SofaSphFluid/SpatialGridContainer.h
++++ b/modules/SofaSphFluid/SpatialGridContainer.h
+@@ -58,13 +58,16 @@
+ 
+ #ifndef HASH_NAMESPACE
+ #  ifdef _MSC_VER
+-#    if _MSC_VER >= 1300
++#    if _MSC_VER >= 1300 && _MSC_VER < 1900
+ #      include <hash_map>
+ //#      if _MSC_VER >= 1400
+ #        define HASH_NAMESPACE stdext
+ //#      else
+ //#        define HASH_NAMESPACE std
+ //#      endif
++#    elif _MSC_VER >= 1900
++#       include <unordered_map>
++#       define HASH_NAMESPACE std
+ #    else
+ #      include <map>
+ #      define HASH_NAMESPACE std
+@@ -282,7 +285,11 @@ public:
+     typedef HASH_NAMESPACE::hash_map<Key, Grid*, key_hash_fun> Map;
+ #    endif
+ #else
++    #if _MSC_VER >= 1900
++    typedef HASH_NAMESPACE::unordered_map<Key, Grid*, key_hash_fun> Map;
++    #else
+     typedef HASH_NAMESPACE::hash_map<Key, Grid*, key_hash_fun> Map;
++    #endif
+ #endif
+ 
+ 
