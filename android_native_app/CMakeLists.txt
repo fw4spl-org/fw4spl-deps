@@ -1,18 +1,12 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(android_native_app)
+project(android_native_app_builder)
 
-include_directories(
-  ${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-${ANDROID_ARCH_NAME}/usr/include
-  ${ANDROID_NDK}/sources/android/native_app_glue
+include(ExternalProject)
+
+ExternalProject_Add(
+    android_native_app
+    URL ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 )
-
-add_library(android_native_app STATIC 
-    ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c
-)
-
-add_custom_command(TARGET android_native_app 
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.h 
-                                                  ${CMAKE_INSTALL_PREFIX}/include/android_native_app_glue.h
-)
-
