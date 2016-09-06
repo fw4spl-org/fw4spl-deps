@@ -4,7 +4,7 @@ project(FreeImageBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/greenjava/FreeImage/archive/FreeImage_3.16.0.b.tar.gz)
+set(CACHED_URL https://github.com/fw4spl-org/FreeImage/archive/FreeImage_3.16.0.c.tar.gz)
 
 set(FREEIMAGE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DBUILD_SHARED_LIBS:BOOL=ON
@@ -16,16 +16,12 @@ set(FREEIMAGE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DINSTALL_EXAMPLES:BOOL=OFF
 )
 
-#Patch FreeImage library to suppport C++11. (std::min/std::max now in algorithm header).
-set(FREEIMAGE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch/OpenEXR)
-
 ExternalProject_Add(
     freeimage
     URL ${CACHED_URL}
-    URL_HASH SHA256=737a92c42b255cdc457c5d8b88cf8d6dc13a196fd74c4ac83c202e4b030419a5
+    URL_HASH SHA256=1a9c1854f434e4c301b5af94b6b64ea586c0e49944b57de4f1d8daca6cd560bc
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS zlib libpng tiff jpeg
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${FREEIMAGE_PATCH_DIR}/" "<SOURCE_DIR>/Source/OpenEXR/"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${FREEIMAGE_CMAKE_ARGS}
 )
