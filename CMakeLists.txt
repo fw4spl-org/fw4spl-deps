@@ -146,6 +146,8 @@ if(NOT ANDROID)
 
 ##ANDROID DEPS##
 else()
+    option(ENABLE_QT_ANDROID "Set to ON to build Qt for Android" OFF)
+
     list(APPEND SUBDIRECTORIES jpeg)
     list(APPEND SUBDIRECTORIES zlib)
     list(APPEND SUBDIRECTORIES tiff)
@@ -155,6 +157,11 @@ else()
     list(APPEND SUBDIRECTORIES expat)
     list(APPEND SUBDIRECTORIES boost)
     list(APPEND SUBDIRECTORIES freetype)
+    
+    if(ENABLE_QT_ANDROID)
+        list(APPEND SUBDIRECTORIES qt)
+    endif()
+    
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES camp)
     list(APPEND SUBDIRECTORIES ann)

@@ -1,0 +1,14 @@
+--- a/qtbase/src/corelib/global/qlogging.cpp	2015-10-13 06:35:31.000000000 +0200
++++ b/qtbase/src/corelib/global/qlogging.cpp	2016-03-17 12:29:32.000000000 +0100
+@@ -93,6 +96,11 @@
+ 
+ #if defined(Q_OS_LINUX) && (defined(__GLIBC__) || __has_include(<sys/syscall.h>))
+ #  include <sys/syscall.h>
++
++# if defined(Q_OS_ANDROID) && !defined(SYS_gettid)
++#  define SYS_gettid __NR_gettid
++# endif
++
+ static long qt_gettid()
+ {
+     // no error handling

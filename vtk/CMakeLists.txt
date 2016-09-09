@@ -98,8 +98,6 @@ else( )
         # Find utilities build on desktop
         -DVTKCompileTools_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk-build-desktop
         
-        #-DVTK_QT_VERSION:STRING=5
-        -DModule_vtkGUISupportQt:BOOL=OFF
         -DModule_vtkGUISupportQtOpenGL:BOOL=OFF
         -DModule_vtkGUISupportQtWebkit:BOOL=OFF
         -DModule_vtkGUISupportQtSQL:BOOL=OFF
@@ -107,6 +105,14 @@ else( )
         -DModule_vtkRenderingContextOpenGL2=OFF
         -DModule_vtkViewsQt:BOOL=OFF
         )
+        
+        if(ENABLE_QT_ANDROID)
+            set(EXTRA_DEPENDS qt)
+            list(APPEND VTK_CMAKE_ARGS
+                -DVTK_QT_VERSION:STRING=5
+                -DModule_vtkGUISupportQt:BOOL=ON
+            )
+        endif()
 endif()
 
 if(APPLE)
