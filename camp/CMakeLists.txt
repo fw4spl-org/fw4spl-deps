@@ -10,6 +10,14 @@ set(CAMP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DBOOST_INCLUDEDIR:PATH=${BOOST_INCLUDEDIR}
 )
 
+if(ANDROID)
+    if( ${ANDROID_STL} MATCHES "gnustl_shared" )
+        set(CAMP_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11")
+        list(APPEND CAMP_CMAKE_ARGS
+            -DCMAKE_CXX_FLAGS=${CAMP_CMAKE_CXX_FLAGS} )
+    endif()
+endif()
+
 set(CACHED_URL https://github.com/fw4spl-org/camp/archive/0.7.1.4.zip)
 
 ExternalProject_Add(
