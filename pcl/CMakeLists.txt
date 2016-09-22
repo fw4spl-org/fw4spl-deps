@@ -122,6 +122,12 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
         endif()
     else()
         set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${NUMBER_OF_PARALLEL_BUILD})
+        # Clang >= 3.8 is not supported by CUDA 7.5
+        if(UNIX AND ${CMAKE_C_COMPILER_ID} STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7)
+            list(APPEND PCL_CMAKE_ARGS -DCUDA_HOST_COMPILER:PATH=/usr/bin/gcc
+                                       -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=OFF
+            )
+        endif()
     endif()
 else()
     message("warning, no acceptable version of CUDA or supported compiler found")
