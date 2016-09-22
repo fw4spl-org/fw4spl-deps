@@ -17,7 +17,12 @@ if(NOT WIN32 AND NOT APPLE)
     set(SET_COMPILER_ENV export CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} &&)
 endif()
 
-set(CROSS_COMPILING OFF CACHE BOOL "Cross compilation option")
+
+if( ANDROID )
+    set(CROSS_COMPILING ON CACHE BOOL "Cross compilation option")
+else()
+    set(CROSS_COMPILING OFF CACHE BOOL "Cross compilation option")
+endif()
 
 if(CROSS_COMPILING)
     if(NOT CMAKE_TOOLCHAIN_FILE)
@@ -233,8 +238,25 @@ if(ADDITIONAL_DEPS)
 
 endif()
 
+####################################################################################################################
+#. Find PYTHON - required for our build process
+#
+# if we are building for Android, we should not use CMAKE_FIND_ROOT_PATH when finding a program
+# so we disable it temporarily, and we will reset it after find_program
+if( ANDROID )
+    set( TMP_PREVIOUS_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM})
+    set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER )
+endif()
+
 find_program(PYTHON_EXECUTABLE python ${PATH})
 
+# if we are building for Android, now we have to reset CMAKE_FIND_ROOT_PATH_MODE_PROGRAM
+if( ANDROID )
+    set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${TMP_PREVIOUS_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM} )
+endif()      
+    
+####################################################################################################################
+#. Install 
 if(APPLE)
     add_custom_target(install_tool
         COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
