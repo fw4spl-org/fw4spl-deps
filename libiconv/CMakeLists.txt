@@ -23,12 +23,12 @@ if(ANDROID)
     )
     
 elseif(WIN32)
-    set(CACHED_URL https://win-iconv.googlecode.com/files/win-iconv-0.0.6.tar.bz2)
+    set(CACHED_URL https://github.com/win-iconv/win-iconv/archive/0.0.6.tar.gz)
 
     ExternalProject_Add(
         libiconv
         URL ${CACHED_URL}
-        URL_HASH SHA256=b54da6cb14f6930fa8bbf3bee4225e842fd6dc0b2377081f1a809ec1ab761aac
+        URL_HASH SHA256=d464bbe0410f72b09f301bead9f1cf091e6aa15e97323961ecb9242c0e7f609b
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}
