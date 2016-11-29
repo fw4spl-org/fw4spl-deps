@@ -6,11 +6,11 @@ This repository contains CMake scripts to download, build and install the librar
 Install
 =======
 
-See how to install *FW4SPL* [here](http://fw4spl-doc.readthedocs.org/en/fw4spl_0.11.0/Installation/index.html)
+See how to install *FW4SPL* [here](http://fw4spl.readthedocs.org/en/fw4spl_0.11.0/Installation/index.html)
 
 Documentation
 =============
 
-* **documentation**: http://fw4spl-doc.readthedocs.org/
+* **documentation**: http://fw4spl.readthedocs.org/
 * **blog**: http://fw4spl-org.github.io/fw4spl-blog/
 
