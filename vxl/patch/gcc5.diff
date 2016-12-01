@@ -1,0 +1,23 @@
+diff -uNr a/vcl/vcl_compiler.h b/vcl/vcl_compiler.h
+--- a/vcl/vcl_compiler.h	2014-11-14 21:40:27.000000000 +0100
++++ b/vcl/vcl_compiler.h	2016-12-01 15:47:18.862268656 +0100
+@@ -119,6 +119,19 @@
+ #  else
+ #   define VCL_GCC_40
+ #  endif
++# elif (__GNUC__==5)
++#  define VCL_GCC_5
++#  if (__GNUC_MINOR__ > 3 )
++#   define VCL_GCC_54
++#  elif (__GNUC_MINOR__ > 2 )
++#   define VCL_GCC_53
++#  elif (__GNUC_MINOR__ > 1 )
++#   define VCL_GCC_52
++#  elif (__GNUC_MINOR__ > 0 )
++#   define VCL_GCC_51
++#  else
++#   define VCL_GCC_50
++#  endif
+ # else
+ #  error "Dunno about this gcc"
+ # endif
