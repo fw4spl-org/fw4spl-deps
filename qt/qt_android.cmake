@@ -6,7 +6,7 @@ if(CMAKE_HOST_WIN32)
     elseif(NOT EXISTS "${QT_SDK_PATH}/bin/moc.exe")
         message(FATAL_ERROR  "Qt SDK path '${QT_SDK_PATH}' is not valid.")
     endif()
-    
+
     ExternalProject_Add(
         qt
         SOURCE_DIR ${QT_SDK_PATH}
@@ -72,10 +72,14 @@ else()
         -skip qtwinextras
         -skip x11extras
         -skip qttools
-        
+
     )
 
     set(QT_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/android/qlogging.diff -d <SOURCE_DIR>)
+
+    if(CMAKE_HOST_APPLE)
+        list(APPEND QT_PATCH_CMD COMMAND ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/xcode8.diff -d <SOURCE_DIR>)
+    endif()
 
     list(APPEND QT_CONFIGURE_CMD
         -android-ndk-host ${SYSTEM}
