@@ -98,26 +98,6 @@ elseif(NOT ANDROID) #linux
             -DWITH_GSTREAMER:BOOL=OFF
             )
     endif()
-
-else() #ANDROID
-    list(APPEND OPENCV_CMAKE_ARGS
-        -DENABLE_PRECOMPILED_HEADERS=OFF
-        -DBUILD_JPEG:BOOL=ON
-        -DBUILD_ANDROID_EXAMPLES:BOOL=OFF
-        -DWITH_QT:BOOL=OFF
-    )
-    list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/android.diff -d <SOURCE_DIR> )
-endif()
-
-#Dowload opencv repository
-
-set(CACHED_URL https://github.com/opencv/opencv/archive/3.1.0.tar.gz)
-
-if(NOT ANDROID)
-    list(APPEND OPENCV_DEPENDS jpeg qt)
-    list(APPEND OPENCV_CMAKE_ARGS
-        -DWITH_QT:BOOL=ON
-    )
 endif()
 
 configure_file(
@@ -126,12 +106,40 @@ configure_file(
     IMMEDIATE @ONLY
 )
 
+if(ANDROID)
+    set(ANDROID_ARCH_NAME arm)
+    list(APPEND OPENCV_CMAKE_ARGS
+        -DENABLE_PRECOMPILED_HEADERS=OFF
+        -DBUILD_JPEG:BOOL=ON
+        -DBUILD_ANDROID_EXAMPLES:BOOL=OFF
+        -DBUILD_WITH_ANDROID_NDK:BOOL=ON
+        -DWITH_QT:BOOL=OFF
+    )
+    list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/android.diff -d <SOURCE_DIR> )
+    # Download OpenCV with changeset :
+    # - #7174: Fix android libc++ build
+    # - #7347: let the build available using clang
+    # - #7360:  check FP16 build condition correctly & build: fix aarch64 build with aarch64-linux-gnu-g++-4.8
+    set(OPENCV_HASHSUM acacb6524df56455e04b870c2fc84d3b8ec7a08a9ae5d7db3bdab0da4bb0221f)
+    set(OPENCV_NAME "opencv_3.1-r7360.zip")
+    set(CACHED_URL https://github.com/opencv/opencv/archive/a9ab629f60d66ed74c3ac0260586763342f6eed5.zip)
+else()
+    list(APPEND OPENCV_DEPENDS jpeg qt)
+    list(APPEND OPENCV_CMAKE_ARGS
+        -DWITH_QT:BOOL=ON
+    )
+    set(OPENCV_HASHSUM f00b3c4f42acda07d89031a2ebb5ebe390764a133502c03a511f67b78bbd4fbf)
+    set(OPENCV_NAME "opencv_3.1.0.tar.gz")
+    set(CACHED_URL https://github.com/opencv/opencv/archive/3.1.0.tar.gz)
+endif()
+
+
 ExternalProject_Add(
     opencv
     URL ${CACHED_URL}
-    URL_HASH SHA256=f00b3c4f42acda07d89031a2ebb5ebe390764a133502c03a511f67b78bbd4fbf
+    URL_HASH SHA256=${OPENCV_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME opencv_3.1.0.tar.gz
+    DOWNLOAD_NAME ${OPENCV_NAME}
     DEPENDS ${OPENCV_DEPENDS}
     PATCH_COMMAND ${OPENCV_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
