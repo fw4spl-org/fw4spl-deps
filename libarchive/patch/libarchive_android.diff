@@ -1,0 +1,62 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,6 +3,10 @@
+ #
+ PROJECT(libarchive C)
+ #
++if(ANDROID)
++    ADD_DEFINITIONS(-DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL})
++endif()
++
+ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build/cmake")
+ if(NOT CMAKE_RUNTIME_OUTPUT_DIRECTORY)
+   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${libarchive_BINARY_DIR}/bin)
+@@ -92,7 +92,8 @@ IF ("CMAKE_C_COMPILER_ID" MATCHES "^GNU$")
+   #################################################################
+   # Set compile flags for debug build.
+   # This is added into CMAKE_C_FLAGS when CMAKE_BUILD_TYPE is "Debug"
+-  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Werror -Wextra -Wunused")
++  #SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Werror -Wextra -Wunused")
++  SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wextra -Wunused")
+   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wshadow")
+   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wmissing-prototypes")
+   SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wcast-qual")
+--- a/libarchive/CMakeLists.txt
++++ b/libarchive/CMakeLists.txt
+@@ -171,7 +171,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
+ # Libarchive is a shared library
+ ADD_LIBRARY(archive SHARED ${libarchive_SOURCES} ${include_HEADERS})
+ TARGET_LINK_LIBRARIES(archive ${ADDITIONAL_LIBS})
+-SET_TARGET_PROPERTIES(archive PROPERTIES SOVERSION ${SOVERSION})
++#SET_TARGET_PROPERTIES(archive PROPERTIES SOVERSION ${SOVERSION})
+ 
+ # archive_static is a static library
+ ADD_LIBRARY(archive_static STATIC ${libarchive_SOURCES} ${include_HEADERS})
+--- a/libarchive/archive_read_disk_posix.c
++++ b/libarchive/archive_read_disk_posix.c
+@@ -28,6 +28,12 @@
+ /* This is the tree-walking code for POSIX systems. */
+ #if !defined(_WIN32) || defined(__CYGWIN__)
+ 
++#if (ANDROID_NATIVE_API_LEVEL <= 19)
++#include <sys/vfs.h>
++#define statvfs statfs
++#define fstatvfs fstatfs
++#endif
++
+ #include "archive_platform.h"
+ __FBSDID("$FreeBSD$");
+ --- a/tar/util.c	2013-02-08 00:56:25.000000000 +0100
+ +++ b/tar/util.c	2016-08-23 09:46:26.000000000 +0200
+ @@ -77,6 +77,11 @@
+   * #endif
+   */
+ 
+ +//ANDROID don't have mbtowc, this is a hack to have one version
+ +#ifdef __ANDROID__
+ +int mbtowc(wchar_t *pwc, const char *s, size_t n) { return mbrtowc(pwc, s, n, NULL); }
+ +#endif
+ +    
+  /*
+   * Print a string, taking care with any non-printable characters.
+   *

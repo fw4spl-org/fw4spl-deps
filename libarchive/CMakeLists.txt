@@ -13,10 +13,10 @@ set(CACHED_URL http://www.libarchive.org/downloads/libarchive-3.1.2.zip)
 set(PATCH_CMD "")
 
 if(ANDROID)
-    set(PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/archive_read_disk_posix.c "<SOURCE_DIR>/libarchive/archive_read_disk_posix.c"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/CMakeLists.txt "<SOURCE_DIR>/CMakeLists.txt"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/util.c "<SOURCE_DIR>/tar/util.c" 
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/libarchive/CMakeLists.txt "<SOURCE_DIR>/libarchive/CMakeLists.txt")
+    list(APPEND LIBARCHIVE_CMAKE_ARGS 
+        -DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL}
+    )
+    set(PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/libarchive_android.diff -d <SOURCE_DIR>)
 
 endif()
 
