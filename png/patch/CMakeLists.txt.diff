@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt	2016-01-15 16:52:12.000000000 +0100
 +++ b/CMakeLists.txt	2016-07-01 14:15:11.000000000 +0200
-@@ -46,6 +46,7 @@
+@@ -46,6 +46,7 @@ option(PNG_TESTS  "Build libpng tests" ON)
  option(PNG_FRAMEWORK "Build OS X framework" OFF)
  option(PNG_DEBUG     "Build with debug output" OFF)
  option(PNGARG        "Disable ANSI-C prototypes" OFF)
@@ -8,7 +8,22 @@
  
  # SET LIBNAME
  set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
-@@ -218,7 +219,7 @@
+@@ -89,6 +90,14 @@ set(libpng_sources
+   pngwtran.c
+   pngwutil.c
+ )
++if(NEON)
++  list(APPEND libpng_sources
++    arm/arm_init.c
++    arm/filter_neon_intrinsics.c
++    arm/filter_neon.S
++  )
++endif()
++
+ set(pngtest_sources
+   pngtest.c
+ )
+@@ -218,7 +227,7 @@ ENDIF(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
  # copies if different.
  macro(CREATE_SYMLINK SRC_FILE DEST_FILE)
    FILE(REMOVE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE})
@@ -17,7 +32,7 @@
      ADD_CUSTOM_COMMAND(
          OUTPUT ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE}   ${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE}
          COMMAND ${CMAKE_COMMAND} -E copy_if_different  "${SRC_FILE}" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE}
-@@ -226,12 +227,12 @@
+@@ -226,12 +235,12 @@ macro(CREATE_SYMLINK SRC_FILE DEST_FILE)
          DEPENDS ${PNG_LIB_TARGETS}
          )
      ADD_CUSTOM_TARGET(${DEST_FILE}_COPY ALL DEPENDS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE})
@@ -32,7 +47,7 @@
  endmacro()
  
  # libpng is a library so default to 'lib'
-@@ -260,11 +261,16 @@
+@@ -260,11 +269,16 @@ endif(NOT WIN32 OR CYGWIN OR MINGW)
  
  # SET UP LINKS
  if(PNG_SHARED)
@@ -54,3 +69,37 @@
  endif()
  if(PNG_STATIC)
    # MSVC doesn't use a different file extension for shared vs. static
+@@ -297,28 +311,28 @@ if(NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL )
+
+   if(PNG_SHARED)
+     # Create a symlink for libpng.dll.a => libpng16.dll.a on Cygwin
+-    if(CYGWIN OR MINGW)
++    if(NOT NO_SYMLINK AND CYGWIN OR MINGW)
+        get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME} LOCATION_${CMAKE_BUILD_TYPE})
+        CREATE_SYMLINK(${BUILD_TARGET_LOCATION} libpng${CMAKE_IMPORT_LIBRARY_SUFFIX})
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_IMPORT_LIBRARY_SUFFIX}
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-    endif(CYGWIN OR MINGW)
++    endif()
+
+-    if(NOT WIN32)
++    if(NOT NO_SYMLINK AND NOT WIN32)
+       get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME} LOCATION_${CMAKE_BUILD_TYPE})
+       CREATE_SYMLINK(${BUILD_TARGET_LOCATION} libpng${CMAKE_SHARED_LIBRARY_SUFFIX})
+       install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_SHARED_LIBRARY_SUFFIX}
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-    endif(NOT WIN32)
++    endif()
+   endif(PNG_SHARED)
+
+   if(PNG_STATIC)
+-    if(NOT WIN32 OR CYGWIN OR MINGW)
++    if(NOT NO_SYMLINK AND NOT WIN32 OR CYGWIN OR MINGW)
+       get_target_property(BUILD_TARGET_LOCATION ${PNG_LIB_NAME_STATIC} LOCATION_${CMAKE_BUILD_TYPE})
+       CREATE_SYMLINK(${BUILD_TARGET_LOCATION} libpng${CMAKE_STATIC_LIBRARY_SUFFIX})
+       install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libpng${CMAKE_STATIC_LIBRARY_SUFFIX}
+          DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-    endif(NOT WIN32 OR CYGWIN OR MINGW)
++    endif()
+  endif()
+ endif()
