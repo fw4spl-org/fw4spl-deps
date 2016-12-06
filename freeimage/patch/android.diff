@@ -1,0 +1,81 @@
+--- a/Source/LibRawLite/CMakeLists.txt	2016-08-26 11:31:40.000000000 +0200
++++ b/Source/LibRawLite/CMakeLists.txt	2016-08-26 11:32:07.000000000 +0200
+@@ -5,6 +5,7 @@
+ add_definitions(-D_CRT_SECURE_NO_WARNINGS -DLIBRAW_NODLL -DLIBRAW_LIBRARY_BUILD -DNO_LCMS)
+ 
+ set( LIBRAWLITE_SOURCES 
++    internal/swab.h
+     internal/dcraw_common.cpp 
+     internal/dcraw_fileio.cpp 
+     internal/demosaic_packs.cpp
+--- a/Source/LibRawLite/internal/dcraw_common.cpp	2016-08-26 11:29:19.000000000 +0200
++++ b/Source/LibRawLite/internal/dcraw_common.cpp	2016-08-26 11:29:48.000000000 +0200
+@@ -29,6 +29,9 @@
+ #include "libraw/libraw.h"
+ #include "internal/defines.h"
+ #include "internal/var_defines.h"
++
++#include "internal/swab.h"
++
+ int CLASS fcol (int row, int col)
+ {
+   static const char filter[16][16] =
+--- a/Source/LibRawLite/src/libraw_cxx.cpp	2016-08-26 11:40:45.000000000 +0200
++++ b/Source/LibRawLite/src/libraw_cxx.cpp	2016-08-26 11:41:50.000000000 +0200
+@@ -45,6 +45,7 @@
+ #include <RawSpeed/ColorFilterArray.h>
+ #endif
+
++#include "internal/swab.h"
+
+ #ifdef __cplusplus
+ extern "C" 
+--- a/Source/LibWebP/CMakeLists.txt	2016-08-18 16:58:35.000000000 +0200
++++ b/Source/LibWebP/CMakeLists.tx	2016-08-26 12:13:03.000000000 +0200
+@@ -1,3 +1,4 @@
++include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include/machine)
+
+ set(LIBWEBP_SOURCES
+   src/dec/dec_alpha.c
+@@ -89,6 +90,7 @@
+   src/utils/thread.h
+   src/utils/utils.h
+   src/mux/muxi.h
++  ${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include/machine/cpu-features.h
+ )
+ 
+ if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64") 
+--- a/Source/LibWebP/src/dsp/dsp.h	2016-08-18 16:58:35.000000000 +0200
++++ b/Source/LibWebP/src/dsp/dsp.h	2016-08-26 12:12:45.000000000 +0200
+@@ -32,9 +32,9 @@
+ #define WEBP_USE_SSE2
+ #endif
+
+-#if defined(__ANDROID__) && defined(__ARM_ARCH_7A__)
+-#define WEBP_ANDROID_NEON  // Android targets that might support NEON
+-#endif
++// #if defined(__ANDROID__) && defined(__ARM_ARCH_7A__)
++// #define WEBP_ANDROID_NEON  // Android targets that might support NEON
++// #endif
+
+ #if (defined(__ARM_NEON__) && !defined(__aarch64__)) || \
+     defined(WEBP_ANDROID_NEON)
+--- a/Source/CMakeLists.txt	2016-08-18 16:58:35.000000000 +0200
++++ b/Source/CMakeLists.txt	2016-08-26 14:11:48.000000000 +0200
+@@ -30,6 +30,8 @@
+     ${CMAKE_SOURCE_DIR}/Source/OpenEXR/Iex 
+     ${CMAKE_SOURCE_DIR}/Source/OpenEXR/Half)
+ 
++include_directories(${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include)
++
+ set( FREEIMAGE_SOURCES
+     FreeImage.h
+ 
+@@ -85,6 +87,7 @@
+     Metadata/Exif.cpp Metadata/FIRational.cpp Metadata/FreeImageTag.cpp 
+     Metadata/IPTC.cpp Metadata/TagConversion.cpp Metadata/TagLib.cpp 
+     Metadata/XTIFF.cpp Metadata/FIRational.h
++    ${ANDROID_NDK}/platforms/android-${ANDROID_NATIVE_API_LEVEL}/arch-arm/usr/include/search.h
+     )
+ 
+ if(FREEIMAGE_BUILD_STATIC)
