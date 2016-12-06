@@ -38,7 +38,6 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DCMAKE_CXX_COMPILER:PATH=${CMAKE_CXX_COMPILER}
                         -DBoost_COMPILER:STRING=${Boost_COMPILER}
                         -DBOOST_ROOT:PATH=${CMAKE_INSTALL_PREFIX}
-                        -DBOOST_INCLUDEDIR:PATH=${CMAKE_INSTALL_PREFIX}/include/boost-${BOOST_VERSION}
                         -DBoost_USE_DEBUG_PYTHON:BOOL=ON
                         -DBoost_USE_MULTITHREADED:BOOL=ON
                         -DBoost_USE_STATIC_LIBS:BOOL=OFF

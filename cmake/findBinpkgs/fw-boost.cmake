@@ -4,7 +4,6 @@ set(Boost_NO_SYSTEM_PATHS ON)
 set(Boost_USE_DEBUG_PYTHON ON)
 set(Boost_USE_MULTITHREADED ON)
 set(BOOST_VERSION "1_61")
-set(BOOST_INCLUDEDIR ${BOOST_ROOT}/include/boost-${BOOST_VERSION})
 
 add_definitions(
         -DBOOST_ALL_DYN_LINK
@@ -46,4 +45,3 @@ else()
         endif()
     endif()
 endif()
-

@@ -7,7 +7,6 @@ include(ExternalProject)
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 set(CAMP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DBUILD_DOXYGEN:BOOL=OFF
-                    -DBOOST_INCLUDEDIR:PATH=${BOOST_INCLUDEDIR}
 )
 
 if(ANDROID)

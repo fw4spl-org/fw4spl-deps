@@ -38,7 +38,6 @@ set(OGRE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DBoost_COMPILER:STRING=${Boost_COMPILER}
                     -DBoost_USE_DEBUG_PYTHON:BOOL=TRUE
                     -DBOOST_ROOT:PATH=${CMAKE_INSTALL_PREFIX}
-                    -DBOOST_INCLUDEDIR:PATH=${CMAKE_INSTALL_PREFIX}/include/boost-${BOOST_VERSION}
    )
 
 set(OGRE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
