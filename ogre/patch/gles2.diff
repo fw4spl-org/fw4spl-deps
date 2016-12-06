@@ -1,0 +1,387 @@
+diff -uNrb a/RenderSystems/GLES2/src/EGL/X11/OgreX11EGLWindow.cpp b/RenderSystems/GLES2/src/EGL/X11/OgreX11EGLWindow.cpp
+--- a/RenderSystems/GLES2/src/EGL/X11/OgreX11EGLWindow.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/EGL/X11/OgreX11EGLWindow.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -457,16 +457,16 @@
+             {
+                 eglContext = eglGetCurrentContext();
+                 EGL_CHECK_ERROR
+-                if (eglContext)
++                if (!eglContext)
+                 {
+                     OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                                 "currentGLContext was specified with no current GL context",
+                                 "EGLWindow::create");
+                 }
+ 
+-                eglContext = eglGetCurrentContext();
+                 EGL_CHECK_ERROR
+                 mEglSurface = eglGetCurrentSurface(EGL_DRAW);
++                mEglDisplay = eglGetCurrentDisplay();
+                 EGL_CHECK_ERROR
+             }
+ 
+diff -uNrb a/RenderSystems/GLES2/src/gles2w.cpp b/RenderSystems/GLES2/src/gles2w.cpp
+--- a/RenderSystems/GLES2/src/gles2w.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/gles2w.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -592,23 +592,23 @@
+     gleswVertexAttrib4fv = (PFNGLVERTEXATTRIB4FVPROC) get_proc("glVertexAttrib4fv");
+     gleswVertexAttribPointer = (PFNGLVERTEXATTRIBPOINTERPROC) get_proc("glVertexAttribPointer");
+     gleswViewport = (PFNGLVIEWPORTPROC) get_proc("glViewport");
+-    gleswEGLImageTargetTexture2DOES = (PFNGLEGLIMAGETARGETTEXTURE2DOESPROC) get_proc("glEGLImageTargetTexture2DOES");
+-    gleswEGLImageTargetRenderbufferStorageOES = (PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC) get_proc("glEGLImageTargetRenderbufferStorageOES");
+-    gleswGetProgramBinaryOES = (PFNGLGETPROGRAMBINARYOESPROC) get_proc("glGetProgramBinaryOES");
+-    gleswProgramBinaryOES = (PFNGLPROGRAMBINARYOESPROC) get_proc("glProgramBinaryOES");
+-    gleswMapBufferOES = (PFNGLMAPBUFFEROESPROC) get_proc("glMapBufferOES");
+-    gleswUnmapBufferOES = (PFNGLUNMAPBUFFEROESPROC) get_proc("glUnmapBufferOES");
+-    gleswGetBufferPointervOES = (PFNGLGETBUFFERPOINTERVOESPROC) get_proc("glGetBufferPointervOES");
+-    gleswTexImage3DOES = (PFNGLTEXIMAGE3DOESPROC) get_proc("glTexImage3DOES");
+-    gleswTexSubImage3DOES = (PFNGLTEXSUBIMAGE3DOESPROC) get_proc("glTexSubImage3DOES");
+-    gleswCopyTexSubImage3DOES = (PFNGLCOPYTEXSUBIMAGE3DOESPROC) get_proc("glCopyTexSubImage3DOES");
+-    gleswCompressedTexImage3DOES = (PFNGLCOMPRESSEDTEXIMAGE3DOESPROC) get_proc("glCompressedTexImage3DOES");
+-    gleswCompressedTexSubImage3DOES = (PFNGLCOMPRESSEDTEXSUBIMAGE3DOESPROC) get_proc("glCompressedTexSubImage3DOES");
+-    gleswFramebufferTexture3DOES = (PFNGLFRAMEBUFFERTEXTURE3DOESPROC) get_proc("glFramebufferTexture3DOES");
+-    gleswBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC) get_proc("glBindVertexArrayOES");
+-    gleswDeleteVertexArraysOES = (PFNGLDELETEVERTEXARRAYSOESPROC) get_proc("glDeleteVertexArraysOES");
+-    gleswGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC) get_proc("glGenVertexArraysOES");
+-    gleswIsVertexArrayOES = (PFNGLISVERTEXARRAYOESPROC) get_proc("glIsVertexArrayOES");
++    gleswEGLImageTargetTexture2DOES = (PFNGLEGLIMAGETARGETTEXTURE2DOESPROC) get_proc("glEGLImageTargetTexture2D");
++    gleswEGLImageTargetRenderbufferStorageOES = (PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC) get_proc("glEGLImageTargetRenderbufferStorage");
++    gleswGetProgramBinaryOES = (PFNGLGETPROGRAMBINARYOESPROC) get_proc("glGetProgramBinary");
++    gleswProgramBinaryOES = (PFNGLPROGRAMBINARYOESPROC) get_proc("glProgramBinary");
++    gleswMapBufferOES = (PFNGLMAPBUFFEROESPROC) get_proc("glMapBuffer");
++    gleswUnmapBufferOES = (PFNGLUNMAPBUFFEROESPROC) get_proc("glUnmapBuffer");
++    gleswGetBufferPointervOES = (PFNGLGETBUFFERPOINTERVOESPROC) get_proc("glGetBufferPointerv");
++    gleswTexImage3DOES = (PFNGLTEXIMAGE3DOESPROC) get_proc("glTexImage3D");
++    gleswTexSubImage3DOES = (PFNGLTEXSUBIMAGE3DOESPROC) get_proc("glTexSubImage3D");
++    gleswCopyTexSubImage3DOES = (PFNGLCOPYTEXSUBIMAGE3DOESPROC) get_proc("glCopyTexSubImage3D");
++    gleswCompressedTexImage3DOES = (PFNGLCOMPRESSEDTEXIMAGE3DOESPROC) get_proc("glCompressedTexImage3D");
++    gleswCompressedTexSubImage3DOES = (PFNGLCOMPRESSEDTEXSUBIMAGE3DOESPROC) get_proc("glCompressedTexSubImage3D");
++    gleswFramebufferTexture3DOES = (PFNGLFRAMEBUFFERTEXTURE3DOESPROC) get_proc("glFramebufferTexture3D");
++    gleswBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC) get_proc("glBindVertexArray");
++    gleswDeleteVertexArraysOES = (PFNGLDELETEVERTEXARRAYSOESPROC) get_proc("glDeleteVertexArrays");
++    gleswGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC) get_proc("glGenVertexArrays");
++    gleswIsVertexArrayOES = (PFNGLISVERTEXARRAYOESPROC) get_proc("glIsVertexArray");
+     gleswDebugMessageControlKHR = (PFNGLDEBUGMESSAGECONTROLKHRPROC) get_proc("glDebugMessageControlKHR");
+     gleswDebugMessageInsertKHR = (PFNGLDEBUGMESSAGEINSERTKHRPROC) get_proc("glDebugMessageInsertKHR");
+     gleswDebugMessageCallbackKHR = (PFNGLDEBUGMESSAGECALLBACKKHRPROC) get_proc("glDebugMessageCallbackKHR");
+@@ -637,9 +637,9 @@
+     gleswDrawElementsInstancedANGLE = (PFNGLDRAWELEMENTSINSTANCEDANGLEPROC) get_proc("glDrawElementsInstancedANGLE");
+     gleswVertexAttribDivisorANGLE = (PFNGLVERTEXATTRIBDIVISORANGLEPROC) get_proc("glVertexAttribDivisorANGLE");
+     gleswGetTranslatedShaderSourceANGLE = (PFNGLGETTRANSLATEDSHADERSOURCEANGLEPROC) get_proc("glGetTranslatedShaderSourceANGLE");
+-    gleswDrawArraysInstancedEXT = (PFNGLDRAWARRAYSINSTANCEDEXTPROC) get_proc("glDrawArraysInstancedEXT");
+-    gleswDrawElementsInstancedEXT = (PFNGLDRAWELEMENTSINSTANCEDEXTPROC) get_proc("glDrawElementsInstancedEXT");
+-    gleswVertexAttribDivisorEXT = (PFNGLVERTEXATTRIBDIVISOREXTPROC) get_proc("glVertexAttribDivisorEXT");
++    gleswDrawArraysInstancedEXT = (PFNGLDRAWARRAYSINSTANCEDEXTPROC) get_proc("glDrawArraysInstanced");
++    gleswDrawElementsInstancedEXT = (PFNGLDRAWELEMENTSINSTANCEDEXTPROC) get_proc("glDrawElementsInstanced");
++    gleswVertexAttribDivisorEXT = (PFNGLVERTEXATTRIBDIVISOREXTPROC) get_proc("glVertexAttribDivisor");
+     gleswCopyTextureLevelsAPPLE = (PFNGLCOPYTEXTURELEVELSAPPLEPROC) get_proc("glCopyTextureLevelsAPPLE");
+     gleswRenderbufferStorageMultisampleAPPLE = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEAPPLEPROC) get_proc("glRenderbufferStorageMultisampleAPPLE");
+     gleswResolveMultisampleFramebufferAPPLE = (PFNGLRESOLVEMULTISAMPLEFRAMEBUFFERAPPLEPROC) get_proc("glResolveMultisampleFramebufferAPPLE");
+@@ -650,72 +650,72 @@
+     gleswWaitSyncAPPLE = (PFNGLWAITSYNCAPPLEPROC) get_proc("glWaitSyncAPPLE");
+     gleswGetInteger64vAPPLE = (PFNGLGETINTEGER64VAPPLEPROC) get_proc("glGetInteger64vAPPLE");
+     gleswGetSyncivAPPLE = (PFNGLGETSYNCIVAPPLEPROC) get_proc("glGetSyncivAPPLE");
+-    gleswLabelObjectEXT = (PFNGLLABELOBJECTEXTPROC) get_proc("glLabelObjectEXT");
+-    gleswGetObjectLabelEXT = (PFNGLGETOBJECTLABELEXTPROC) get_proc("glGetObjectLabelEXT");
+-    gleswInsertEventMarkerEXT = (PFNGLINSERTEVENTMARKEREXTPROC) get_proc("glInsertEventMarkerEXT");
+-    gleswPushGroupMarkerEXT = (PFNGLPUSHGROUPMARKEREXTPROC) get_proc("glPushGroupMarkerEXT");
+-    gleswPopGroupMarkerEXT = (PFNGLPOPGROUPMARKEREXTPROC) get_proc("glPopGroupMarkerEXT");
+-    gleswDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC) get_proc("glDiscardFramebufferEXT");
+-    gleswGenQueriesEXT = (PFNGLGENQUERIESEXTPROC) get_proc("glGenQueriesEXT");
+-    gleswDeleteQueriesEXT = (PFNGLDELETEQUERIESEXTPROC) get_proc("glDeleteQueriesEXT");
+-    gleswIsQueryEXT = (PFNGLISQUERYEXTPROC) get_proc("glIsQueryEXT");
+-    gleswBeginQueryEXT = (PFNGLBEGINQUERYEXTPROC) get_proc("glBeginQueryEXT");
+-    gleswEndQueryEXT = (PFNGLENDQUERYEXTPROC) get_proc("glEndQueryEXT");
+-    gleswQueryCounterEXT = (PFNGLQUERYCOUNTEREXTPROC) get_proc("glQueryCounterEXT");
+-    gleswGetQueryivEXT = (PFNGLGETQUERYIVEXTPROC) get_proc("glGetQueryivEXT");
+-    gleswGetQueryObjectivEXT = (PFNGLGETQUERYOBJECTIVEXTPROC) get_proc("glGetQueryObjectivEXT");
+-    gleswGetQueryObjectuivEXT = (PFNGLGETQUERYOBJECTUIVEXTPROC) get_proc("glGetQueryObjectuivEXT");
+-    gleswGetQueryObjecti64vEXT = (PFNGLGETQUERYOBJECTI64VEXTPROC) get_proc("glGetQueryObjecti64vEXT");
+-    gleswGetQueryObjectui64vEXT = (PFNGLGETQUERYOBJECTUI64VEXTPROC) get_proc("glGetQueryObjectui64vEXT");
+-    gleswMapBufferRangeEXT = (PFNGLMAPBUFFERRANGEEXTPROC) get_proc("glMapBufferRangeEXT");
+-    gleswFlushMappedBufferRangeEXT = (PFNGLFLUSHMAPPEDBUFFERRANGEEXTPROC) get_proc("glFlushMappedBufferRangeEXT");
+-    gleswRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) get_proc("glRenderbufferStorageMultisampleEXT");
+-    gleswFramebufferTexture2DMultisampleEXT = (PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC) get_proc("glFramebufferTexture2DMultisampleEXT");
+-    gleswReadBufferIndexedEXT = (PFNGLREADBUFFERINDEXEDEXTPROC) get_proc("glReadBufferIndexedEXT");
+-    gleswDrawBuffersIndexedEXT = (PFNGLDRAWBUFFERSINDEXEDEXTPROC) get_proc("glDrawBuffersIndexedEXT");
+-    gleswGetIntegeri_vEXT = (PFNGLGETINTEGERI_VEXTPROC) get_proc("glGetIntegeri_vEXT");
+-    gleswMultiDrawArraysEXT = (PFNGLMULTIDRAWARRAYSEXTPROC) get_proc("glMultiDrawArraysEXT");
+-    gleswMultiDrawElementsEXT = (PFNGLMULTIDRAWELEMENTSEXTPROC) get_proc("glMultiDrawElementsEXT");
+-    gleswGetGraphicsResetStatusEXT = (PFNGLGETGRAPHICSRESETSTATUSEXTPROC) get_proc("glGetGraphicsResetStatusEXT");
+-    gleswReadnPixelsEXT = (PFNGLREADNPIXELSEXTPROC) get_proc("glReadnPixelsEXT");
+-    gleswGetnUniformfvEXT = (PFNGLGETNUNIFORMFVEXTPROC) get_proc("glGetnUniformfvEXT");
+-    gleswGetnUniformivEXT = (PFNGLGETNUNIFORMIVEXTPROC) get_proc("glGetnUniformivEXT");
+-    gleswUseProgramStagesEXT = (PFNGLUSEPROGRAMSTAGESEXTPROC) get_proc("glUseProgramStagesEXT");
+-    gleswActiveShaderProgramEXT = (PFNGLACTIVESHADERPROGRAMEXTPROC) get_proc("glActiveShaderProgramEXT");
+-    gleswCreateShaderProgramvEXT = (PFNGLCREATESHADERPROGRAMVEXTPROC) get_proc("glCreateShaderProgramvEXT");
+-    gleswBindProgramPipelineEXT = (PFNGLBINDPROGRAMPIPELINEEXTPROC) get_proc("glBindProgramPipelineEXT");
+-    gleswDeleteProgramPipelinesEXT = (PFNGLDELETEPROGRAMPIPELINESEXTPROC) get_proc("glDeleteProgramPipelinesEXT");
+-    gleswGenProgramPipelinesEXT = (PFNGLGENPROGRAMPIPELINESEXTPROC) get_proc("glGenProgramPipelinesEXT");
+-    gleswIsProgramPipelineEXT = (PFNGLISPROGRAMPIPELINEEXTPROC) get_proc("glIsProgramPipelineEXT");
+-    gleswProgramParameteriEXT = (PFNGLPROGRAMPARAMETERIEXTPROC) get_proc("glProgramParameteriEXT");
+-    gleswGetProgramPipelineivEXT = (PFNGLGETPROGRAMPIPELINEIVEXTPROC) get_proc("glGetProgramPipelineivEXT");
+-    gleswProgramUniform1iEXT = (PFNGLPROGRAMUNIFORM1IEXTPROC) get_proc("glProgramUniform1iEXT");
+-    gleswProgramUniform2iEXT = (PFNGLPROGRAMUNIFORM2IEXTPROC) get_proc("glProgramUniform2iEXT");
+-    gleswProgramUniform3iEXT = (PFNGLPROGRAMUNIFORM3IEXTPROC) get_proc("glProgramUniform3iEXT");
+-    gleswProgramUniform4iEXT = (PFNGLPROGRAMUNIFORM4IEXTPROC) get_proc("glProgramUniform4iEXT");
+-    gleswProgramUniform1fEXT = (PFNGLPROGRAMUNIFORM1FEXTPROC) get_proc("glProgramUniform1fEXT");
+-    gleswProgramUniform2fEXT = (PFNGLPROGRAMUNIFORM2FEXTPROC) get_proc("glProgramUniform2fEXT");
+-    gleswProgramUniform3fEXT = (PFNGLPROGRAMUNIFORM3FEXTPROC) get_proc("glProgramUniform3fEXT");
+-    gleswProgramUniform4fEXT = (PFNGLPROGRAMUNIFORM4FEXTPROC) get_proc("glProgramUniform4fEXT");
+-    gleswProgramUniform1ivEXT = (PFNGLPROGRAMUNIFORM1IVEXTPROC) get_proc("glProgramUniform1ivEXT");
+-    gleswProgramUniform2ivEXT = (PFNGLPROGRAMUNIFORM2IVEXTPROC) get_proc("glProgramUniform2ivEXT");
+-    gleswProgramUniform3ivEXT = (PFNGLPROGRAMUNIFORM3IVEXTPROC) get_proc("glProgramUniform3ivEXT");
+-    gleswProgramUniform4ivEXT = (PFNGLPROGRAMUNIFORM4IVEXTPROC) get_proc("glProgramUniform4ivEXT");
+-    gleswProgramUniform1fvEXT = (PFNGLPROGRAMUNIFORM1FVEXTPROC) get_proc("glProgramUniform1fvEXT");
+-    gleswProgramUniform2fvEXT = (PFNGLPROGRAMUNIFORM2FVEXTPROC) get_proc("glProgramUniform2fvEXT");
+-    gleswProgramUniform3fvEXT = (PFNGLPROGRAMUNIFORM3FVEXTPROC) get_proc("glProgramUniform3fvEXT");
+-    gleswProgramUniform4fvEXT = (PFNGLPROGRAMUNIFORM4FVEXTPROC) get_proc("glProgramUniform4fvEXT");
+-    gleswProgramUniformMatrix2fvEXT = (PFNGLPROGRAMUNIFORMMATRIX2FVEXTPROC) get_proc("glProgramUniformMatrix2fvEXT");
+-    gleswProgramUniformMatrix3fvEXT = (PFNGLPROGRAMUNIFORMMATRIX3FVEXTPROC) get_proc("glProgramUniformMatrix3fvEXT");
+-    gleswProgramUniformMatrix4fvEXT = (PFNGLPROGRAMUNIFORMMATRIX4FVEXTPROC) get_proc("glProgramUniformMatrix4fvEXT");
+-    gleswValidateProgramPipelineEXT = (PFNGLVALIDATEPROGRAMPIPELINEEXTPROC) get_proc("glValidateProgramPipelineEXT");
+-    gleswGetProgramPipelineInfoLogEXT = (PFNGLGETPROGRAMPIPELINEINFOLOGEXTPROC) get_proc("glGetProgramPipelineInfoLogEXT");
+-    gleswTexStorage1DEXT = (PFNGLTEXSTORAGE1DEXTPROC) get_proc("glTexStorage1DEXT");
+-    gleswTexStorage2DEXT = (PFNGLTEXSTORAGE2DEXTPROC) get_proc("glTexStorage2DEXT");
+-    gleswTexStorage3DEXT = (PFNGLTEXSTORAGE3DEXTPROC) get_proc("glTexStorage3DEXT");
+-    gleswTextureStorage1DEXT = (PFNGLTEXTURESTORAGE1DEXTPROC) get_proc("glTextureStorage1DEXT");
+-    gleswTextureStorage2DEXT = (PFNGLTEXTURESTORAGE2DEXTPROC) get_proc("glTextureStorage2DEXT");
+-    gleswTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC) get_proc("glTextureStorage3DEXT");
++    gleswLabelObjectEXT = (PFNGLLABELOBJECTEXTPROC) get_proc("glLabelObject");
++    gleswGetObjectLabelEXT = (PFNGLGETOBJECTLABELEXTPROC) get_proc("glGetObjectLabel");
++    gleswInsertEventMarkerEXT = (PFNGLINSERTEVENTMARKEREXTPROC) get_proc("glInsertEventMarker");
++    gleswPushGroupMarkerEXT = (PFNGLPUSHGROUPMARKEREXTPROC) get_proc("glPushGroupMarker");
++    gleswPopGroupMarkerEXT = (PFNGLPOPGROUPMARKEREXTPROC) get_proc("glPopGroupMarker");
++    gleswDiscardFramebufferEXT = (PFNGLDISCARDFRAMEBUFFEREXTPROC) get_proc("glDiscardFramebuffer");
++    gleswGenQueriesEXT = (PFNGLGENQUERIESEXTPROC) get_proc("glGenQueries");
++    gleswDeleteQueriesEXT = (PFNGLDELETEQUERIESEXTPROC) get_proc("glDeleteQueries");
++    gleswIsQueryEXT = (PFNGLISQUERYEXTPROC) get_proc("glIsQuery");
++    gleswBeginQueryEXT = (PFNGLBEGINQUERYEXTPROC) get_proc("glBeginQuery");
++    gleswEndQueryEXT = (PFNGLENDQUERYEXTPROC) get_proc("glEndQuery");
++    gleswQueryCounterEXT = (PFNGLQUERYCOUNTEREXTPROC) get_proc("glQueryCounter");
++    gleswGetQueryivEXT = (PFNGLGETQUERYIVEXTPROC) get_proc("glGetQueryiv");
++    gleswGetQueryObjectivEXT = (PFNGLGETQUERYOBJECTIVEXTPROC) get_proc("glGetQueryObjectiv");
++    gleswGetQueryObjectuivEXT = (PFNGLGETQUERYOBJECTUIVEXTPROC) get_proc("glGetQueryObjectuiv");
++    gleswGetQueryObjecti64vEXT = (PFNGLGETQUERYOBJECTI64VEXTPROC) get_proc("glGetQueryObjecti64v");
++    gleswGetQueryObjectui64vEXT = (PFNGLGETQUERYOBJECTUI64VEXTPROC) get_proc("glGetQueryObjectui64v");
++    gleswMapBufferRangeEXT = (PFNGLMAPBUFFERRANGEEXTPROC) get_proc("glMapBufferRange");
++    gleswFlushMappedBufferRangeEXT = (PFNGLFLUSHMAPPEDBUFFERRANGEEXTPROC) get_proc("glFlushMappedBufferRange");
++    gleswRenderbufferStorageMultisampleEXT = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEEXTPROC) get_proc("glRenderbufferStorageMultisample");
++    gleswFramebufferTexture2DMultisampleEXT = (PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEEXTPROC) get_proc("glFramebufferTexture2DMultisample");
++    gleswReadBufferIndexedEXT = (PFNGLREADBUFFERINDEXEDEXTPROC) get_proc("glReadBufferIndexed");
++    gleswDrawBuffersIndexedEXT = (PFNGLDRAWBUFFERSINDEXEDEXTPROC) get_proc("glDrawBuffersIndexed");
++    gleswGetIntegeri_vEXT = (PFNGLGETINTEGERI_VEXTPROC) get_proc("glGetIntegeri_v");
++    gleswMultiDrawArraysEXT = (PFNGLMULTIDRAWARRAYSEXTPROC) get_proc("glMultiDrawArrays");
++    gleswMultiDrawElementsEXT = (PFNGLMULTIDRAWELEMENTSEXTPROC) get_proc("glMultiDrawElements");
++    gleswGetGraphicsResetStatusEXT = (PFNGLGETGRAPHICSRESETSTATUSEXTPROC) get_proc("glGetGraphicsResetStatus");
++    gleswReadnPixelsEXT = (PFNGLREADNPIXELSEXTPROC) get_proc("glReadnPixels");
++    gleswGetnUniformfvEXT = (PFNGLGETNUNIFORMFVEXTPROC) get_proc("glGetnUniformfv");
++    gleswGetnUniformivEXT = (PFNGLGETNUNIFORMIVEXTPROC) get_proc("glGetnUniformiv");
++    gleswUseProgramStagesEXT = (PFNGLUSEPROGRAMSTAGESEXTPROC) get_proc("glUseProgramStages");
++    gleswActiveShaderProgramEXT = (PFNGLACTIVESHADERPROGRAMEXTPROC) get_proc("glActiveShaderProgram");
++    gleswCreateShaderProgramvEXT = (PFNGLCREATESHADERPROGRAMVEXTPROC) get_proc("glCreateShaderProgramv");
++    gleswBindProgramPipelineEXT = (PFNGLBINDPROGRAMPIPELINEEXTPROC) get_proc("glBindProgramPipeline");
++    gleswDeleteProgramPipelinesEXT = (PFNGLDELETEPROGRAMPIPELINESEXTPROC) get_proc("glDeleteProgramPipelines");
++    gleswGenProgramPipelinesEXT = (PFNGLGENPROGRAMPIPELINESEXTPROC) get_proc("glGenProgramPipelines");
++    gleswIsProgramPipelineEXT = (PFNGLISPROGRAMPIPELINEEXTPROC) get_proc("glIsProgramPipeline");
++    gleswProgramParameteriEXT = (PFNGLPROGRAMPARAMETERIEXTPROC) get_proc("glProgramParameteri");
++    gleswGetProgramPipelineivEXT = (PFNGLGETPROGRAMPIPELINEIVEXTPROC) get_proc("glGetProgramPipelineiv");
++    gleswProgramUniform1iEXT = (PFNGLPROGRAMUNIFORM1IEXTPROC) get_proc("glProgramUniform1i");
++    gleswProgramUniform2iEXT = (PFNGLPROGRAMUNIFORM2IEXTPROC) get_proc("glProgramUniform2i");
++    gleswProgramUniform3iEXT = (PFNGLPROGRAMUNIFORM3IEXTPROC) get_proc("glProgramUniform3i");
++    gleswProgramUniform4iEXT = (PFNGLPROGRAMUNIFORM4IEXTPROC) get_proc("glProgramUniform4i");
++    gleswProgramUniform1fEXT = (PFNGLPROGRAMUNIFORM1FEXTPROC) get_proc("glProgramUniform1f");
++    gleswProgramUniform2fEXT = (PFNGLPROGRAMUNIFORM2FEXTPROC) get_proc("glProgramUniform2f");
++    gleswProgramUniform3fEXT = (PFNGLPROGRAMUNIFORM3FEXTPROC) get_proc("glProgramUniform3f");
++    gleswProgramUniform4fEXT = (PFNGLPROGRAMUNIFORM4FEXTPROC) get_proc("glProgramUniform4f");
++    gleswProgramUniform1ivEXT = (PFNGLPROGRAMUNIFORM1IVEXTPROC) get_proc("glProgramUniform1iv");
++    gleswProgramUniform2ivEXT = (PFNGLPROGRAMUNIFORM2IVEXTPROC) get_proc("glProgramUniform2iv");
++    gleswProgramUniform3ivEXT = (PFNGLPROGRAMUNIFORM3IVEXTPROC) get_proc("glProgramUniform3iv");
++    gleswProgramUniform4ivEXT = (PFNGLPROGRAMUNIFORM4IVEXTPROC) get_proc("glProgramUniform4iv");
++    gleswProgramUniform1fvEXT = (PFNGLPROGRAMUNIFORM1FVEXTPROC) get_proc("glProgramUniform1fv");
++    gleswProgramUniform2fvEXT = (PFNGLPROGRAMUNIFORM2FVEXTPROC) get_proc("glProgramUniform2fv");
++    gleswProgramUniform3fvEXT = (PFNGLPROGRAMUNIFORM3FVEXTPROC) get_proc("glProgramUniform3fv");
++    gleswProgramUniform4fvEXT = (PFNGLPROGRAMUNIFORM4FVEXTPROC) get_proc("glProgramUniform4fv");
++    gleswProgramUniformMatrix2fvEXT = (PFNGLPROGRAMUNIFORMMATRIX2FVEXTPROC) get_proc("glProgramUniformMatrix2fv");
++    gleswProgramUniformMatrix3fvEXT = (PFNGLPROGRAMUNIFORMMATRIX3FVEXTPROC) get_proc("glProgramUniformMatrix3fv");
++    gleswProgramUniformMatrix4fvEXT = (PFNGLPROGRAMUNIFORMMATRIX4FVEXTPROC) get_proc("glProgramUniformMatrix4fv");
++    gleswValidateProgramPipelineEXT = (PFNGLVALIDATEPROGRAMPIPELINEEXTPROC) get_proc("glValidateProgramPipeline");
++    gleswGetProgramPipelineInfoLogEXT = (PFNGLGETPROGRAMPIPELINEINFOLOGEXTPROC) get_proc("glGetProgramPipelineInfoLog");
++    gleswTexStorage1DEXT = (PFNGLTEXSTORAGE1DEXTPROC) get_proc("glTexStorage1D");
++    gleswTexStorage2DEXT = (PFNGLTEXSTORAGE2DEXTPROC) get_proc("glTexStorage2D");
++    gleswTexStorage3DEXT = (PFNGLTEXSTORAGE3DEXTPROC) get_proc("glTexStorage3D");
++    gleswTextureStorage1DEXT = (PFNGLTEXTURESTORAGE1DEXTPROC) get_proc("glTextureStorage1D");
++    gleswTextureStorage2DEXT = (PFNGLTEXTURESTORAGE2DEXTPROC) get_proc("glTextureStorage2D");
++    gleswTextureStorage3DEXT = (PFNGLTEXTURESTORAGE3DEXTPROC) get_proc("glTextureStorage3D");
+     gleswRenderbufferStorageMultisampleIMG = (PFNGLRENDERBUFFERSTORAGEMULTISAMPLEIMGPROC) get_proc("glRenderbufferStorageMultisampleIMG");
+     gleswFramebufferTexture2DMultisampleIMG = (PFNGLFRAMEBUFFERTEXTURE2DMULTISAMPLEIMGPROC) get_proc("glFramebufferTexture2DMultisampleIMG");
+     gleswCoverageMaskNV = (PFNGLCOVERAGEMASKNVPROC) get_proc("glCoverageMaskNV");
+diff -uNrb a/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgram.cpp b/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgram.cpp
+--- a/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgram.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgram.cpp	2016-09-20 14:27:40.859487341 +0200
+@@ -196,8 +196,8 @@
+ #if OGRE_PLATFORM != OGRE_PLATFORM_NACL
+             if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+             {
+-               OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-                    glLabelObjectEXT(GL_SHADER_OBJECT_EXT, mGLShaderHandle, 0, mName.c_str());
++//               OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//                    glLabelObjectEXT(GL_SHADER_OBJECT_EXT, mGLShaderHandle, 0, mName.c_str());
+             }
+ #endif
+ 
+@@ -207,8 +207,8 @@
+ #if OGRE_PLATFORM != OGRE_PLATFORM_NACL
+                 if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+                 {
+-                    OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-                        glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, mGLProgramHandle, 0, mName.c_str());
++//                    OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//                        glLabelObjectEXT(GL_PROGRAM_OBJECT_EXT, mGLProgramHandle, 0, mName.c_str());
+                 }
+ #endif
+             }
+diff -uNrb a/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgramPipeline.cpp b/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgramPipeline.cpp
+--- a/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgramPipeline.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/GLSLES/src/OgreGLSLESProgramPipeline.cpp	2016-09-20 14:27:40.859487341 +0200
+@@ -153,9 +153,9 @@
+ #if OGRE_PLATFORM != OGRE_PLATFORM_NACL
+             if(mVertexProgram && mFragmentProgram && getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+             {
+-                OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-                    glLabelObjectEXT(GL_PROGRAM_PIPELINE_OBJECT_EXT, mGLProgramPipelineHandle, 0,
+-                                 (mVertexProgram->getName() + "/" + mFragmentProgram->getName()).c_str());
++//                OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//                    glLabelObjectEXT(GL_PROGRAM_PIPELINE_OBJECT_EXT, mGLProgramPipelineHandle, 0,
++//                                 (mVertexProgram->getName() + "/" + mFragmentProgram->getName()).c_str());
+             }
+ #endif
+         }
+diff -uNrb a/RenderSystems/GLES2/src/OgreGLES2FrameBufferObject.cpp b/RenderSystems/GLES2/src/OgreGLES2FrameBufferObject.cpp
+--- a/RenderSystems/GLES2/src/OgreGLES2FrameBufferObject.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/OgreGLES2FrameBufferObject.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -45,8 +45,8 @@
+ 
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mFB, 0, ("FBO #" + StringConverter::toString(mFB)).c_str()));
++//            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mFB, 0, ("FBO #" + StringConverter::toString(mFB)).c_str()));
+         }
+ 
+         mNumSamples = 0;
+@@ -69,8 +69,8 @@
+             OGRE_CHECK_GL_ERROR(glGenFramebuffers(1, &mMultisampleFB));
+             if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+             {
+-                OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-                OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mMultisampleFB, 0, ("MSAA FBO #" + StringConverter::toString(mMultisampleFB)).c_str()));
++//                OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//                OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mMultisampleFB, 0, ("MSAA FBO #" + StringConverter::toString(mMultisampleFB)).c_str()));
+             }
+         }
+         else
+diff -uNrb a/RenderSystems/GLES2/src/OgreGLES2HardwareIndexBuffer.cpp b/RenderSystems/GLES2/src/OgreGLES2HardwareIndexBuffer.cpp
+--- a/RenderSystems/GLES2/src/OgreGLES2HardwareIndexBuffer.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/OgreGLES2HardwareIndexBuffer.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -64,8 +64,8 @@
+ 
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Index Buffer #" + StringConverter::toString(mBufferId)).c_str()));
++//            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Index Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+         }
+ 
+         if (!mBufferId)
+@@ -110,7 +110,7 @@
+         {
+             OGRE_CHECK_GL_ERROR(glFlushMappedBufferRangeEXT(GL_ELEMENT_ARRAY_BUFFER, mLockStart, mLockSize));
+         }
+-#endif
++#else
+         GLboolean mapped;
+         OGRE_CHECK_GL_ERROR(mapped = glUnmapBufferOES(GL_ELEMENT_ARRAY_BUFFER));
+         if(!mapped)
+@@ -119,6 +119,7 @@
+                 "Buffer data corrupted, please reload", 
+                 "GLES2HardwareIndexBuffer::unlock");
+         }
++#endif
+         mIsLocked = false;
+     }
+ 
+diff -uNrb a/RenderSystems/GLES2/src/OgreGLES2HardwarePixelBuffer.cpp b/RenderSystems/GLES2/src/OgreGLES2HardwarePixelBuffer.cpp
+--- a/RenderSystems/GLES2/src/OgreGLES2HardwarePixelBuffer.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/OgreGLES2HardwarePixelBuffer.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -333,7 +333,7 @@
+ 
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Pixel Buffer #" + StringConverter::toString(mBufferId)).c_str()));
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Pixel Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+         }
+ 
+         // Upload data to PBO
+@@ -486,7 +486,7 @@
+         OGRE_CHECK_GL_ERROR(glGenBuffers(1, &mBufferId));
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Pixel Buffer #" + StringConverter::toString(mBufferId)).c_str()));
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Pixel Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+         }
+         OGRE_CHECK_GL_ERROR(glBindBuffer(GL_PIXEL_PACK_BUFFER, mBufferId));
+ 
+@@ -1231,8 +1231,8 @@
+         OGRE_CHECK_GL_ERROR(glGenRenderbuffers(1, &mRenderbufferID));
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mRenderbufferID, 0, ("RB " + StringConverter::toString(mRenderbufferID) + " MSAA: " + StringConverter::toString(mNumSamples)).c_str()));
++//            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mRenderbufferID, 0, ("RB " + StringConverter::toString(mRenderbufferID) + " MSAA: " + StringConverter::toString(mNumSamples)).c_str()));
+         }
+ 
+         // Bind it to FBO
+diff -uNrb a/RenderSystems/GLES2/src/OgreGLES2HardwareUniformBuffer.cpp b/RenderSystems/GLES2/src/OgreGLES2HardwareUniformBuffer.cpp
+--- a/RenderSystems/GLES2/src/OgreGLES2HardwareUniformBuffer.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/OgreGLES2HardwareUniformBuffer.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -45,8 +45,8 @@
+ 
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Uniform Buffer #" + StringConverter::toString(mBufferId)).c_str()));
++//            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Uniform Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+         }
+ 
+         if (!mBufferId)
+diff -uNrb a/RenderSystems/GLES2/src/OgreGLES2HardwareVertexBuffer.cpp b/RenderSystems/GLES2/src/OgreGLES2HardwareVertexBuffer.cpp
+--- a/RenderSystems/GLES2/src/OgreGLES2HardwareVertexBuffer.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/OgreGLES2HardwareVertexBuffer.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -54,8 +54,8 @@
+         OGRE_CHECK_GL_ERROR(glGenBuffers(1, &mBufferId));
+         if(getGLES2SupportRef()->checkExtension("GL_EXT_debug_label"))
+         {
+-            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
+-            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Vertex Buffer #" + StringConverter::toString(mBufferId)).c_str()));
++//            OGRE_IF_IOS_VERSION_IS_GREATER_THAN(5.0)
++//            OGRE_CHECK_GL_ERROR(glLabelObjectEXT(GL_BUFFER_OBJECT_EXT, mBufferId, 0, ("Vertex Buffer #" + StringConverter::toString(mBufferId)).c_str()));
+         }
+ 
+         if (!mBufferId)
+diff -uNrb a/RenderSystems/GLES2/src/OgreGLES2PixelFormat.cpp b/RenderSystems/GLES2/src/OgreGLES2PixelFormat.cpp
+--- a/RenderSystems/GLES2/src/OgreGLES2PixelFormat.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/OgreGLES2PixelFormat.cpp	2016-09-20 14:27:40.863487313 +0200
+@@ -31,6 +31,8 @@
+ #include "OgreRenderSystem.h"
+ #include "OgreBitwise.h"
+ 
++#undef GL_AMD_compressed_ATC_texture
++
+ namespace Ogre {
+     //-----------------------------------------------------------------------------
+     GLenum GLES2PixelUtil::getGLOriginFormat(PixelFormat mFormat)

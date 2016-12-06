@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.0)
 project(ogre)
 
 include(ExternalProject)
+       
+if(NOT ANDROID)
+    set(OGRE_BUILD_GLES2 "OFF" CACHE BOOL "Enable the build of OpenGLES 2 rendersystem (experimental).")
+endif()
 
 set(CACHED_URL https://bitbucket.org/fw4splorg/ogre-fw4spl/get/v1-10.tar.bz2)
 set(OGRE_HASH a1d96902a02e3c912095036bc29a1f0852fffe894082bf502153cbca262332cf)
@@ -42,11 +46,16 @@ set(OGRE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 
 set(OGRE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
    
+if(OGRE_BUILD_GLES2)
+    list(APPEND OGRE_CMAKE_ARGS -DOGRE_BUILD_RENDERSYSTEM_GLES2:BOOL=ON)
+    list(APPEND OGRE_PATCH_CMD COMMAND ${PATCH_EXECUTABLE} -p1 -i ${OGRE_PATCH_DIR}/gles2.diff -d <SOURCE_DIR>)
+endif()
+
 if(WIN32)
     set(OGRE_CMAKE_ARGS ${OGRE_CMAKE_ARGS} -DOGRE_INSTALL_PDB:BOOL=OFF)
     list(APPEND OGRE_PATCH_CMD COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OGRE_PATCH_DIR}/PrecompiledHeader.cmake <SOURCE_DIR>/CMake/Utils/PrecompiledHeader.cmake)
 endif()
-
+                    
 if(ANDROID)
     list(APPEND OGRE_PATCH_CMD COMMAND ${PATCH_EXECUTABLE} -p1 -i ${OGRE_PATCH_DIR}/android.diff -d <SOURCE_DIR>)
 endif()
