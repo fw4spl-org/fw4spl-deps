@@ -11,7 +11,6 @@ set(FREEIMAGE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DFREEIMAGE_BUILD_STATIC:BOOL=OFF
                         -DFREEIMAGE_USE_SYSTEM_TIFF:BOOL=ON
                         -DFREEIMAGE_USE_SYSTEM_ZLIB:BOOL=ON
-                        -DFREEIMAGE_USE_SYSTEM_JPEG:BOOL=ON
                         -DFREEIMAGE_USE_SYSTEM_PNG:BOOL=ON
                         -DINSTALL_WRAPPER:BOOL=OFF
                         -DINSTALL_EXAMPLES:BOOL=OFF
@@ -21,6 +20,11 @@ if(ANDROID)
     set(PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/swab.h <SOURCE_DIR>/Source/LibRawLite/internal/swab.h
         COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/android.diff -d <SOURCE_DIR>
     )
+    list(APPEND FREEIMAGE_CMAKE_ARGS
+               -DFREEIMAGE_USE_SYSTEM_JPEG:BOOL=OFF)
+else()
+    list(APPEND FREEIMAGE_CMAKE_ARGS
+               -DFREEIMAGE_USE_SYSTEM_JPEG:BOOL=ON)
 endif()
 
 ExternalProject_Add(

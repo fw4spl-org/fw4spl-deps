@@ -194,6 +194,12 @@ else()
     list(APPEND SUBDIRECTORIES libarchive)
     list(APPEND SUBDIRECTORIES openigtlink)
     list(APPEND SUBDIRECTORIES zeromq)
+    
+    if(ENABLED_OGRE_DEPS)
+        list(APPEND SUBDIRECTORIES zzip)
+        list(APPEND SUBDIRECTORIES freeimage)
+        list(APPEND SUBDIRECTORIES ogre)
+    endif()
 endif()
 
 macro(createUninstallTarget SUBDIR )

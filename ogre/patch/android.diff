@@ -1,0 +1,244 @@
+--- a/CMakeLists.txt	2016-08-26 14:33:19.000000000 +0200
++++ b/CMakeLists.txt	2016-08-26 14:35:29.000000000 +0200
+@@ -306,7 +306,7 @@
+   set(OGRE_BUILD_PLUGIN_PCZ FALSE CACHE BOOL "Disable pcz on Android" FORCE)
+   set(OGRE_BUILD_PLUGIN_BSP FALSE CACHE BOOL "Disable bsp scenemanager on Android" FORCE)
+   set(OGRE_BUILD_TOOLS FALSE CACHE BOOL "Disable tools on Android" FORCE)
+-  set(OGRE_STATIC TRUE CACHE BOOL "Forcing static build for Android" FORCE)
++  set(OGRE_STATIC FALSE CACHE BOOL "Forcing static build for Android" FORCE)
+   string (REPLACE "-msse" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+ elseif(EMSCRIPTEN)
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-c++11-extensions")
+--- a/OgreMain/CMakeLists.txt	2016-06-06 18:12:12.000000000 +0200
++++ b/OgreMain/CMakeLists.txt	2016-08-29 10:10:27.000000000 +0200
+@@ -322,7 +322,7 @@
+                         VERSION ${OGRE_SOVERSION}
+                         LINK_FLAGS "/INCREMENTAL:NO"
+                       )
+-else()
++elseif(NOT ANDROID)
+   set_target_properties(OgreMain PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
+ endif()
+ 
+--- a/OgreMain/CMakeLists.txt	2016-08-26 15:42:56.000000000 +0200
++++ b/OgreMain/CMakeLists.txt	2016-08-26 15:43:16.000000000 +0200
+@@ -332,6 +332,8 @@
+ 	else()
+ 	  list(APPEND LIBRARIES "-latomic")
+ 	endif()
++elseif(ANDROID)
++    list(APPEND LIBRARIES "android;log;boost_system;boost_thread")
+ endif()
+
+ if (APPLE)
+--- a/OgreMain/CMakeLists.txt	2016-08-26 16:54:27.000000000 +0200
++++ b/OgreMain/CMakeLists.txt	2016-08-26 16:58:41.000000000 +0200
+@@ -180,6 +180,8 @@
+       "${CMAKE_CURRENT_SOURCE_DIR}/src/OgrePOSIXTimer.cpp"
+       "${CMAKE_CURRENT_SOURCE_DIR}/src/OgreConfigDialogNoOp.cpp")
+
++  list(APPEND PLATFORM_HEADERS ${ANDROID_NDK}/sources/android/cpufeatures/cpu-features.h)
++  list(APPEND PLATFORM_SOURCE_FILES ${ANDROID_NDK}/sources/android/cpufeatures/cpu-features.c)
+   set(PLATFORM_HEADER_INSTALL "Android")
+ elseif (UNIX)
+   include_directories(include/GLX ${X11_INCLUDE_DIR})
+--- a/Components/MeshLodGenerator/CMakeLists.txt	2016-06-06 18:12:12.000000000 +0200
++++ b/Components/MeshLodGenerator/CMakeLists.txt	2016-08-29 09:25:32.000000000 +0200
+@@ -26,7 +26,9 @@
+
+ # setup target
+ ogre_add_library_to_folder(Components OgreMeshLodGenerator ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
+-set_target_properties(OgreMeshLodGenerator PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++if(NOT ANDROID)
++    set_target_properties(OgreMeshLodGenerator PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++endif()
+ target_link_libraries(OgreMeshLodGenerator OgreMain)
+ if (OGRE_CONFIG_THREADS)
+   target_link_libraries(OgreMeshLodGenerator ${OGRE_THREAD_LIBRARIES})
+--- a/Components/Overlay/CMakeLists.txt	2016-06-06 18:12:12.000000000 +0200
++++ b/Components/Overlay/CMakeLists.txt	2016-08-29 09:34:22.000000000 +0200
+@@ -26,7 +26,9 @@
+
+ # setup target
+ ogre_add_library_to_folder(Components OgreOverlay ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
+-set_target_properties(OgreOverlay PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++if(NOT ANDROID)
++    set_target_properties(OgreOverlay PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++endif()
+ target_link_libraries(OgreOverlay OgreMain ${FREETYPE_LIBRARIES})
+ if (OGRE_CONFIG_THREADS)
+   target_link_libraries(OgreOverlay ${OGRE_THREAD_LIBRARIES})
+--- a/Components/Property/CMakeLists.txt	2016-06-06 18:12:12.000000000 +0200
++++ b/Components/Property/CMakeLists.txt	2016-08-29 09:29:17.000000000 +0200
+@@ -36,7 +36,9 @@
+
+ # setup target
+ ogre_add_library_to_folder(Components OgreProperty ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
+-set_target_properties(OgreProperty PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++if(NOT ANDROID)
++    set_target_properties(OgreProperty PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++endif()
+ target_link_libraries(OgreProperty OgreMain)
+
+ # install 
+--- a/Components//RTShaderSystem/CMakeLists.txt	2016-06-06 18:12:12.000000000 +0200
++++ b/Components//RTShaderSystem/CMakeLists.tx	2016-08-29 09:30:37.000000000 +0200
+@@ -17,7 +17,9 @@
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+ ogre_add_library_to_folder(Components OgreRTShaderSystem ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES})
+-set_target_properties(OgreRTShaderSystem PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++if(NOT ANDROID)
++    set_target_properties(OgreRTShaderSystem PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++endif()
+ target_link_libraries(OgreRTShaderSystem OgreMain)
+
+ ogre_config_framework(OgreRTShaderSystem)
+--- a/Components/Paging/CMakeLists.txt	2016-06-06 18:12:12.000000000 +0200
++++ b/Components/Paging/CMakeLists.txt	2016-08-29 09:50:05.000000000 +0200
+@@ -26,7 +26,9 @@
+
+ # setup target
+ ogre_add_library_to_folder(Components OgrePaging ${OGRE_COMP_LIB_TYPE} ${HEADER_FILES} ${SOURCE_FILES} ${PLATFORM_HEADER_FILES} ${PLATFORM_SOURCE_FILES})
+-set_target_properties(OgrePaging PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++if(NOT ANDROID)
++    set_target_properties(OgrePaging PROPERTIES VERSION ${OGRE_SOVERSION} SOVERSION ${OGRE_SOVERSION})
++endif()
+ target_link_libraries(OgrePaging OgreMain)
+ if (OGRE_CONFIG_THREADS)
+   target_link_libraries(OgrePaging ${OGRE_THREAD_LIBRARIES})
+--- a/CMake/Utils/OgreConfigTargets.cmake	2016-06-06 18:12:12.000000000 +0200
++++ b/CMake/Utils/OgreConfigTargets.cmake	2016-08-29 11:25:36.000000000 +0200
+@@ -256,7 +256,9 @@
+ # setup plugin build
+ function(ogre_config_plugin PLUGINNAME)
+   ogre_config_common(${PLUGINNAME})
+-  set_target_properties(${PLUGINNAME} PROPERTIES VERSION ${OGRE_SOVERSION})
++  if(NOT ANDROID)
++      set_target_properties(${PLUGINNAME} PROPERTIES VERSION ${OGRE_SOVERSION})
++  endif()
+   if (OGRE_STATIC)
+     # add static prefix, if compiling static version
+     set_target_properties(${PLUGINNAME} PROPERTIES OUTPUT_NAME ${PLUGINNAME}Static)
+--- a/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLWindow.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLWindow.cpp	2016-09-05 16:16:21.000000000 +0200
+@@ -136,7 +136,7 @@
+                 StringConverter::parseBool(opt->second))
+             {
+                 eglContext = eglGetCurrentContext();
+-                if (eglContext)
++                if (!eglContext)
+                 {
+                     OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
+                                 "currentGLContext was specified with no current GL context",
+@@ -145,6 +145,8 @@
+
+                 eglContext = eglGetCurrentContext();
+                 mEglSurface = eglGetCurrentSurface(EGL_DRAW);
++                mNativeDisplay= EGL_DEFAULT_DISPLAY;
++                mEglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+             }
+             
+             
+--- a/RenderSystems/GLES2/include/EGL/Android/OgreAndroidEGLSupport.h	2016-09-06 09:12:06.000000000 +0200
++++ a/RenderSystems/GLES2/include/EGL/Android/OgreAndroidEGLSupport.h	2016-09-06 09:13:09.000000000 +0200
+@@ -44,6 +44,10 @@
+                                         unsigned int width, unsigned int height,
+                                         bool fullScreen,
+                                         const NameValuePairList *miscParams = 0);
++                                        
++        ::EGLContext createNewContext(EGLDisplay eglDisplay,
++                                             ::EGLConfig glconfig,
++                                             ::EGLContext shareList) const; 
+     };
+ }
+
+--- a/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLSupport.cpp	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLSupport.cpp	2016-09-06 09:13:19.000000000 +0200
+@@ -79,4 +79,45 @@
+
+         return window;
+     }
++    
++    ::EGLContext AndroidEGLSupport::createNewContext(EGLDisplay eglDisplay,
++                          ::EGLConfig glconfig,
++                                              ::EGLContext shareList) const 
++    {
++        EGLint contextAttrs[] = {
++#if OGRE_NO_GLES3_SUPPORT == 0
++            EGL_CONTEXT_CLIENT_VERSION, 3,
++#else
++            EGL_CONTEXT_CLIENT_VERSION, 2,
++#endif
++            EGL_NONE, EGL_NONE
++        };
++        ::EGLContext context = ((::EGLContext) 0);
++        
++        
++        context = eglGetCurrentContext();
++        if (!context)
++        {
++            if (eglDisplay == ((EGLDisplay) 0))
++            {
++                context = eglCreateContext(mGLDisplay, glconfig, shareList, contextAttrs);
++                EGL_CHECK_ERROR
++            }
++            else
++            {
++                context = eglCreateContext(eglDisplay, glconfig, 0, contextAttrs);
++                EGL_CHECK_ERROR
++            }
++
++            if (context == ((::EGLContext) 0))
++            {
++                OGRE_EXCEPT(Exception::ERR_RENDERINGAPI_ERROR,
++                            "Fail to create New Android context",
++                            __FUNCTION__);
++                return 0;
++            }
++        }
++
++        return context;
++    }
+ }
+--- a/RenderSystems/GLES2/include/EGL/OgreEGLSupport.h	2016-06-06 18:12:12.000000000 +0200
++++ b/RenderSystems/GLES2/include/EGL/OgreEGLSupport.h	2016-09-06 09:49:25.000000000 +0200
+@@ -80,7 +80,7 @@
+             EGLConfig* getConfigs(EGLint *nElements);
+             EGLBoolean getGLConfigAttrib(EGLConfig fbConfig, EGLint attribute, EGLint *value);
+             void* getProcAddress(const Ogre::String& name);
+-            ::EGLContext createNewContext(EGLDisplay eglDisplay, ::EGLConfig glconfig, ::EGLContext shareList) const;
++            virtual ::EGLContext createNewContext(EGLDisplay eglDisplay, ::EGLConfig glconfig, ::EGLContext shareList) const;
+
+             RenderWindow* createWindow(bool autoCreateWindow,
+                                        GLES2RenderSystem *renderSystem,
+--- a/RenderSystems/GLES2/include/EGL/Android/OgreAndroidEGLContext.h	2016-09-06 10:17:35.000000000 +0200
++++ b/RenderSystems/GLES2/include/EGL/Android/OgreAndroidEGLContext.h	2016-09-06 10:17:17.000000000 +0200
+@@ -30,11 +30,16 @@
+ #define __AndroidGLContext_H__
+ 
+ #include "OgreEGLContext.h"
++#include "OgreAndroidEGLSupport.h"
+ #include <EGL/eglplatform.h>
+ 
+ namespace Ogre {
+     class _OgrePrivate AndroidEGLContext : public EGLContext
+     {
++    
++    protected:
++        const AndroidEGLSupport*    mGLSupport;
++        
+     public:
+         AndroidEGLContext(EGLDisplay eglDisplay, const EGLSupport* glsupport, ::EGLConfig fbconfig, ::EGLSurface drawable);
+         diff -uNr a/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLWindow.cpp b/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLWindow.cpp
+--- a/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLWindow.cpp	2016-09-16 10:48:33.635562019 +0200
++++ b/RenderSystems/GLES2/src/EGL/Android/OgreAndroidEGLWindow.cpp	2016-09-16 10:50:00.814841768 +0200
+@@ -41,6 +41,8 @@
+ #include "OgreGLES2ManagedResourceManager.h"
+ #include "OgreViewport.h"
+ 
++#include <android_native_app_glue.h>
++
+ #include <iostream>
+ #include <algorithm>
+ #include <climits>
