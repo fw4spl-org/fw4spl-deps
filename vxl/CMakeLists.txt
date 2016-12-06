@@ -21,7 +21,6 @@ set(VXL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 
 if(ANDROID)
     list(APPEND VXL_CMAKE_ARGS
-        ${COMMON_CMAKE_ARGS}
         -DBUILD_CORE_NUMERICS:BOOL=ON
         -DBUILD_CORE_SERIALISATION:BOOL=OFF
         -DBUILD_CORE_UTILITIES:BOOL=OFF
@@ -48,6 +47,7 @@ else()
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vnl_cpoly_roots.diff -d <SOURCE_DIR>
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vnl_rnpoly_solve.diff -d <SOURCE_DIR>
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcsl_CMakeLists.diff -d <SOURCE_DIR>
+            COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/export_CMakeLists.txt.diff -d <SOURCE_DIR>
         )
     endif()
 endif()
