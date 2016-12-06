@@ -22,7 +22,6 @@ set(OPENCV_CMAKE_ARGS
 
     -DWITH_JPEG:BOOL=ON
     -DWITH_PNG:BOOL=ON
-    -DWITH_QT:BOOL=OFF
     -DWITH_VTK:BOOL=OFF
     -DWITH_OPENGL:BOOL=ON
     -DWITH_TBB:BOOL=OFF
@@ -39,16 +38,16 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_ts:BOOL=OFF
 )
 
-    
+
 
 if(ENABLE_OPENCV_CONTRIB)
     list(APPEND OPENCV_CMAKE_ARGS
 
         -DOPENCV_EXTRA_MODULES_PATH=${CMAKE_CURRENT_BINARY_DIR}/opencv_contrib/src/modules
-    
+
         #OpenCv_contrib module
         -DBUILD_opencv_xfeatures2d:BOOL=ON
-        
+
         -DBUILD_opencv_adas:BOOL=OFF
         -DBUILD_opencv_bgsegm:BOOL=OFF
         -DBUILD_opencv_bioinspired:BOOL=OFF
@@ -67,6 +66,8 @@ if(ENABLE_OPENCV_CONTRIB)
         -DBUILD_opencv_ximgproc:BOOL=OFF
         -DBUILD_opencv_xobjdetect:BOOL=OFF
         -DBUILD_opencv_xphoto:BOOL=OFF
+        -DBUILD_opencv_cvv:BOOL=OFF
+        -DBUILD_opencv_dpm:BOOL=OFF
     )
 endif()
 
@@ -103,16 +104,20 @@ else() #ANDROID
         -DENABLE_PRECOMPILED_HEADERS=OFF
         -DBUILD_JPEG:BOOL=ON
         -DBUILD_ANDROID_EXAMPLES:BOOL=OFF
+        -DWITH_QT:BOOL=OFF
     )
     list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/android.diff -d <SOURCE_DIR> )
 endif()
 
 #Dowload opencv repository
 
-set(CACHED_URL https://github.com/Itseez/opencv/archive/3.0.0.zip)
+set(CACHED_URL https://github.com/opencv/opencv/archive/3.1.0.tar.gz)
 
 if(NOT ANDROID)
-    list(APPEND OPENCV_DEPENDS jpeg )
+    list(APPEND OPENCV_DEPENDS jpeg qt)
+    list(APPEND OPENCV_CMAKE_ARGS
+        -DWITH_QT:BOOL=ON
+    )
 endif()
 
 configure_file(
@@ -124,20 +129,21 @@ configure_file(
 ExternalProject_Add(
     opencv
     URL ${CACHED_URL}
-    URL_HASH SHA256=07094ea2f996f2622d572f0f3a162d698c8a547520341ca9109fbaf9363fb001
+    URL_HASH SHA256=f00b3c4f42acda07d89031a2ebb5ebe390764a133502c03a511f67b78bbd4fbf
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME opencv_3.0.0.zip
+    DOWNLOAD_NAME opencv_3.1.0.tar.gz
     DEPENDS ${OPENCV_DEPENDS}
     PATCH_COMMAND ${OPENCV_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${OPENCV_CMAKE_ARGS}
 )
-  
-if(ENABLE_OPENCV_CONTRIB)      
-    ExternalProject_Add_Step(opencv OpenCVContrib 
+
+if(ENABLE_OPENCV_CONTRIB)
+    ExternalProject_Add_Step(opencv OpenCVContrib
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/scripts/opencvContrib.cmake
         DEPENDEES download
         DEPENDERS build
         COMMENT "Download opencv contribution repository"
     )
 endif()
+
