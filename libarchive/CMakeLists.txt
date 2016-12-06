@@ -13,11 +13,7 @@ set(CACHED_URL http://www.libarchive.org/downloads/libarchive-3.1.2.zip)
 set(PATCH_CMD "")
 
 if(ANDROID)
-    list(APPEND LIBARCHIVE_CMAKE_ARGS 
-        -DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL}
-    )
     set(PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/libarchive_android.diff -d <SOURCE_DIR>)
-
 endif()
 
 if(UNIX)

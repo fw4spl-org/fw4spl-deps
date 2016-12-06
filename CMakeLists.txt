@@ -30,8 +30,10 @@ if(CROSS_COMPILING)
         set(CMAKE_TOOLCHAIN_FILE CACHE FILEPATH "Path to the toolchain file")
     endif()
     list(APPEND COMMON_CMAKE_ARGS -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
-                                  -DANDROID_ABI=${ANDROID_ABI}
-                                  -DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL})
+                                  -DANDROID_ABI=${CMAKE_ANDROID_ARCH_ABI}
+                                  -DANDROID_NDK=${CMAKE_ANDROID_NDK}
+                                  -DANDROID_NATIVE_API_LEVEL=${CMAKE_SYSTEM_VERSION}
+                                  -DANDROID_STL=${CMAKE_ANDROID_STL_TYPE})
 endif()
 
 if(WIN32 OR CMAKE_HOST_WIN32 )
