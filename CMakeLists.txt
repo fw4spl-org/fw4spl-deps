@@ -84,6 +84,7 @@ option(ENABLE_OPEN_MP "Set to ON use allow the use of OpenMP" OFF)
 option(ENABLED_OGRE_DEPS "Set to ON to build ogre" OFF)
 option(ENABLED_SOFA_DEPS "Set to ON to build sofa" OFF)
 option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
+option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
 
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
@@ -132,7 +133,15 @@ if(NOT ANDROID)
         if(UNIX)
             list(APPEND SUBDIRECTORIES libfreenect)
         endif()
+        
         list(APPEND SUBDIRECTORIES pcl)
+    endif()
+
+    if(ENABLED_REALSENSE)
+        if(NOT ENABLED_PCL_DEPS AND UNIX)
+            list(APPEND SUBDIRECTORIES libusb)
+        endif()
+        list(APPEND SUBDIRECTORIES realsense)
     endif()
     
     if(ENABLED_SOFA_DEPS)
