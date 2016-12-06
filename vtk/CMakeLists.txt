@@ -144,6 +144,7 @@ if(ANDROID)
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/Core_CMakeLists.diff -d <SOURCE_DIR>
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkModuleMacros.diff -d <SOURCE_DIR>
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkEGL.diff -d <SOURCE_DIR>
+         COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkAndroidOutputWindow.cxx.diff -d <SOURCE_DIR>
     )
 endif()
 
