@@ -5,9 +5,9 @@ project(expatBuilder)
 include(ExternalProject)
 
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz)
+set(CACHED_URL http://downloads.sourceforge.net/expat/expat-2.1.0.tar.gz)
 
-set(EXPAT_CMAKE_ARGS 
+set(EXPAT_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
     -DBUILD_tools=FALSE
     -DBUILD_examples=FALSE
@@ -17,7 +17,7 @@ set(EXPAT_CMAKE_ARGS
 set(EXPAT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 if(ANDROID OR WIN32)
-            
+
     ExternalProject_Add(
         expat
         URL ${CACHED_URL}

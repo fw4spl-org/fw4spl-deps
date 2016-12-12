@@ -10,7 +10,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_TESTING:BOOL=OFF
                    -DBUILD_DOXYGEN:BOOL=OFF
                    -DITK_USE_REVIEW:BOOL=ON
-                   
+
                    -DITK_USE_SYSTEM_DCMTK:BOOL=ON
                    -DITK_USE_SYSTEM_GDCM:BOOL=ON
                    -DITK_USE_SYSTEM_PNG:BOOL=ON
@@ -19,7 +19,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DITK_USE_SYSTEM_ZLIB:BOOL=ON
                    -DITK_USE_SYSTEM_JPEG:BOOL=ON
                    -DITK_USE_OPTIMIZED_REGISTRATION_METHODS:BOOL=ON
-                   
+
                    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF
                    -DModule_ITKDeprecated:BOOL=OFF
                    -DModule_ITKMINC:BOOL=OFF
@@ -29,7 +29,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKDCMTK:BOOL=OFF
                    -DModule_ITKIODCMTK:BOOL=OFF
                    -DModule_ITKIOHDF5:BOOL=OFF
-                   
+
 
                    -DModule_ITKAnisotropicSmoothing:BOOL=ON
                    -DModule_ITKAntiAlias:BOOL=ON
@@ -87,7 +87,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKLabelVoting:BOOL=ON
                    -DModule_ITKLevelSets:BOOL=ON
                    -DModule_ITKLevelSetsv4:BOOL=ON
-                                     
+
                    -DModule_ITKMarkovRandomFieldsClassifiers:BOOL=ON
                    -DModule_ITKMathematicalMorphology:BOOL=ON
                    -DModule_ITKMetricsv4:BOOL=ON
@@ -107,7 +107,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKSmoothing:BOOL=ON
                    -DModule_ITKSpatialFunction:BOOL=ON
                    -DModule_ITKThresholding:BOOL=ON
-                   
+
                    -DModule_ITKVideoCore:BOOL=ON
                    -DModule_ITKVideoFiltering:BOOL=ON
                    -DModule_ITKVideoIO:BOOL=ON
@@ -119,12 +119,12 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    # Disabled on Linux (link errors)
                    -DModule_ITKLevelSetsv4Visualization:BOOL=OFF
                    -DModule_ITKVtkGlue:BOOL=OFF
-                   
+
                    # Disabled because Vxl vidl is not build anymore
                    -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz)
+set(CACHED_URL http://downloads.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>
     && "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/ConfigureChecks.cmake.diff -d <SOURCE_DIR>/Modules/ThirdParty/HDF5/src/itkhdf5/config/cmake)
@@ -140,7 +140,7 @@ ExternalProject_Add(
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(itk CopyConfigFileToInstall 
+ExternalProject_Add_Step(itk CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-ITK.cmake ${CMAKE_INSTALL_PREFIX}/fw-ITK.cmake
     COMMENT "Install configuration file"
     DEPENDEES install

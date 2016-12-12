@@ -4,7 +4,7 @@ project(pngBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/libpng/libpng-1.6.21.tar.gz)
+set(CACHED_URL https://github.com/glennrp/libpng/archive/v1.6.21.tar.gz)
 set(PNG_CMAKE_ARGS  ${COMMON_CMAKE_ARGS}
                     -DPNG_DEBUG:BOOL=OFF
                     -DPNG_SHARED:BOOL=ON
@@ -19,7 +19,7 @@ ExternalProject_Add(
         libpng
         DEPENDS zlib
         URL ${CACHED_URL}
-        URL_HASH SHA256=b36a3c124622c8e1647f360424371394284f4c6c4b384593e478666c59ff42d3
+        URL_HASH SHA256=caa0f62d09452bf3018a7e22973246f62b5818c7bf86c466009ab11a68f0a137
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         PATCH_COMMAND ${LIBPNG_PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
@@ -35,8 +35,8 @@ set(LIBPNG_LIB_NAME ${LIBPNG_LIB_NAME} PARENT_SCOPE)
 
 if(WIN32)
     ExternalProject_Add_Step(libpng RENAME_LIBPNG
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBPNG_LIB_NAME}.lib libpng.lib 
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBPNG_LIB_NAME}.lib png.lib 
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBPNG_LIB_NAME}.lib libpng.lib
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${LIBPNG_LIB_NAME}.lib png.lib
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib
         DEPENDEES install
         )
