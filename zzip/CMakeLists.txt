@@ -6,7 +6,7 @@ include(ExternalProject)
 
 set(ZZIP_VERSION 0.13.62)
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/project/zziplib/zziplib13/${ZZIP_VERSION}/zziplib-${ZZIP_VERSION}.tar.bz2)
+set(CACHED_URL http://downloads.sourceforge.net/project/zziplib/zziplib13/${ZZIP_VERSION}/zziplib-${ZZIP_VERSION}.tar.bz2)
 
 set(ZZIP_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 

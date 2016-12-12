@@ -4,7 +4,7 @@ project(boostBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/boost/boost_1_61_0.tar.gz)
+set(CACHED_URL http://downloads.sourceforge.net/boost/boost_1_61_0.tar.gz)
 set(BOOST_HASHSUM a77c7cc660ec02704c6884fbb20c552d52d60a18f26573c9cee0788bf00ed7e6)
 
 string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
