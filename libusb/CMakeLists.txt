@@ -39,6 +39,6 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add_Step(libusb COPY_FILES
-    COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libusb} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+    COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libusb} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
     DEPENDEES install
 )

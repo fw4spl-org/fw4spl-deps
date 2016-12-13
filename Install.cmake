@@ -1,5 +1,4 @@
-macro(installWatch TEMP_PATH INSTALL_PATH)
-
+macro(installWatchUnix TEMP_PATH INSTALL_PATH)
     set(TEMP_PATH ${TEMP_PATH}${INSTALL_PATH})
 
     # create the directory where the install_manifest.txt will be written
@@ -43,5 +42,35 @@ macro(installWatch TEMP_PATH INSTALL_PATH)
     file(REMOVE_RECURSE ${TEMP_PATH})
 endmacro()
 
-installWatch(${SRC} ${DST})
+macro(installWatchWin32 TEMP_PATH INSTALL_PATH)
+    # create the directory where the install_manifest.txt will be written
+    get_filename_component(PROJECTNAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
+    set(BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECTNAME}-prefix/src/${PROJECTNAME}-build")
+    file(MAKE_DIRECTORY ${BUILD_DIR})
+
+    # retrieve the list of files in the intermediate install path
+    file(GLOB_RECURSE FILE_LIST "${TEMP_PATH}/*")
+
+    # clean the old install_manifest.txt
+    file(REMOVE "${BUILD_DIR}/install_manifest.txt")
+
+    foreach(FILENAME IN LISTS FILE_LIST)
+        # write the filename in the install_manifest.txt
+        file(RELATIVE_PATH REL_FILENAME ${TEMP_PATH} ${FILENAME})
+        file(TO_CMAKE_PATH "${INSTALL_PATH}/${REL_FILENAME}" INSTALL_FILENAME)
+        file(APPEND "${BUILD_DIR}/install_manifest.txt" "${INSTALL_FILENAME}\n")
+        
+        # Copy the file at the final install place
+        get_filename_component(INSTALL_DIR ${INSTALL_FILENAME} DIRECTORY)
+        file(INSTALL ${FILENAME} DESTINATION ${INSTALL_DIR} USE_SOURCE_PERMISSIONS)
+    endforeach()
+
+    file(REMOVE_RECURSE ${TEMP_PATH})
+endmacro()
+
+if(WIN32)
+    installWatchWin32(${SRC} ${DST})
+else()
+    installWatchUnix(${SRC} ${DST})
+endif()
 
