@@ -37,7 +37,7 @@ ExternalProject_Add(
     PATCH_COMMAND ${DCMTK_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${DCMTK_CMAKE_ARGS}
-    DEPENDS tiff libpng
+    DEPENDS tiff libpng libxml
 )
 
 ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
