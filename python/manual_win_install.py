@@ -1,4 +1,5 @@
 # Installs a Python build from the Visual Studio directory to target directory
+from __future__ import print_function
 
 import glob
 import os
@@ -10,9 +11,11 @@ import os.path
 from os.path import dirname
 from os.path import abspath
 
+
+
 def make_directory(d):
     if not os.path.exists(d):
-        print "Creating directory: %s" % repr(d)
+        print("Creating directory: {!s}".format(d))
         os.makedirs(d)
 
 def copy_files(filelist, dst):
@@ -22,15 +25,15 @@ def copy_files(filelist, dst):
         for ext_ in [ext, '_d' + ext]:
             f_ = f + ext_
             if os.path.isfile(f_):
-                print "Copying %s --> %s" % (f_, dst)
+                print("Copying {!s} --> {!s}".format(f_, dst))
                 shutil.copy(f_, dst)
 
 def copy_directory(src_dir, dst_dir):
     if not os.path.isdir(src_dir):
-        raise RuntimeError("Oops, couldn't find path: %s" % repr(src_dir))
+        raise RuntimeError("Oops, couldn't find path: {!s}".format(src_dir))
     if os.path.isdir(dst_dir):
         shutil.rmtree(dst_dir)
-    print "Copying %s --> %s" % (src_dir, dst_dir)
+    print("Copying {!s} --> {!s}".format(src_dir, dst_dir))
     shutil.copytree(src_dir, dst_dir)
 
 def main(args):
@@ -46,14 +49,14 @@ def main(args):
     #DST_DIR = r"C:\install\Python-3.5.1"
     #CPU = "amd64"
     
-    print("SRC_DIR = %s" % SRC_DIR)
-    print("DST_DIR = %s" % DST_DIR)
-    print("CPU = %s" % CPU)
+    print("SRC_DIR = {}".format(SRC_DIR))
+    print("DST_DIR = {}".format(DST_DIR))
+    print("CPU = {}".format(CPU))
 
     if not os.path.isdir(SRC_DIR):
-        raise RuntimeError("Oops, could not find path: %s" % repr(p))
+        raise RuntimeError("Oops, could not find path: {!s}".format(p))
 
-    print "DST_DIR =", DST_DIR
+    print ("DST_DIR ="+ DST_DIR)
     make_directory(DST_DIR)
 
     # copy python.exe
@@ -92,7 +95,7 @@ def main(args):
     # Scripts dir
     make_directory(os.path.join(DST_DIR, "Scripts"))
 
-    print "All done!"
+    print("All done!")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
