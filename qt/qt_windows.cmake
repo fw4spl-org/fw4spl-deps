@@ -42,6 +42,7 @@ set(QT_CONFIGURE_CMD ./configure
     -l jpeg
     -l png
     -l freetype
+    -wmf-backend
 )
 
 #hack: rcc.exe need zlib in path
