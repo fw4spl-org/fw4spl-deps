@@ -92,8 +92,10 @@ endif()
 find_package(CUDA)
 set(CUDA_HOST_COMPILER_SUPPORT TRUE)
 if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
-    # Microsoft Visual Studio 2015 Update >= 2 is not supported yet!
-    set(CUDA_HOST_COMPILER_SUPPORT FALSE)
+    # Microsoft Visual Studio 2015 is supported in CUDA version > 8.0
+    if(CUDA_VERSION_MAJOR LESS 8)
+        set(CUDA_HOST_COMPILER_SUPPORT FALSE)
+    endif()
 endif()
 if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
     #Enable GPU options
@@ -113,7 +115,7 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
         if(${CMAKE_MAKE_PROGRAM} STREQUAL "jom")
             set(PCL_TARGETS pcl_common pcl_octree pcl_io pcl_io_ply pcl_kdtree pcl_search pcl_sample_consensus pcl_filters
                             pcl_2d pcl_features pcl_ml pcl_segmentation pcl_visualization pcl_surface pcl_registration
-                            pcl_keypoints pcl_tracking pcl_recognition pcl_stereo pcl_cuda_features pcl_cuda_segmentation
+                            pcl_keypoints pcl_tracking pcl_recognition pcl_stereo pcl_cuda_segmentation
                             pcl_cuda_sample_consensus pcl_outofcore pcl_people)
             set(PCL_GPU_TARGETS pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_kinfu pcl_gpu_kinfu_large_scale pcl_gpu_segmentation)
             set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} ${PCL_TARGETS}
