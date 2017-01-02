@@ -40,8 +40,10 @@ else()
     # This important to use '$(MAKE)' and not just 'make' to forward the flags from the command line (-j for instance)
     set(MAKE $(MAKE))
     if(NOT APPLE)
+        # Do not set the runtime path in the install step, this allows to get "portable" libraries
         list(APPEND COMMON_CMAKE_ARGS 
             -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
+            -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
         )
     else()
         list(APPEND COMMON_CMAKE_ARGS
@@ -277,3 +279,24 @@ add_custom_target(fix_path
     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/utils/fix_path.py "${CMAKE_INSTALL_PREFIX}"
     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
 )
+
+####################################################################################################################
+# CPack related code
+        
+install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/ DESTINATION ${CMAKE_BUILD_TYPE}
+        PATTERN "bin/*"
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+install(CODE "set(INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
+install(CODE "set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/fix_path.cmake")
+                 
+set(CPACK_PACKAGE_VERSION_MAJOR 11)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 1)
+set(CPACK_PACKAGE_VENDOR "IRCAD/IHU")
+
+set(CPACK_GENERATOR "TGZ")
+
+include(CPack)
+
