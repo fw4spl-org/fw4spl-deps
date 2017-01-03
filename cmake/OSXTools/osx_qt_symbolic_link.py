@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: UTF8 -*-
 
 # osx_qt_symbolic_link.py:
