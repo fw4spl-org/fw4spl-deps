@@ -1,0 +1,15 @@
+# use glob syntax.
+syntax: glob
+# ignore archive folder
+archive/*
+*.autosave
+# vim swap files
+*.swp
+# tmp files
+.*~
+# python
+*.pyc
+*.pyo
+# reject and backup files
+*.rej
+*.orig
