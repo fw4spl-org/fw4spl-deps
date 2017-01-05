@@ -38,7 +38,8 @@ else()
     list(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
     #fixed error: 'constexpr' needed for in-class initialization of static data member 'tolerance' of non-integral type
     # -> define VCL_CAN_STATIC_CONST_INIT_FLOAT to 0
-    set(VXL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcl_config_compiler.h.in.diff -d <SOURCE_DIR>)
+    set(VXL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcl_config_compiler.h.in.diff -d <SOURCE_DIR>
+              COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/gcc5.diff -d <SOURCE_DIR>)
     if(ANDROID)
         list(APPEND VXL_PATCH_CMD
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/config_CMakeLists.txt.diff -d <SOURCE_DIR>
