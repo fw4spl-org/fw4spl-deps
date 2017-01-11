@@ -20,19 +20,18 @@ if(ANDROID)
         PATCH_COMMAND ${PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}
-        STEP_TARGETS CopyConfigFileToInstall
     )
     
 elseif(WIN32)
-    set(CACHED_URL https://win-iconv.googlecode.com/files/win-iconv-0.0.6.tar.bz2)
+    set(CACHED_URL https://github.com/win-iconv/win-iconv/archive/0.0.6.tar.gz)
 
     ExternalProject_Add(
         libiconv
         URL ${CACHED_URL}
+        URL_HASH SHA256=d464bbe0410f72b09f301bead9f1cf091e6aa15e97323961ecb9242c0e7f609b
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${LIBICONV_CMAKE_ARGS}
-        STEP_TARGETS CopyConfigFileToInstall
     )
 else()
     set(LIBICONV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
@@ -47,7 +46,7 @@ else()
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                 --enable-shared
                 --disable-static
                 --without-libintl
@@ -56,18 +55,18 @@ else()
         PATCH_COMMAND ${CMAKE_COMMAND} -E copy_directory "${LIBICONV_PATCH_DIR}/" "<SOURCE_DIR>/" ${LIBICONV_PATCH_CMD}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_libiconv} install
-        STEP_TARGETS CopyConfigFileToInstall
     )
     
 endif()
 
 if(NOT WIN32)
     ExternalProject_Add_Step(libiconv COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libiconv} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libiconv} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
 endif()
 ExternalProject_Add_Step(libiconv CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

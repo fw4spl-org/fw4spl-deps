@@ -13,7 +13,16 @@ set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_LINKER=${CMAKE_LINKER}
 )
 
-set(CROSS_COMPILING OFF CACHE BOOL "Cross compilation option")
+if(NOT WIN32 AND NOT APPLE)
+    set(SET_COMPILER_ENV export CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} &&)
+endif()
+
+
+if( ANDROID )
+    set(CROSS_COMPILING ON CACHE BOOL "Cross compilation option")
+else()
+    set(CROSS_COMPILING OFF CACHE BOOL "Cross compilation option")
+endif()
 
 if(CROSS_COMPILING)
     if(NOT CMAKE_TOOLCHAIN_FILE)
@@ -31,8 +40,10 @@ else()
     # This important to use '$(MAKE)' and not just 'make' to forward the flags from the command line (-j for instance)
     set(MAKE $(MAKE))
     if(NOT APPLE)
+        # Do not set the runtime path in the install step, this allows to get "portable" libraries
         list(APPEND COMMON_CMAKE_ARGS 
             -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
+            -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
         )
     else()
         list(APPEND COMMON_CMAKE_ARGS
@@ -71,6 +82,12 @@ endif()
 
 set(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
 
+option(ENABLE_OPEN_MP "Set to ON use allow the use of OpenMP" OFF)
+option(ENABLED_OGRE_DEPS "Set to ON to build ogre" OFF)
+option(ENABLED_SOFA_DEPS "Set to ON to build sofa" OFF)
+option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
+option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
+
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES jpeg)
@@ -85,11 +102,6 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES freetype)
     list(APPEND SUBDIRECTORIES icu4c)
 
-    if(NOT APPLE)
-        list(APPEND SUBDIRECTORIES curl)
-    endif()
-
-    list(APPEND SUBDIRECTORIES numpy)
     list(APPEND SUBDIRECTORIES qt)
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES vxl)
@@ -100,12 +112,58 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES ann)
     list(APPEND SUBDIRECTORIES dcmtk)
 
-    list(APPEND SUBDIRECTORIES cryptopp)
     list(APPEND SUBDIRECTORIES tetgen)
     list(APPEND SUBDIRECTORIES json-spirit)
     list(APPEND SUBDIRECTORIES glm)
+    
+    list(APPEND SUBDIRECTORIES opencv)
+    list(APPEND SUBDIRECTORIES aruco)
+    list(APPEND SUBDIRECTORIES eigen)
+    list(APPEND SUBDIRECTORIES flann)
+    list(APPEND SUBDIRECTORIES bullet)
+    list(APPEND SUBDIRECTORIES geodesic)
+
+    list(APPEND SUBDIRECTORIES libarchive)
+    list(APPEND SUBDIRECTORIES openigtlink)
+    list(APPEND SUBDIRECTORIES zeromq)
+    
+    if(ENABLED_PCL_DEPS)
+        if(UNIX)
+            list(APPEND SUBDIRECTORIES libusb)
+        endif()
+        list(APPEND SUBDIRECTORIES openni)
+        if(UNIX)
+            list(APPEND SUBDIRECTORIES libfreenect)
+        endif()
+        
+        list(APPEND SUBDIRECTORIES pcl)
+    endif()
+
+    if(ENABLED_REALSENSE)
+        if(NOT ENABLED_PCL_DEPS AND UNIX)
+            list(APPEND SUBDIRECTORIES libusb)
+        endif()
+        list(APPEND SUBDIRECTORIES realsense)
+    endif()
+    
+    if(ENABLED_SOFA_DEPS)
+        list(APPEND SUBDIRECTORIES glew)
+        if (NOT APPLE)
+            list(APPEND SUBDIRECTORIES freeglut)
+        endif()
+        list(APPEND SUBDIRECTORIES sofa)
+    endif()    
+
+    if(ENABLED_OGRE_DEPS)
+        list(APPEND SUBDIRECTORIES zzip)
+        list(APPEND SUBDIRECTORIES freeimage)
+        list(APPEND SUBDIRECTORIES ogre)
+    endif()
+
 ##ANDROID DEPS##
 else()
+    option(ENABLE_QT_ANDROID "Set to ON to build Qt for Android" OFF)
+
     list(APPEND SUBDIRECTORIES jpeg)
     list(APPEND SUBDIRECTORIES zlib)
     list(APPEND SUBDIRECTORIES tiff)
@@ -115,6 +173,11 @@ else()
     list(APPEND SUBDIRECTORIES expat)
     list(APPEND SUBDIRECTORIES boost)
     list(APPEND SUBDIRECTORIES freetype)
+    
+    if(ENABLE_QT_ANDROID)
+        list(APPEND SUBDIRECTORIES qt)
+    endif()
+    
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES camp)
     list(APPEND SUBDIRECTORIES ann)
@@ -122,20 +185,55 @@ else()
     list(APPEND SUBDIRECTORIES android_native_app)
     list(APPEND SUBDIRECTORIES glm)
     list(APPEND SUBDIRECTORIES vxl)
+    list(APPEND SUBDIRECTORIES opencv)
+    list(APPEND SUBDIRECTORIES aruco)
+    if(ENABLED_PCL_DEPS)
+        list(APPEND SUBDIRECTORIES flann)
+        list(APPEND SUBDIRECTORIES eigen)
+        list(APPEND SUBDIRECTORIES pcl)
+    endif()
+
+    list(APPEND SUBDIRECTORIES libarchive)
+    list(APPEND SUBDIRECTORIES openigtlink)
+    list(APPEND SUBDIRECTORIES zeromq)
 endif()
 
-foreach(subdir ${SUBDIRECTORIES})
+macro(createUninstallTarget SUBDIR )
+
     # define an uninstall target for each project
     configure_file(
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/${subdir}/cmake_uninstall.cmake"
+        "${CMAKE_SOURCE_DIR}/cmake_uninstall.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_uninstall.cmake"
         IMMEDIATE @ONLY)
 
-    add_custom_target(${subdir}_uninstall
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/cmake_uninstall.cmake)
+    add_custom_target(${SUBDIR}_uninstall
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_uninstall.cmake)
 
     # define the standard location for the intermediate install directory
-    set(INSTALL_PREFIX_${subdir} ${CMAKE_CURRENT_BINARY_DIR}/${subdir}/${subdir}-prefix/src/${subdir}-install-tmp)
+    set(INSTALL_PREFIX_${SUBDIR} ${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/${SUBDIR}-prefix/src/${SUBDIR}-install-tmp)
+
+endmacro()
+
+macro(createCleanTarget SUBDIR )
+
+    configure_file(
+        "${CMAKE_SOURCE_DIR}/cmake_clean.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_clean.cmake"
+        IMMEDIATE @ONLY)
+
+    add_custom_target(${SUBDIR}_clean
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_clean.cmake)
+    add_dependencies(${SUBDIR}_clean ${SUBDIR}_uninstall)
+
+endmacro()
+
+foreach(subdir ${SUBDIRECTORIES})
+
+    # define an uninstall target for each project
+    createUninstallTarget(${subdir})
+
+    # define a clean target for each project
+    createCleanTarget(${subdir})
 
     add_subdirectory(${subdir})
 endforeach()
@@ -151,16 +249,54 @@ if(ADDITIONAL_DEPS)
 
 endif()
 
+####################################################################################################################
+#. Find PYTHON - required for our build process
+#
+# if we are building for Android, we should not use CMAKE_FIND_ROOT_PATH when finding a program
+# so we disable it temporarily, and we will reset it after find_program
+if( ANDROID )
+    set( TMP_PREVIOUS_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM})
+    set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER )
+endif()
+
 find_program(PYTHON_EXECUTABLE python ${PATH})
 
+# if we are building for Android, now we have to reset CMAKE_FIND_ROOT_PATH_MODE_PROGRAM
+if( ANDROID )
+    set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${TMP_PREVIOUS_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM} )
+endif()      
+    
+####################################################################################################################
+#. Install 
 if(APPLE)
     add_custom_target(install_tool
-        COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
+        COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
     )
 endif()
 
 add_custom_target(fix_path
-    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/CMake/utils/fix_path.py "${CMAKE_INSTALL_PREFIX}"
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils/fix_path.py "${CMAKE_INSTALL_PREFIX}"
     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
 )
+
+####################################################################################################################
+# CPack related code
+        
+install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/ DESTINATION ${CMAKE_BUILD_TYPE}
+        PATTERN "bin/*"
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+install(CODE "set(INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
+install(CODE "set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/fix_path.cmake")
+                 
+set(CPACK_PACKAGE_VERSION_MAJOR 11)
+set(CPACK_PACKAGE_VERSION_MINOR 0)
+set(CPACK_PACKAGE_VERSION_PATCH 1)
+set(CPACK_PACKAGE_VENDOR "IRCAD/IHU")
+
+set(CPACK_GENERATOR "TGZ")
+
+include(CPack)
+

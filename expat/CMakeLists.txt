@@ -5,9 +5,9 @@ project(expatBuilder)
 include(ExternalProject)
 
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/expat/expat-2.1.0.tar.gz)
+set(CACHED_URL http://downloads.sourceforge.net/expat/expat-2.1.0.tar.gz)
 
-set(EXPAT_CMAKE_ARGS 
+set(EXPAT_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
     -DBUILD_tools=FALSE
     -DBUILD_examples=FALSE
@@ -17,7 +17,7 @@ set(EXPAT_CMAKE_ARGS
 set(EXPAT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 if(ANDROID OR WIN32)
-            
+
     ExternalProject_Add(
         expat
         URL ${CACHED_URL}
@@ -35,7 +35,7 @@ else()
         URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                           --enable-shared
                           --disable-static
                           --prefix=${CMAKE_INSTALL_PREFIX}
@@ -47,7 +47,7 @@ endif()
 
 if(NOT WIN32)
     ExternalProject_Add_Step(expat COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_expat} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_expat} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
 endif()

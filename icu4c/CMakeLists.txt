@@ -9,16 +9,18 @@ set(CACHED_URL http://download.icu-project.org/files/icu4c/${MAJOR_VERSION}.2/ic
 
 if(WIN32)
 
-    set(ICU4C_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    set(ICU4C_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
+    set(ICU4C_CMAKE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+    set(ICU4C_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/ufile.c.diff -d <SOURCE_DIR>
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${ICU4C_CMAKE_DIR}/" "<SOURCE_DIR>")
+    
     ExternalProject_Add(
         icu4c
         URL ${CACHED_URL}
         URL_MD5 072e501b87065f3a0ca888f1b5165709
         DOWNLOAD_DIR ${ARCHIVE_DIR}
-        PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${ICU4C_PATCH_DIR}/" "<SOURCE_DIR>"
+        PATCH_COMMAND ${ICU4C_PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        CMAKE_ARGS ${ICU4C_CMAKE_ARGS}
+        CMAKE_ARGS ${COMMON_CMAKE_ARGS}
     )
 else()
     ExternalProject_Add(
@@ -27,7 +29,7 @@ else()
         URL_MD5 072e501b87065f3a0ca888f1b5165709
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ./configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/source ./configure
                         --enable-shared
                         --disable-static
                         --prefix=${CMAKE_INSTALL_PREFIX}
@@ -36,7 +38,7 @@ else()
     )
 
     ExternalProject_Add_Step(icu4c COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_icu4c} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_icu4c} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
     

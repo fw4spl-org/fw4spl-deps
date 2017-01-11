@@ -1,0 +1,56 @@
+--- a/CMakeLists.txt	2016-01-15 16:52:12.000000000 +0100
++++ b/CMakeLists.txt	2016-07-01 14:15:11.000000000 +0200
+@@ -46,6 +46,7 @@
+ option(PNG_FRAMEWORK "Build OS X framework" OFF)
+ option(PNG_DEBUG     "Build with debug output" OFF)
+ option(PNGARG        "Disable ANSI-C prototypes" OFF)
++option(NO_SYMLINK    "Disable symbolic link" OFF)
+ 
+ # SET LIBNAME
+ set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
+@@ -218,7 +219,7 @@
+ # copies if different.
+ macro(CREATE_SYMLINK SRC_FILE DEST_FILE)
+   FILE(REMOVE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE})
+-  if(WIN32 AND NOT CYGWIN AND NOT MSYS)
++  if(NO_SYMLINK OR WIN32 AND NOT CYGWIN AND NOT MSYS)
+     ADD_CUSTOM_COMMAND(
+         OUTPUT ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE}   ${CMAKE_CURRENT_BINARY_DIR}/${DEST_FILE}
+         COMMAND ${CMAKE_COMMAND} -E copy_if_different  "${SRC_FILE}" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE}
+@@ -226,12 +227,12 @@
+         DEPENDS ${PNG_LIB_TARGETS}
+         )
+     ADD_CUSTOM_TARGET(${DEST_FILE}_COPY ALL DEPENDS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE})
+-  else(WIN32 AND NOT CYGWIN AND NOT MSYS)
++  else()
+     get_filename_component(LINK_TARGET "${SRC_FILE}" NAME)
+     execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+     execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${LINK_TARGET}" ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${DEST_FILE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+     execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink "${LINK_TARGET}" ${DEST_FILE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+-  endif(WIN32 AND NOT CYGWIN AND NOT MSYS)
++  endif()
+ endmacro()
+ 
+ # libpng is a library so default to 'lib'
+@@ -260,11 +261,16 @@
+ 
+ # SET UP LINKS
+ if(PNG_SHARED)
+-  set_target_properties(${PNG_LIB_NAME} PROPERTIES
+-#   VERSION 16.${PNGLIB_RELEASE}.1.6.21
+-    VERSION 16.${PNGLIB_RELEASE}.0
+-    SOVERSION 16
+-    CLEAN_DIRECT_OUTPUT 1)
++    if(NO_SYMLINK)
++        set_target_properties(${PNG_LIB_NAME} PROPERTIES
++          CLEAN_DIRECT_OUTPUT 1)
++    else()
++        set_target_properties(${PNG_LIB_NAME} PROPERTIES
++      #   VERSION 16.${PNGLIB_RELEASE}.1.6.21
++          VERSION 16.${PNGLIB_RELEASE}.0
++          SOVERSION 16
++          CLEAN_DIRECT_OUTPUT 1)
++    endif()
+ endif()
+ if(PNG_STATIC)
+   # MSVC doesn't use a different file extension for shared vs. static

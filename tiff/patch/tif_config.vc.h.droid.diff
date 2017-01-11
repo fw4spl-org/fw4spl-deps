@@ -1,0 +1,50 @@
+diff --git a/libtiff/tif_config.vc.h b/libtiff/tif_config.vc.h
+index c297cf3..8233e3b 100644
+--- a/libtiff/tif_config.vc.h
++++ b/libtiff/tif_config.vc.h
+@@ -18,11 +18,14 @@
+ #define HAVE_SYS_TYPES_H 1
+ 
+ /* Define to 1 if you have the <io.h> header file. */
+-#define HAVE_IO_H 1
+-
+-/* Define to 1 if you have the <search.h> header file. */
+-#define HAVE_SEARCH_H 1
++#ifdef __WIN32__
++    #define HAVE_IO_H 1
++#endif
+ 
++#ifdef __WIN32__
++    /* Define to 1 if you have the <search.h> header file. */
++    #define HAVE_SEARCH_H 1
++#endif
+ /* Define to 1 if you have the `setmode' function. */
+ #define HAVE_SETMODE 1
+ 
+@@ -35,14 +38,21 @@
+ /* Signed 64-bit type formatter */
+ #define TIFF_INT64_FORMAT "%I64d"
+ 
+-/* Signed 64-bit type */
+-#define TIFF_INT64_T signed __int64
+-
++#ifdef __WIN32__
++    /* Signed 64-bit type */
++    #define TIFF_INT64_T signed __int64
++#else
++    #define TIFF_INT64_T long int
++#endif
+ /* Unsigned 64-bit type formatter */
+ #define TIFF_UINT64_FORMAT "%I64u"
+ 
+-/* Unsigned 64-bit type */
+-#define TIFF_UINT64_T unsigned __int64
++#ifdef __WIN32__
++    /* Unsigned 64-bit type */
++    #define TIFF_UINT64_T unsigned __int64
++#else
++    #define TIFF_UINT64_T unsigned long int
++#endif
+ 
+ /* Set the native cpu bit order */
+ #define HOST_FILLORDER FILLORDER_LSB2MSB

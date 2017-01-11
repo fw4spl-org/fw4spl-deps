@@ -4,7 +4,7 @@ project(cppunitBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://freefr.dl.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz)
+set(CACHED_URL http://downloads.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz)
 
 if(WIN32)
     set(CPPUNIT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
@@ -14,11 +14,11 @@ if(WIN32)
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
+        URL_HASH SHA256=ac28a04c8e6c9217d910b0ae7122832d28d9917fa668bcc9e0b8b09acb4ea44a
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${CPPUNIT_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
         CMAKE_ARGS ${CPPUNIT_CMAKE_ARGS}
-        STEP_TARGETS CopyConfigFileToInstall
     )
 else()
     set(FIX_CONFIGURE)
@@ -29,9 +29,10 @@ else()
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
+        URL_HASH SHA256=ac28a04c8e6c9217d910b0ae7122832d28d9917fa668bcc9e0b8b09acb4ea44a
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                         --enable-shared
                         --disable-static
                         LDFLAGS=-ldl
@@ -39,11 +40,10 @@ else()
                         ${FIX_CONFIGURE}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_cppunit} install
-        STEP_TARGETS CopyConfigFileToInstall 
     )
 
     ExternalProject_Add_Step(cppunit COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_cppunit} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_cppunit} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
 endif()
@@ -51,4 +51,5 @@ endif()
 ExternalProject_Add_Step(cppunit CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCppUnit.cmake ${CMAKE_INSTALL_PREFIX}/FindCppUnit.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

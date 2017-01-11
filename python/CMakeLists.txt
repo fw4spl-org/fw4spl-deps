@@ -4,34 +4,36 @@ project(pythonBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://www.python.org/ftp/python/2.7.8/Python-2.7.8.tgz)
+set(CACHED_URL http://www.python.org/ftp/python/3.5.2/Python-3.5.2.tgz)
+set(PYTHON_HASHSUM 1524b840e42cf3b909e8f8df67c1724012c7dc7f9d076d4feef2d3eff031e8a0)
 
 if(WIN32)
-    set(PYTHON_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    set(PYTHON_CMAKE_ARGS 
-        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-        -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-        -DENABLE_CURSES:BOOL=OFF
-        -DENABLE_CURSES_PANEL:BOOL=OFF
-        -DENABLE_CRYPT:BOOL=OFF
-        -DENABLE_MMAP:BOOL=OFF
-        -DENABLE_IO:BOOL=OFF
-        -DENABLE_MATH:BOOL=OFF
-        -DENABLE_PARSER:BOOL=OFF
-        -DENABLE_SHARED:BOOL=ON
-        -DENABLE_STATIC:BOOL=OFF
-    )
+
+    set(PYTHON_BUILD_CMD PCbuild/build.bat)
+    if(${IS_DEBUG})
+        set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -c Debug)
+    else()
+        set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -c Release)
+    endif()
+    
+    if(CMAKE_SIZEOF_VOID_P EQUAL 8) #x64
+        set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -p x64)
+    else()
+        set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -p Win32)
+    endif()
+
     ExternalProject_Add(
         python
         URL ${CACHED_URL}
+        URL_HASH SHA256=${PYTHON_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
-        DEPENDS zlib expat
-        PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${PYTHON_PATCH_DIR}/" "<SOURCE_DIR>/"
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        CMAKE_ARGS ${PYTHON_CMAKE_ARGS}
+        BUILD_IN_SOURCE 1
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${PYTHON_BUILD_CMD}
+        INSTALL_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/manual_win_install.py <SOURCE_DIR> ${CMAKE_INSTALL_PREFIX}/Python-3.5.2 amd64
         STEP_TARGETS CopyConfigFileToInstall
     )
-else(WIN32)
+else()
 
     if(NOT APPLE)
         if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -47,27 +49,28 @@ else(WIN32)
     
     if(${IS_DEBUG})
         list(APPEND CONFIGURE_CMD --with-debug --with-pydebug)
-    else(${IS_DEBUG})
+    else()
         list(APPEND CONFIGURE_CMD --without-debug)
-    endif(${IS_DEBUG})
+    endif()
     ExternalProject_Add(
         python
         URL ${CACHED_URL}
+        URL_HASH SHA256=${PYTHON_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND ${SETENV} ${CONFIGURE_CMD}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile -j${NUMBER_OF_PARALLEL_BUILD}
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_python} install
-        STEP_TARGETS CopyConfigFileToInstall
     )
     ExternalProject_Add_Step(python COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_python} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_python} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
-endif(WIN32)
+endif()
 
 
 ExternalProject_Add_Step(python CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-python.cmake ${CMAKE_INSTALL_PREFIX}/fw-python.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )

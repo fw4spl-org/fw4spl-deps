@@ -4,7 +4,7 @@ project(zlibBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://zlib.net/zlib-1.2.8.tar.gz)
+set(CACHED_URL http://zlib.net/zlib-1.2.10.tar.gz)
 
 set(ZLIB_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 set(PATCH_CMD)
@@ -15,6 +15,7 @@ endif()
 ExternalProject_Add(
     zlib
     URL ${CACHED_URL}
+    URL_HASH SHA256=8d7e9f698ce48787b6e1c67e6bff79e487303e66077e25cb9784ac8835978017
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}

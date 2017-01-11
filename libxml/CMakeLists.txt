@@ -5,12 +5,14 @@ project(libxmlBuilder)
 include(ExternalProject)
 
 
-set(CACHED_URL http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz)
+set(CACHED_URL http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz)
+set(LIBXML2_HASHSUM ffb911191e509b966deb55de705387f14156e1a56b21824357cdf0053233633c)
 
 set(LIBXML2_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 if(ANDROID)
-
+    set(CACHED_URL http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz)
+    set(LIBXML2_HASHSUM fd3c64cb66f2c4ea27e934d275904d92cec494a8e8405613780cbc8a71680fdb)
     set(LIBXML2_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
         -DXML2_BUILD_SHARED=BOOL:ON
     )
@@ -18,6 +20,7 @@ if(ANDROID)
     ExternalProject_Add(
         libxml
         URL ${CACHED_URL}
+        URL_HASH SHA256=${LIBXML2_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS libiconv zlib
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${LIBXML2_PATCH_DIR}/android" "<SOURCE_DIR>/"
@@ -42,9 +45,9 @@ elseif(WIN32)
     )
     if(IS_DEBUG)
         set(CONFIGURE_CMD ${CONFIGURE_CMD} debug=yes cruntime=/MDd)
-    else(IS_DEBUG)
+    else()
         set(CONFIGURE_CMD ${CONFIGURE_CMD} debug=no cruntime=/MD)
-    endif(IS_DEBUG)
+    endif()
 
     
     
@@ -65,6 +68,7 @@ elseif(WIN32)
     ExternalProject_Add(
         libxml
         URL ${CACHED_URL}
+        URL_HASH SHA256=${LIBXML2_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS libiconv zlib
         BUILD_IN_SOURCE 1
@@ -75,7 +79,7 @@ elseif(WIN32)
     )
     
 else()
-    set(CONFIGURE_CMD <SOURCE_DIR>/configure
+    set(CONFIGURE_CMD ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                       --enable-shared --disable-static --without-libintl --enable-extra-encodings
                       # FIXME : Issue with zlib:
                       # "Undefined reference to `gzdirect@ZLIB_1.2.2.3'"
@@ -85,11 +89,11 @@ else()
                       --without-python
                       --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    if(${IS_DEBUG})
+    if(IS_DEBUG)
         set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-debug)
-    else(${IS_DEBUG})
+    else()
         set(CONFIGURE_CMD ${CONFIGURE_CMD} --without-debug)
-    endif(${IS_DEBUG})
+    endif()
 
     if("${CMAKE_SYSTEM}" MATCHES "Linux")
         set(CONFIGURE_CMD ${CONFIGURE_CMD} --with-iconv=${CMAKE_INSTALL_PREFIX})
@@ -103,6 +107,7 @@ else()
     ExternalProject_Add(
         libxml
         URL ${CACHED_URL}
+        URL_HASH SHA256=${LIBXML2_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DEPENDS ${EXTRA_DEPENDS} zlib
         BUILD_IN_SOURCE 1
@@ -111,7 +116,7 @@ else()
         INSTALL_COMMAND ${MAKE} DESTDIR=${INSTALL_PREFIX_libxml} install
     )
     ExternalProject_Add_Step(libxml COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libxml} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libxml} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
 

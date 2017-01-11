@@ -1,0 +1,22 @@
+--- a/cmake/pcl_targets.cmake	2015-10-01 11:55:47.000000000 +0200
++++ b/cmake/pcl_targets.cmake	2015-10-01 11:56:30.000000000 +0200
+@@ -216,8 +216,8 @@
+     endif()
+     #
+     set_target_properties(${_name} PROPERTIES
+-        VERSION ${PCL_VERSION}
+-        SOVERSION ${PCL_MAJOR_VERSION}.${PCL_MINOR_VERSION}
++        #VERSION ${PCL_VERSION}
++        #SOVERSION ${PCL_MAJOR_VERSION}.${PCL_MINOR_VERSION}
+         DEFINE_SYMBOL "PCLAPI_EXPORTS")
+     if(USE_PROJECT_FOLDERS)
+       set_target_properties(${_name} PROPERTIES FOLDER "Libraries")
+@@ -225,7 +225,7 @@
+ 
+     install(TARGETS ${_name}
+         RUNTIME DESTINATION ${BIN_INSTALL_DIR} COMPONENT pcl_${_component}
+-        LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT pcl_${_component}
++        LIBRARY DESTINATION ${LIB_INSTALL_DIR} COMPONENT pcl_${_component} NAMELINK_SKIP
+         ARCHIVE DESTINATION ${LIB_INSTALL_DIR} COMPONENT pcl_${_component})
+ 
+ endmacro(PCL_ADD_LIBRARY)

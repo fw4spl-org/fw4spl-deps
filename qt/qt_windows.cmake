@@ -4,7 +4,9 @@ if(NOT MAKE_QT)
     set(MAKE_QT ${MAKE})
 endif()
 
-if(MSVC12)
+if(MSVC14)
+    set(PLATFORM "win32-msvc2015")
+elseif(MSVC12)
     set(PLATFORM "win32-msvc2013")
 elseif(MSVC10)
     set(PLATFORM "win32-msvc2010")
@@ -25,17 +27,7 @@ set(QT_CONFIGURE_CMD ./configure
     -no-fontconfig
     -opengl desktop
     
-    -skip qtactiveqt
-    -skip qtconnectivity
-    -skip qtenginio
-    -skip qtsensors
-    -skip qttranslations
-    -skip qtwayland
-    -skip qtwebengine
-    -skip qtwebchannel
-    -skip qtwebkit 
-    -skip qtwebkit-examples
-    -skip qtwebsockets 
+    ${QT_SKIP_MODULES_LIST} 
     
     -prefix ${CMAKE_INSTALL_PREFIX}
     -I ${CMAKE_INSTALL_PREFIX}/include
@@ -44,12 +36,13 @@ set(QT_CONFIGURE_CMD ./configure
     -I ${CMAKE_INSTALL_PREFIX}/include/icu
     -arch windows
     -no-angle
-    -c++11
+    -c++std c++11
     -platform ${PLATFORM}
     -l zlib
     -l jpeg
     -l png
     -l freetype
+    -wmf-backend
 )
 
 #hack: rcc.exe need zlib in path
@@ -61,12 +54,11 @@ ExternalProject_Add(
     qt
     URL ${CACHED_URL}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    URL_HASH MD5=${QT5_HASHSUM}
+    URL_HASH SHA256=${QT5_HASHSUM}
     BUILD_IN_SOURCE 1
     PATCH_COMMAND ${QT_PATCH_CMD}
     DEPENDS zlib jpeg libpng tiff icu4c freetype
     CONFIGURE_COMMAND ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE_QT} -f Makefile
     INSTALL_COMMAND ${MAKE_QT} -f Makefile install
-    STEP_TARGETS CopyConfigFileToInstall
 )

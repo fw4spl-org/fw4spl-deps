@@ -5,6 +5,7 @@ project(tiffBuilder)
 include(ExternalProject)
 
 set(CACHED_URL http://download.osgeo.org/libtiff/tiff-4.0.3.zip)
+set(TIFF_HASHSUM dd70349cedb3981371686e1c9b89a7f9)
 
 if(WIN32 OR ANDROID)
     
@@ -14,8 +15,12 @@ if(WIN32 OR ANDROID)
     
     if(ANDROID)
         list(APPEND TIFF_PATCH_COMMAND
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TIFF_PATCH_DIR}/tif_config.vc.h" "<SOURCE_DIR>/libtiff"
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different "${TIFF_PATCH_DIR}/tiffconf.vc.h" "<SOURCE_DIR>/libtiff" 
+                COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/tif_config.vc.h.droid.diff -d <SOURCE_DIR>
+                COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/tiffconf.vc.h.droid.diff -d <SOURCE_DIR>
+            )
+    else()
+        list(APPEND TIFF_PATCH_COMMAND
+                COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/tif_config.vc.h.win32.diff -d <SOURCE_DIR>
             )
     endif()
              
@@ -25,6 +30,7 @@ if(WIN32 OR ANDROID)
         tiff
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
+        URL_HASH MD5=${TIFF_HASHSUM}
         DEPENDS jpeg zlib
         PATCH_COMMAND ${TIFF_PATCH_COMMAND}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
@@ -32,13 +38,15 @@ if(WIN32 OR ANDROID)
     )
     
 else()
+
     ExternalProject_Add(
         tiff
         URL ${CACHED_URL}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
+        URL_HASH MD5=${TIFF_HASHSUM}
         BUILD_IN_SOURCE 1
         DEPENDS jpeg zlib
-        CONFIGURE_COMMAND <SOURCE_DIR>/configure
+        CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                         --enable-shared
                         --disable-static
                         --enable-cxx
@@ -52,7 +60,7 @@ else()
     )
 
     ExternalProject_Add_Step(tiff COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_tiff} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.txt
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_tiff} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
         DEPENDEES install
     )
 

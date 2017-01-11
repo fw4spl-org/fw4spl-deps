@@ -38,7 +38,8 @@ else()
     list(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
     #fixed error: 'constexpr' needed for in-class initialization of static data member 'tolerance' of non-integral type
     # -> define VCL_CAN_STATIC_CONST_INIT_FLOAT to 0
-    set(VXL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcl_config_compiler.h.in.diff -d <SOURCE_DIR>)
+    set(VXL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcl_config_compiler.h.in.diff -d <SOURCE_DIR>
+              COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/gcc5.diff -d <SOURCE_DIR>)
     if(ANDROID)
         list(APPEND VXL_PATCH_CMD
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/config_CMakeLists.txt.diff -d <SOURCE_DIR>
@@ -57,16 +58,17 @@ set(CACHED_URL https://github.com/vxl/vxl/archive/fbe829dd16e4c1bdf312cf287b33c6
 ExternalProject_Add(
     vxl
     URL ${CACHED_URL}
+    URL_HASH SHA256=f4f6315dd7905e50b11cb93bb4d81a0a18b733c17629b824265f97b1b4af2644
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME vxl_1.18.0.tar.gz
     DEPENDS zlib jpeg libpng tiff expat
     PATCH_COMMAND ${VXL_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${VXL_CMAKE_ARGS}
-    STEP_TARGETS CopyConfigFileToInstall
 )
 
 ExternalProject_Add_Step(vxl CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VXL.cmake ${CMAKE_INSTALL_PREFIX}/fw-VXL.cmake
     COMMENT "Install configuration file"
+    DEPENDEES install
 )
