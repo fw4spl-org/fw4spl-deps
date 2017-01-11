@@ -46,7 +46,7 @@ endif()
 
 if(APPLE)
     ExternalProject_Add_Step(qt FRAMEWORK_FIXUP
-        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../CMake/OSXTools/osx_qt_symbolic_link.py
+        COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/OSXTools/osx_qt_symbolic_link.py
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
         DEPENDEES COPY_FILES
      )
