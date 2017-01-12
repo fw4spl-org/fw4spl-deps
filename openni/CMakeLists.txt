@@ -14,6 +14,12 @@ if(WIN32)
         set (KINECT_BUILD_STEP "")
     endif()
 
+	if(MSVC AND MSVC_VERSION GREATER 1800)
+		set(OPENNI_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+		set(OPENNI_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${OPENNI_PATCH_DIR}/werror.diff" -d "<SOURCE_DIR>")
+		set(OPENNI_CONFIGURE_CMD devenv OpenNI.sln /upgrade)
+	endif()
+	
     # get archive on commit 70da8eb: Upgrade all VS projects to MSVC12 (Visual Studio 2013).
     set(CACHED_URL https://github.com/fw4spl-org/OpenNI2/archive/70da8eb798048a7c5baa5ae20672b5a2dc6cc7fe.tar.gz)
     ExternalProject_Add(
@@ -22,7 +28,8 @@ if(WIN32)
             URL_HASH SHA256=af82d50e2134e9ff41c07a1adf70a4e3db5049f643c3421570b83d2c08f9db23
             DOWNLOAD_DIR ${ARCHIVE_DIR}
             BUILD_IN_SOURCE 1
-            CONFIGURE_COMMAND ""
+            PATCH_COMMAND ${OPENNI_PATCH_CMD}
+            CONFIGURE_COMMAND ${OPENNI_CONFIGURE_CMD}
             BUILD_COMMAND devenv OpenNI.sln /project OpenNI /build ${CMAKE_BUILD_TYPE}
                   COMMAND devenv OpenNI.sln /project PS1080 /build ${CMAKE_BUILD_TYPE}
                   COMMAND ${KINECT_BUILD_STEP}
