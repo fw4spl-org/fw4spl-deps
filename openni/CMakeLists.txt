@@ -11,6 +11,7 @@ if(WIN32)
     if(DEFINED ENV{KINECTSDK10_DIR})
         set (KINECT_BUILD_STEP devenv OpenNI.sln /project Kinect /build ${CMAKE_BUILD_TYPE})
     else()
+        message(WARNING "Kinect SDK is not found, the kinect driver will not be compiled.")
         set (KINECT_BUILD_STEP "")
     endif()
 
