@@ -227,3 +227,21 @@ diff -uNr a/Source/Drivers/Kinect/Kinect.vcxproj openni/Source/Drivers/Kinect/Ki
      </Link>
    </ItemDefinitionGroup>
    <ItemGroup>
+diff -uNr a/OpenNI.sln b/OpenNI.sln
+--- a/OpenNI.sln	2014-12-22 10:35:13.000000000 +0100
++++ b/OpenNI.sln	2017-01-31 10:02:07.358619700 +0100
+@@ -83,14 +83,6 @@
+ 		{72D595BB-8C52-449B-91DB-0E9F6AEAF53A} = {72D595BB-8C52-449B-91DB-0E9F6AEAF53A}
+ 	EndProjectSection
+ EndProject
+-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Install", "Packaging\Install\Install.wixproj", "{BAEB9C48-562C-4D56-A6CD-18932265480A}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{5B74F010-8B79-46B5-B906-C2B56CDB3386} = {5B74F010-8B79-46B5-B906-C2B56CDB3386}
+-		{D5709FB9-909D-415F-8F86-2F25BEF6CE23} = {D5709FB9-909D-415F-8F86-2F25BEF6CE23}
+-		{1723CBBA-8EE7-439A-93FB-2E94B4DB2E63} = {1723CBBA-8EE7-439A-93FB-2E94B4DB2E63}
+-		{E636BACA-795F-41CF-BC52-14C727BF014E} = {E636BACA-795F-41CF-BC52-14C727BF014E}
+-	EndProjectSection
+-EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kinect", "Source\Drivers\Kinect\Kinect.vcxproj", "{E636BACA-795F-41CF-BC52-14C727BF014E}"
+ 	ProjectSection(ProjectDependencies) = postProject
+ 		{72D595BB-8C52-449B-91DB-0E9F6AEAF5BB} = {72D595BB-8C52-449B-91DB-0E9F6AEAF5BB}
