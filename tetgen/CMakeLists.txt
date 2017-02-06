@@ -7,14 +7,16 @@ include(ExternalProject)
 set(TETGEN_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 set(TETGEN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
-set(CACHED_URL http://tetgen.org/files/tetgen1.4.3.tar.gz)
+set(CACHED_URL http://www.tetgen.org/1.5/src/tetgen1.5.0.tar.gz)
+
+set(TETGEN_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${TETGEN_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>)
 
 ExternalProject_Add(
     tetgen
     URL ${CACHED_URL}
-    URL_HASH SHA256=952711bb06b7f64fd855eb24c33f08e3faf40bdd54764de10bbe5ed5b0dce034
+    URL_HASH SHA256=4d114861d5ef2063afd06ef38885ec46822e90e7b4ea38c864f76493451f9cf3
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${TETGEN_PATCH_DIR}/" "<SOURCE_DIR>/"
+    PATCH_COMMAND ${TETGEN_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${TETGEN_CMAKE_ARGS}
 )
