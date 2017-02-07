@@ -131,7 +131,7 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
         endif()
     endif()
 else()
-    message("warning, no acceptable version of CUDA or supported compiler found")
+    message("warning, no acceptable version of CUDA or supported compiler found.\nOnly features that do not depend of CUDA will be built.")
 endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
