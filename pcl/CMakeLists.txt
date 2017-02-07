@@ -132,17 +132,6 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
     endif()
 else()
     message("warning, no acceptable version of CUDA or supported compiler found")
-    list(APPEND PCL_CMAKE_ARGS -DBUILD_tracking:BOOL=OFF
-                               -DBUILD_segmentation:BOOL=OFF
-                               -DBUILD_simulation:BOOL=OFF
-                               -DBUILD_stereo:BOOL=OFF
-                               -DBUILD_surface_on_nurbs:BOOL=OFF
-                               -DBUILD_outofcore:BOOL=OFF
-                               -DBUILD_recognition:BOOL=OFF
-                               -DBUILD_registration:BOOL=OFF
-                               -DBUILD_keypoints:BOOL=OFF
-                               -DBUILD_ml:BOOL=OFF
-    )
 endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
