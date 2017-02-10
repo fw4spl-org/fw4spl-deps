@@ -23,11 +23,11 @@ set(SOFA_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DSOFA_TESTS:BOOL=OFF
 )
 
-set(CACHED_URL https://gforge.inria.fr/git/sofa/sofa.git)
+set(CACHED_URL https://github.com/sofa-framework/sofa.git)
 
 
 # Getting fixed rev with working compilations in all plateforms (except Mac)
-set(SOFA_REV bb5b0b0cceb4bb86301effd9eaaa9ff770557103)
+set(SOFA_REV afce0f18c733f4b6e9dabc4a2f7214007432be3e)
 
 set(SOFA_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(SOFA_PATCH_CMD ${CMAKE_COMMAND} -E remove_directory "<SOURCE_DIR>/extlibs/miniBoost/"
