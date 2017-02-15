@@ -16,7 +16,7 @@ find_library(OPENNI2_LIBRARY
 )
 
 # Find include (not useful for windows)
-find_path(OPENNI2_INCLUDE_DIR
+find_path(OPENNI2_INCLUDE_DIRS
     NAMES OpenNI.h
     PATH_SUFFIXES include/openni2/
 )
@@ -27,7 +27,7 @@ find_package_handle_standard_args(OpenNI2 DEFAULT_MSG OPENNI2_LIBRARY OPENNI2_IN
 message(STATUS "(OPENNI2_FOUND : ${OPENNI2_FOUND} include: ${OPENNI2_INCLUDE_DIRS}, lib: ${OPENNI2_LIBRARY})")
 
 mark_as_advanced(OPENNI2_FOUND)
-set(OPENNI2_FOUND FLASE CACHE BOOL "" FORCE)
+set(OPENNI2_FOUND FALSE CACHE BOOL "" FORCE)
 
 if(OPENNI2_FOUND)
     set(OPENNI2_FOUND TRUE CACHE BOOL "" FORCE)
