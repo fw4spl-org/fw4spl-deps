@@ -136,6 +136,8 @@ endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(PCL_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>")
+# Enable support for SM 6.1 hardware in pcl::gpu
+list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/cuda_pascal_support.diff -d <SOURCE_DIR>)
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()
