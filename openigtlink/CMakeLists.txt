@@ -28,6 +28,12 @@ else()
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/Source/igtlImageMessage.cxx "<SOURCE_DIR>/Source/igtlutil/igtlImageMessage.cxx")
 endif()
 
+if(APPLE)
+    list(APPEND PATCH_CMD
+        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/macos_socket_deadlock_workaround.diff -d <SOURCE_DIR>
+    )
+endif()
+
 ExternalProject_Add(
     openigtlink
     URL ${CACHED_URL}

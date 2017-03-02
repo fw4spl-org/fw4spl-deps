@@ -1,0 +1,11 @@
+--- a/Source/igtlSocket.cxx	2017-03-02 11:08:56.000000000 +0100
++++ b/Source/igtlSocket.cxx	2017-03-02 11:09:58.000000000 +0100
+@@ -47,6 +47,8 @@
+ #if defined(_WIN32) && !defined(__CYGWIN__)
+ #define WSA_VERSION MAKEWORD(1,1)
+ #define igtlCloseSocketMacro(sock) (closesocket(sock))
++#elif defined( __APPLE__)
++#define igtlCloseSocketMacro(sock) (close(sock))
+ #else
+ #define igtlCloseSocketMacro(sock) (shutdown(sock, 2))
+ #endif
