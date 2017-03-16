@@ -27,8 +27,8 @@ set(VTK_CMAKE_ARGS
 
 if(NOT ANDROID)
 
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.0.0.tar.gz)
-    set(VTK_HASHSUM 8edb4a681b948f9c7c318f50d57bc23146095464539bfd00ae09e5158de17b97)
+    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
+    set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
 
     list(APPEND VTK_CMAKE_ARGS
         -DVTK_USE_GL2PS:BOOL=ON
@@ -58,9 +58,9 @@ if(NOT ANDROID)
     )
     set(EXTRA_DEPENDS qt)
 else( )
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.0.0.tar.gz)
-    set(VTK_HASHSUM 8edb4a681b948f9c7c318f50d57bc23146095464539bfd00ae09e5158de17b97)
-    
+    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
+    set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
+
     add_definitions(-DANDROID)
 
     list(APPEND VTK_CMAKE_ARGS
