@@ -1,6 +1,6 @@
---- a/CMake/vtkModuleMacros.cmake	2016-04-19 10:11:19.000000000 +0200
-+++ b/CMake/vtkModuleMacros.cmake	2016-04-19 10:11:47.000000000 +0200
-@@ -401,7 +401,7 @@
+--- a/CMake/vtkModuleMacros.cmake	2016-11-14 16:05:14.000000000 +0100
++++ b/CMake/vtkModuleMacros.cmake"	2017-03-17 14:02:09.602538200 +0100
+@@ -413,7 +413,7 @@
  # VTK_CUSTOM_LIBRARY_SUFFIX will override the suffix.
  function(vtk_target_name _name)
    get_property(_type TARGET ${_name} PROPERTY TYPE)

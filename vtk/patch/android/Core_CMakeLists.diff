@@ -1,14 +1,16 @@
---- a/Common/Core/CMakeLists.txt	2016-04-18 17:54:34.000000000 +0200
-+++ b/Common/Core/CMakeLists.txt	2016-04-18 17:54:57.000000000 +0200
-@@ -624,4 +624,10 @@
+--- a/Common/Core/CMakeLists.txt	2016-11-14 16:05:14.000000000 +0100
++++ b/Common/Core/CMakeLists.txt"	2017-03-17 11:42:05.017722200 +0100
+@@ -719,8 +719,10 @@
  
  vtk_module_library(vtkCommonCore ${Module_SRCS})
  
 -vtk_module_link_libraries(vtkCommonCore LINK_PRIVATE ${CMAKE_THREAD_LIBS} LINK_PUBLIC ${VTK_SMP_IMPLEMENTATION_LIBRARIES})
-+if(ANDROID)
+-
+ if(ANDROID)
+-  target_link_libraries(vtkCommonCore LINK_PRIVATE log)
 +    find_library(LIBLOG NAMES log REQUIRED PATH "${ANDROID_SYSROOT}/usr/lib")
 +    find_library(LIBANDROID NAMES android REQUIRED PATH "${ANDROID_SYSROOT}/usr/lib")
 +    vtk_module_link_libraries(vtkCommonCore LINK_PRIVATE ${CMAKE_THREAD_LIBS} LINK_PUBLIC ${VTK_SMP_IMPLEMENTATION_LIBRARIES} ${LIBLOG} ${LIBANDROID})
 +else()
 +    vtk_module_link_libraries(vtkCommonCore LINK_PRIVATE ${CMAKE_THREAD_LIBS} LINK_PUBLIC ${VTK_SMP_IMPLEMENTATION_LIBRARIES})
-+endif()
+ endif()
