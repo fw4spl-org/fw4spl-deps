@@ -18,6 +18,9 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DGDCM_BUILD_EXAMPLES:BOOL=OFF
                     -DGDCM_BUILD_APPLICATIONS:BOOL=OFF
                     -DGDCM_USE_WXWIDGETS:BOOL=OFF
+                    # Do not build man pages, troubles were reported on MacOsX
+                    # https://github.com/fw4spl-org/fw4spl/issues/8
+                    -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF
                     -DUSE_ITK:BOOL=OFF
 )
 
