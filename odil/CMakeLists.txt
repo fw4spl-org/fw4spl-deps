@@ -5,8 +5,9 @@ project(odilBuilder)
 include(ExternalProject)
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
-set(CACHED_URL https://github.com/fw4spl-org/odil/archive/0.7.3.1.zip)
+set(VERSION 0.7.3.1)
 
+set(CACHED_URL https://github.com/fw4spl-org/odil/archive/${VERSION}.zip)
 if(WIN32)
     # Grab compile definitions from fw-boost.cmake
     get_directory_property(ODIL_DEFINITIONS COMPILE_DEFINITIONS)
@@ -42,9 +43,9 @@ endif()
 ExternalProject_Add(
     odil
     URL ${CACHED_URL}
-    URL_HASH SHA256=c02bb40b862fd7ddfa5234e30d5436154639b2d97b23db6eb72ea0f81d95fb0a
+    URL_HASH SHA256=53367a2f1440f92269beb62839b03a1dbc523b5d2ea98c3a53cf62da72141fee
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME odil0.7.3.1.zip
+    DOWNLOAD_NAME odil${VERSION}.zip
     DEPENDS boost dcmtk jsoncpp icu4c log4cpp 
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ODIL_CMAKE_ARGS}
