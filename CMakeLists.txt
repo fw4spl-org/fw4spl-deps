@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(BinPkgs)
 
+
 #looking for patch command
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/patch.cmake)
 
@@ -87,6 +88,7 @@ option(ENABLED_OGRE_DEPS "Set to ON to build ogre" OFF)
 option(ENABLED_SOFA_DEPS "Set to ON to build sofa" OFF)
 option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
 option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
+option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
 
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
@@ -159,6 +161,12 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES freeimage)
         list(APPEND SUBDIRECTORIES ogre)
     endif()
+    
+    if(ENABLE_ODIL)
+        list(APPEND SUBDIRECTORIES jsoncpp)
+        list(APPEND SUBDIRECTORIES log4cpp)
+        list(APPEND SUBDIRECTORIES odil)
+    endif()
 
 ##ANDROID DEPS##
 else()
@@ -196,6 +204,7 @@ else()
     list(APPEND SUBDIRECTORIES libarchive)
     list(APPEND SUBDIRECTORIES openigtlink)
     list(APPEND SUBDIRECTORIES zeromq)
+
 endif()
 
 macro(createUninstallTarget SUBDIR )
@@ -236,6 +245,7 @@ foreach(subdir ${SUBDIRECTORIES})
     createCleanTarget(${subdir})
 
     add_subdirectory(${subdir})
+    
 endforeach()
 
 set(SUBDIRECTORIES "")
