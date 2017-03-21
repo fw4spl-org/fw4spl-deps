@@ -21,7 +21,6 @@ if(WIN32)
                         -DBUILD_WRAPPERS=OFF
                         -DBUILD_EXAMPLES=OFF
                         -DBUILD_TESTING=OFF
-                        -DCMAKE_CXX_FLAGS:STRING=${ODIL_CMAKE_CXX_FLAGS}
                         -DPC_ICU_INCLUDE_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/include/icu
                         -DLog4Cpp_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DJsonCpp_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
@@ -36,7 +35,6 @@ else()
                         -DBoost_USE_DEBUG_PYTHON=ON
                         -DBoost_USE_MULTITHREADED=ON
                         -DBoost_COMPILER:STRING=${Boost_COMPILER}
-                        -DCMAKE_CXX_FLAGS:STRING=-std=c++11
     )
 endif()
 
