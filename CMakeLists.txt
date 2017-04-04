@@ -287,13 +287,8 @@ add_custom_target(fix_path
 
 ####################################################################################################################
 # CPack related code
-
-install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/ DESTINATION ${CMAKE_BUILD_TYPE}
-        PATTERN "bin/*"
-        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-install(CODE "set(INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
-install(CODE "set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
+install(CODE "set(CPACK_SRC_INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/cpack_install.cmake")
 install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/fix_path.cmake")
 
 set(CPACK_PACKAGE_VERSION_MAJOR 11)
