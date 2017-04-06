@@ -7,7 +7,7 @@ include(ExternalProject)
 set(TETGEN_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 set(TETGEN_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
-set(CACHED_URL http://www.tetgen.org/1.5/src/tetgen1.5.0.tar.gz)
+set(CACHED_URL http://http.debian.net/debian/pool/main/t/tetgen/tetgen_1.5.0.orig.tar.gz)
 
 set(TETGEN_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${TETGEN_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>)
 

@@ -115,9 +115,9 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
         if(${CMAKE_MAKE_PROGRAM} STREQUAL "jom")
             set(PCL_TARGETS pcl_common pcl_octree pcl_io pcl_io_ply pcl_kdtree pcl_search pcl_sample_consensus pcl_filters
                             pcl_2d pcl_features pcl_ml pcl_segmentation pcl_visualization pcl_surface pcl_registration
-                            pcl_keypoints pcl_tracking pcl_recognition pcl_stereo pcl_cuda_segmentation
-                            pcl_cuda_sample_consensus pcl_outofcore pcl_people)
-            set(PCL_GPU_TARGETS pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree pcl_gpu_features pcl_gpu_kinfu pcl_gpu_kinfu_large_scale pcl_gpu_segmentation)
+                            pcl_keypoints pcl_tracking pcl_recognition pcl_stereo pcl_outofcore pcl_people)
+            set(PCL_GPU_TARGETS pcl_cuda_segmentation pcl_cuda_sample_consensus pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree
+                                pcl_gpu_features pcl_gpu_kinfu pcl_gpu_kinfu_large_scale pcl_gpu_segmentation)
             set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} ${PCL_TARGETS}
                 COMMAND ${CMAKE_MAKE_PROGRAM} -j1 ${PCL_GPU_TARGETS})
         endif()
@@ -131,22 +131,13 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
         endif()
     endif()
 else()
-    message("warning, no acceptable version of CUDA or supported compiler found")
-    list(APPEND PCL_CMAKE_ARGS -DBUILD_tracking:BOOL=OFF
-                               -DBUILD_segmentation:BOOL=OFF
-                               -DBUILD_simulation:BOOL=OFF
-                               -DBUILD_stereo:BOOL=OFF
-                               -DBUILD_surface_on_nurbs:BOOL=OFF
-                               -DBUILD_outofcore:BOOL=OFF
-                               -DBUILD_recognition:BOOL=OFF
-                               -DBUILD_registration:BOOL=OFF
-                               -DBUILD_keypoints:BOOL=OFF
-                               -DBUILD_ml:BOOL=OFF
-    )
+    message("warning, no acceptable version of CUDA or supported compiler found.\nOnly features that do not depend of CUDA will be built.")
 endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(PCL_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>")
+# Enable support for SM 6.1 hardware in pcl::gpu
+list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/cuda_pascal_support.diff -d <SOURCE_DIR>)
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()
