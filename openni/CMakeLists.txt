@@ -15,24 +15,18 @@ if(WIN32)
         set (KINECT_BUILD_STEP "")
     endif()
 
-	if(MSVC AND MSVC_VERSION GREATER 1800)
-		set(OPENNI_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-		set(OPENNI_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${OPENNI_PATCH_DIR}/werror.diff" -d "<SOURCE_DIR>")
-		set(OPENNI_CONFIGURE_CMD devenv OpenNI.sln /upgrade)
-	endif()
-	
-    # get archive on commit 70da8eb: Upgrade all VS projects to MSVC12 (Visual Studio 2013).
-    set(CACHED_URL https://github.com/fw4spl-org/OpenNI2/archive/70da8eb798048a7c5baa5ae20672b5a2dc6cc7fe.tar.gz)
+    # get archive on commit 958951f: fix(orbbec): removed warning as error.
+    set(CACHED_URL https://github.com/fw4spl-org/OpenNI2/archive/958951f7a6c03c36915e9caf5084b15ecb301d2e.tar.gz)
     ExternalProject_Add(
             openni
             URL ${CACHED_URL}
-            URL_HASH SHA256=af82d50e2134e9ff41c07a1adf70a4e3db5049f643c3421570b83d2c08f9db23
+            URL_HASH SHA256=a86911d2ff9c76598d620d5b193ec0fad56037a11a7d7f0f4a493ccff6ba638c
             DOWNLOAD_DIR ${ARCHIVE_DIR}
             BUILD_IN_SOURCE 1
-            PATCH_COMMAND ${OPENNI_PATCH_CMD}
-            CONFIGURE_COMMAND ${OPENNI_CONFIGURE_CMD}
+            CONFIGURE_COMMAND ""
             BUILD_COMMAND devenv OpenNI.sln /project OpenNI /build ${CMAKE_BUILD_TYPE}
                   COMMAND devenv OpenNI.sln /project PS1080 /build ${CMAKE_BUILD_TYPE}
+                  COMMAND devenv OpenNI.sln /project ORBBEC /build ${CMAKE_BUILD_TYPE}
                   COMMAND ${KINECT_BUILD_STEP}
             INSTALL_COMMAND ""
     )
@@ -48,7 +42,7 @@ if(WIN32)
             DEPENDEES install
     )
 else()
-    set(CACHED_URL https://github.com/fw4spl-org/OpenNI2/archive/a2f6724871cad1fbb8d0b37b914128e8e5e137d4.tar.gz)
+    set(CACHED_URL https://github.com/fw4spl-org/OpenNI2/archive/958951f7a6c03c36915e9caf5084b15ecb301d2e.tar.gz)
     # Building Prerequisites:
     # - LibUSB 1.0.x
     #     sudo apt-get install libusb-1.0-0-dev
@@ -65,12 +59,12 @@ else()
             openni
             DEPENDS libusb
             URL ${CACHED_URL}
-            URL_HASH SHA256=ab10b74db61e3d40fdd3abb1c16df9d0cf415bcf08bde159cb7af27d3b32b311
+            URL_HASH SHA256=a86911d2ff9c76598d620d5b193ec0fad56037a11a7d7f0f4a493ccff6ba638c
             DOWNLOAD_DIR ${ARCHIVE_DIR}
             DOWNLOAD_NAME openni_2.2.0.xx.tar.gz
             BUILD_IN_SOURCE 1
             CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${CMAKE_BUILD_TYPE} INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile minimum
+            BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${CMAKE_BUILD_TYPE} INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile
             INSTALL_COMMAND ""
     )
 
@@ -86,8 +80,12 @@ else()
     if(NOT APPLE)
         ExternalProject_Add_Step(openni INSTALL_RULES
                 COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Packaging/Linux/primesense-usb.rules ${CMAKE_INSTALL_PREFIX}/primesense-usb.rules
+                COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Packaging/Linux/orbbec-usb.rules ${CMAKE_INSTALL_PREFIX}/orbbec-usb.rules
+                COMMAND ${CMAKE_COMMAND} -E echo "LINUX WARNING : The file '${CMAKE_INSTALL_PREFIX}/primesense-usb.rules' should be copied \
+                                                  to '/etc/udev/rules.d/557-primesense-usb.rules' with admin rights (sudo)"
+                COMMAND ${CMAKE_COMMAND} -E echo "LINUX WARNING : The file '${CMAKE_INSTALL_PREFIX}/orbbec-usb.rules' should be copied \
+                                                  to '/etc/udev/rules.d/558-orbbec-usb.rules' with admin rights (sudo)"
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-                COMMENT "LINUX WARNING : The file '${CMAKE_INSTALL_PREFIX}/primesense-usb.rules' should be copy to '/etc/udev/rules.d/557-primesense-usb.rules' with admin rights (sudo)"
                 DEPENDEES INSTALL_OPENNI
         )
     endif()
