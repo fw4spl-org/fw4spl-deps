@@ -6,23 +6,22 @@ include(ExternalProject)
 set(CACHED_URL "https://sourceforge.net/projects/log4cpp/files/log4cpp-1.1.x%20%28new%29/log4cpp-1.1/log4cpp-1.1.1.tar.gz/download") 
 set(LOG4CPP_LIBRARY_NAME Log4Cpp)
 
+set(LOG4CPP_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(LOG4CPP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DBUILD_SHARED_LIBS:BOOL=ON
-                    -DBUILD_STATIC_LIBS:BOOL=OFF
-                    -DLIBRARY_INSTALL_DIR:PATH=${CMAKE_INSTALL_PREFIX}/lib
-                    -DLIBRARY_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
-                    -DLIBRARY_DESTINATION:PATH=${CMAKE_INSTALL_PREFIX}
 )
 
 if(WIN32)
+    set(LOG4CPP_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${LOG4CPP_PATCH_DIR}/log4cpp.diff -d <SOURCE_DIR>)
 	ExternalProject_Add(
         log4cpp
         URL ${CACHED_URL}
         URL_HASH SHA256=35abf332630a6809c969276b1d60b90c81a95daf24c86cfd7866ffef72f9bed0
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         DOWNLOAD_NAME log4cpp-1.1.1.zip
+        PATCH_COMMAND ${LOG4CPP_PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        CMAKE_ARGS ${COMMON_CMAKE_ARGS}
+        CMAKE_ARGS ${LOG4CPP_CMAKE_ARGS}
     )
 else()
     ExternalProject_Add(
