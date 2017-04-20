@@ -20,7 +20,7 @@ find_path(Log4Cpp_INCLUDE_DIR
 
 
 find_library(Log4Cpp_LIBRARY
-    NAMES log4cpp log4cppD liblog4cpp Log4Cpp
+    NAMES log4cpp log4cppD liblog4cpp liblog4cppD Log4Cpp
     HINTS ${Log4Cpp_ROOT_DIR}/lib
 )
 

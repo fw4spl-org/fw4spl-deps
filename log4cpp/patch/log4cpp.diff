@@ -1,0 +1,31 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 708ae4f..e3044b4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -24,6 +24,10 @@ ELSE (WIN32)
+   ENDIF (APPLE)
+ ENDIF (WIN32)
+
++if(BUILD_SHARED_LIBS)
++    add_definitions(-DLOG4CPP_HAS_DLL -DLOG4CPP_BUILD_DLL)
++endif()
++
+ IF ( CMAKE_BUILD_TYPE MATCHES "Debug" )
+   SET ( LOG4CPP_LIBRARY_NAME "log4cppD" )
+ ELSE ( CMAKE_BUILD_TYPE MATCHES "Debug" )
+@@ -87,7 +91,6 @@ ENDIF (WIN32)
+ INSTALL (
+   DIRECTORY include/log4cpp
+   DESTINATION include
+-  PATTERN "config.h" EXCLUDE
+   PATTERN ".svn" EXCLUDE
+   PATTERN "*.am" EXCLUDE
+   PATTERN "*.in" EXCLUDE
+@@ -96,4 +99,6 @@ INSTALL (
+ INSTALL (
+   TARGETS ${LOG4CPP_LIBRARY_NAME}
+   ARCHIVE DESTINATION lib
++  LIBRARY DESTINATION lib
++  RUNTIME DESTINATION bin
+   )
+
