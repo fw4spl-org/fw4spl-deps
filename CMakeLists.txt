@@ -129,10 +129,6 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES openigtlink)
     list(APPEND SUBDIRECTORIES zeromq)
 
-    if(UNIX)
-        # Needed by openni
-        list(APPEND SUBDIRECTORIES libusb)
-    endif()
     list(APPEND SUBDIRECTORIES openni)
 
     if(ENABLED_PCL_DEPS)

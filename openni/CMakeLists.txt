@@ -55,22 +55,13 @@ else()
         set (EXT ".so")
     endif()
 
-
-    if(NOT APPLE)
-    	set(OPENNI_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    	# Fix the include of our libusb
-    	set(OPENNI_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${OPENNI_PATCH_DIR}/linux.diff" -d "<SOURCE_DIR>")
-    endif()
-    
     ExternalProject_Add(
             openni
-            DEPENDS libusb
             URL ${CACHED_URL}
             URL_HASH SHA256=a86911d2ff9c76598d620d5b193ec0fad56037a11a7d7f0f4a493ccff6ba638c
             DOWNLOAD_DIR ${ARCHIVE_DIR}
             DOWNLOAD_NAME openni_2.2.0.xx.tar.gz
             BUILD_IN_SOURCE 1
-            PATCH_COMMAND ${OPENNI_PATCH_CMD}
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${CMAKE_BUILD_TYPE} ALLOW_WARNINGS=1 INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile main
             INSTALL_COMMAND ""
