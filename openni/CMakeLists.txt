@@ -58,13 +58,8 @@ else()
 
     if(NOT APPLE)
     	set(OPENNI_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    	if("${CMAKE_C_COMPILER_ID}" MATCHES "Clang")
-	    	# Fix the include of our libusb and use our libjpeg instead of the embedded one because Clang does not like compiling a mix of c and c++ files
-	    	set(OPENNI_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${OPENNI_PATCH_DIR}/linux-clang.diff" -d "<SOURCE_DIR>")
-	   	else()
-	    	# Fix the include of our libusb
-	    	set(OPENNI_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${OPENNI_PATCH_DIR}/linux-gcc.diff" -d "<SOURCE_DIR>")
-    	endif()
+    	# Fix the include of our libusb
+    	set(OPENNI_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${OPENNI_PATCH_DIR}/linux.diff" -d "<SOURCE_DIR>")
     endif()
     
     ExternalProject_Add(
@@ -77,7 +72,7 @@ else()
             BUILD_IN_SOURCE 1
             PATCH_COMMAND ${OPENNI_PATCH_CMD}
             CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${CMAKE_BUILD_TYPE} INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile main
+            BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${CMAKE_BUILD_TYPE} ALLOW_WARNINGS=1 INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile main
             INSTALL_COMMAND ""
     )
 
