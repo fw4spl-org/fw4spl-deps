@@ -287,6 +287,7 @@ add_custom_target(fix_path
 
 ####################################################################################################################
 # CPack related code
+install(CODE "set(HOST_INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
 install(CODE "set(CPACK_SRC_INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
 install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/cpack_install.cmake")
 install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/fix_path.cmake")
