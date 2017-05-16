@@ -287,21 +287,22 @@ add_custom_target(fix_path
 
 ####################################################################################################################
 # CPack related code
-
-install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/ DESTINATION ${CMAKE_BUILD_TYPE}
-        PATTERN "bin/*"
-        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-install(CODE "set(INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
-install(CODE "set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
+install(CODE "set(HOST_INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/cpack_install.cmake")
 install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/fix_path.cmake")
 
-set(CPACK_PACKAGE_VERSION_MAJOR 11)
-set(CPACK_PACKAGE_VERSION_MINOR 0)
-set(CPACK_PACKAGE_VERSION_PATCH 1)
+include(${CMAKE_SOURCE_DIR}/cmake/utils/get_git_rev.cmake)
+set(CPACK_PACKAGE_VERSION_MAJOR ${GIT_TAG_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${GIT_TAG_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${GIT_TAG_PATCH})
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME}-${CMAKE_BUILD_TYPE})
 set(CPACK_PACKAGE_VENDOR "IRCAD/IHU")
-
-set(CPACK_GENERATOR "TGZ")
+if(APPLE)
+    # Mac OS X has some problems with tgz archive, so we use zip generator.
+    set(CPACK_GENERATOR "ZIP")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
 
 include(CPack)
 
