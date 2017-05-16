@@ -130,6 +130,9 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES zeromq)
 
     list(APPEND SUBDIRECTORIES openni)
+    list(APPEND SUBDIRECTORIES glog)
+    list(APPEND SUBDIRECTORIES CXSparse)
+    list(APPEND SUBDIRECTORIES ceresSolver)
 
     if(ENABLED_PCL_DEPS)
         if(UNIX)
