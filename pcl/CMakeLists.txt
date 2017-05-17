@@ -47,7 +47,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DPCL_SHARED_LIBS:BOOL=ON
                         -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DWITH_PCAP:BOOL=OFF
-                        -DCUDA_TOOLKIT_ROOT_DIR:BOOL=${CUDA_TOOLKIT_ROOT_DIR}
+                        -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
                         -DWITH_RSSDK:BOOL=OFF
 )
 
