@@ -47,7 +47,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DPCL_SHARED_LIBS:BOOL=ON
                         -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DWITH_PCAP:BOOL=OFF
-                        -DCUDA_TOOLKIT_ROOT_DIR:BOOL=${CUDA_TOOLKIT_ROOT_DIR}
+                        -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
                         -DWITH_RSSDK:BOOL=OFF
 )
 
@@ -71,6 +71,10 @@ if(NOT ANDROID)
         -DOPENNI2_INCLUDE_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/include/openni2
         -DOPENNI2_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/openni2/${OPENNI2_LIBRARY}
         -DQT_QMAKE_EXECUTABLE:PATH=${CMAKE_INSTALL_PREFIX}/bin/qmake
+        -DBUILD_ml:BOOL=ON 
+        -DBUILD_simulation:BOOL=ON 
+        -DBUILD_segmentation:BOOL=ON 
+        -DBUILD_registration:BOOL=ON
     )
 else()
     list(APPEND PCL_CMAKE_ARGS
@@ -143,6 +147,8 @@ if(ANDROID)
 endif()
 if(WIN32)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/win.diff -d <SOURCE_DIR>)
+    # Fix compilation on Windows for Ensenso grabber
+    list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/ensenso_grabber.diff -d <SOURCE_DIR>)
 endif()
 
 ExternalProject_Add(

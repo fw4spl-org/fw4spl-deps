@@ -5,7 +5,7 @@ project(odilBuilder)
 include(ExternalProject)
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
-set(VERSION 0.7.3.1)
+set(VERSION binpkg_20170427)
 
 set(CACHED_URL https://github.com/fw4spl-org/odil/archive/${VERSION}.zip)
 if(WIN32)
@@ -14,10 +14,10 @@ if(WIN32)
     foreach(DEF ${ODIL_DEFINITIONS})
         set(ODIL_CMAKE_CXX_FLAGS "/D${DEF} ${ODIL_CMAKE_CXX_FLAGS}")
     endforeach()
-    
+
     # Add exception flag for noexcept keyword
     set(ODIL_CMAKE_CXX_FLAGS "${ODIL_CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
-    
+
     set(ODIL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DBUILD_WRAPPERS=OFF
                         -DBUILD_EXAMPLES=OFF
@@ -44,10 +44,10 @@ endif()
 ExternalProject_Add(
     odil
     URL ${CACHED_URL}
-    URL_HASH SHA256=53367a2f1440f92269beb62839b03a1dbc523b5d2ea98c3a53cf62da72141fee
+    URL_HASH SHA256=a133760bc0f69087b2c574fb09b69d15ae7558e9b60ade3fc259d86d35851956
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME odil-${VERSION}.zip
-    DEPENDS boost dcmtk jsoncpp icu4c log4cpp 
+    DEPENDS boost dcmtk jsoncpp icu4c log4cpp
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ODIL_CMAKE_ARGS}
 )

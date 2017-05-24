@@ -1,0 +1,12 @@
+diff --git a/cmake/FindGlog.cmake  b/cmake/FindGlog.cmake 
+--- a/cmake/FindGlog.cmake 
++++ b/cmake/FindGlog.cmake
+@@ -113,7 +113,7 @@
+ ENDIF (NOT GLOG_INCLUDE_DIR OR
+        NOT EXISTS ${GLOG_INCLUDE_DIR})
+ 
+-FIND_LIBRARY(GLOG_LIBRARY NAMES glog
++FIND_LIBRARY(GLOG_LIBRARY NAMES glog google-glog google-glogD
+   PATHS ${GLOG_LIBRARY_DIR_HINTS}
+   ${GLOG_CHECK_LIBRARY_DIRS})
+ IF (NOT GLOG_LIBRARY OR

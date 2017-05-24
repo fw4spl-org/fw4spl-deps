@@ -1,0 +1,16 @@
+diff --git a/Source/cs_convert.c b/Source/cs_convert.c
+--- a/Source/cs_convert.c
++++ b/Source/cs_convert.c
+@@ -1,5 +1,6 @@
+ #include "cs.h"
+ 
++#ifndef NCOMPLEX
+ /* convert from complex to real (int version) */
+ /* C = real(A) if real is true, imag(A) otherwise */
+ cs_di *cs_i_real (cs_ci *A, int real)
+@@ -91,3 +92,4 @@
+     if (triplet) C->nz = nz ;
+     return (C) ;
+ }
++#endif
+\ No newline at end of file

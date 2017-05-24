@@ -9,9 +9,6 @@ set(CACHED_URL https://github.com/fw4spl-org/librealsense/archive/v0.9.1.1.tar.g
 set(REALSENSE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                          -DBUILD_EXAMPLES=OFF
 )
-if(UNIX)
-    set(REALSENSE_DEPENDS libusb)
-endif()
 
 ExternalProject_Add(
     realsense

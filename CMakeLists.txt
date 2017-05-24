@@ -42,7 +42,7 @@ else()
     set(MAKE $(MAKE))
     if(NOT APPLE)
         # Do not set the runtime path in the install step, this allows to get "portable" libraries
-        list(APPEND COMMON_CMAKE_ARGS 
+        list(APPEND COMMON_CMAKE_ARGS
             -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
         )
@@ -68,7 +68,7 @@ set(CMAKE_INSTALL_PREFIX "${CMAKE_SOURCE_DIR}/${CMAKE_BUILD_TYPE}" CACHE PATH "I
 include(ProcessorCount)
 ProcessorCount(CPUS_COUNT)
 if(CPUS_COUNT EQUAL 0)
-    # default to 1 if cmake fails  
+    # default to 1 if cmake fails
     set(CPUS_COUNT 1)
 endif()
 
@@ -117,7 +117,7 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES tetgen)
     list(APPEND SUBDIRECTORIES json-spirit)
     list(APPEND SUBDIRECTORIES glm)
-    
+
     list(APPEND SUBDIRECTORIES opencv)
     list(APPEND SUBDIRECTORIES aruco)
     list(APPEND SUBDIRECTORIES eigen)
@@ -128,40 +128,38 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES libarchive)
     list(APPEND SUBDIRECTORIES openigtlink)
     list(APPEND SUBDIRECTORIES zeromq)
-    
+
+    list(APPEND SUBDIRECTORIES openni)
+    list(APPEND SUBDIRECTORIES glog)
+    list(APPEND SUBDIRECTORIES CXSparse)
+    list(APPEND SUBDIRECTORIES ceresSolver)
+
     if(ENABLED_PCL_DEPS)
-        if(UNIX)
-            list(APPEND SUBDIRECTORIES libusb)
-        endif()
-        list(APPEND SUBDIRECTORIES openni)
         if(UNIX)
             list(APPEND SUBDIRECTORIES libfreenect)
         endif()
-        
+
         list(APPEND SUBDIRECTORIES pcl)
     endif()
 
     if(ENABLED_REALSENSE)
-        if(NOT ENABLED_PCL_DEPS AND UNIX)
-            list(APPEND SUBDIRECTORIES libusb)
-        endif()
         list(APPEND SUBDIRECTORIES realsense)
     endif()
-    
+
     if(ENABLED_SOFA_DEPS)
         list(APPEND SUBDIRECTORIES glew)
         if (NOT APPLE)
             list(APPEND SUBDIRECTORIES freeglut)
         endif()
         list(APPEND SUBDIRECTORIES sofa)
-    endif()    
+    endif()
 
     if(ENABLED_OGRE_DEPS)
         list(APPEND SUBDIRECTORIES zzip)
         list(APPEND SUBDIRECTORIES freeimage)
         list(APPEND SUBDIRECTORIES ogre)
     endif()
-    
+
     if(ENABLE_ODIL)
         list(APPEND SUBDIRECTORIES jsoncpp)
         list(APPEND SUBDIRECTORIES log4cpp)
@@ -181,11 +179,11 @@ else()
     list(APPEND SUBDIRECTORIES expat)
     list(APPEND SUBDIRECTORIES boost)
     list(APPEND SUBDIRECTORIES freetype)
-    
+
     if(ENABLE_QT_ANDROID)
         list(APPEND SUBDIRECTORIES qt)
     endif()
-    
+
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES camp)
     list(APPEND SUBDIRECTORIES ann)
@@ -245,7 +243,7 @@ foreach(subdir ${SUBDIRECTORIES})
     createCleanTarget(${subdir})
 
     add_subdirectory(${subdir})
-    
+
 endforeach()
 
 set(SUBDIRECTORIES "")
@@ -274,10 +272,10 @@ find_program(PYTHON_EXECUTABLE python ${PATH})
 # if we are building for Android, now we have to reset CMAKE_FIND_ROOT_PATH_MODE_PROGRAM
 if( ANDROID )
     set( CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ${TMP_PREVIOUS_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM} )
-endif()      
-    
+endif()
+
 ####################################################################################################################
-#. Install 
+#. Install
 if(APPLE)
     add_custom_target(install_tool
         COMMAND find . -name '*.dylib' -o -name '*.framework' | xargs ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/OSXTools/osx_install_name_tool.py –-progress -a -f -u -p
@@ -292,21 +290,22 @@ add_custom_target(fix_path
 
 ####################################################################################################################
 # CPack related code
-        
-install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/ DESTINATION ${CMAKE_BUILD_TYPE}
-        PATTERN "bin/*"
-        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_WRITE GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-
-install(CODE "set(INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
-install(CODE "set(BUILD_TYPE \"${CMAKE_BUILD_TYPE}\")")
+install(CODE "set(HOST_INSTALL_PATH \"${CMAKE_INSTALL_PREFIX}\")")
+install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/cpack_install.cmake")
 install(SCRIPT "${CMAKE_SOURCE_DIR}/cmake/utils/fix_path.cmake")
-                 
-set(CPACK_PACKAGE_VERSION_MAJOR 11)
-set(CPACK_PACKAGE_VERSION_MINOR 0)
-set(CPACK_PACKAGE_VERSION_PATCH 1)
-set(CPACK_PACKAGE_VENDOR "IRCAD/IHU")
 
-set(CPACK_GENERATOR "TGZ")
+include(${CMAKE_SOURCE_DIR}/cmake/utils/get_git_rev.cmake)
+set(CPACK_PACKAGE_VERSION_MAJOR ${GIT_TAG_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${GIT_TAG_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${GIT_TAG_PATCH})
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME}-${CMAKE_BUILD_TYPE})
+set(CPACK_PACKAGE_VENDOR "IRCAD/IHU")
+if(APPLE)
+    # Mac OS X has some problems with tgz archive, so we use zip generator.
+    set(CPACK_GENERATOR "ZIP")
+else()
+    set(CPACK_GENERATOR "TGZ")
+endif()
 
 include(CPack)
 
