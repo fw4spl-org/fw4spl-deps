@@ -4,7 +4,7 @@ project(tiffBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://download.osgeo.org/libtiff/tiff-4.0.3.zip)
+set(CACHED_URL ftp://download.osgeo.org/libtiff/old/tiff-4.0.3.zip)
 set(TIFF_HASHSUM dd70349cedb3981371686e1c9b89a7f9)
 
 if(WIN32 OR ANDROID)
