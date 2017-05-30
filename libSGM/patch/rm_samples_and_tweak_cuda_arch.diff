@@ -1,0 +1,64 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ee9f1d1..9dfd6d5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,24 +1,11 @@
+ cmake_minimum_required(VERSION 2.8)
+ 
+-set(CUDA_ARCH "-arch=sm_50" CACHE STRING "Value of the NVCC -arch option.")
+-
+-option(ENABLE_ZED_DEMO "Build a Demo using ZED Camera" OFF)
+-
+-if(WIN32)
+-  set(ZED_SDK_LIB "C:\\Program Files (x86)\\ZED SDK\\lib\\sl_zed64.lib" CACHE STRING "ZED SDK library(sl_zed**.llb) path.")
+-  set(ZED_SDK_INCLUDE_DIR "C:\\Program Files (x86)\\ZED SDK\\include" CACHE STRING "ZED SDK include path.")
+-else()
+-  set(ZED_SDK_LIB "/usr/local/zed/lib/libsl_zed.so" CACHE STRING "ZED SDK library(sl_zed**.llb) path.")
+-  set(ZED_SDK_INCLUDE_DIR "/usr/local/zed/include" CACHE STRING "ZED SDK include path.")
+-endif()
+-
+ project(libSGM)
+ 
+-add_subdirectory(src)
++find_package(CUDA REQUIRED)
+ 
+-add_subdirectory(sample/image)
+-add_subdirectory(sample/movie)
++# libSGM requires 3.0 or later compute capabilities
++set(CUDA_ARCH_BIN "3.0 3.2 3.5 3.7 5.0 5.2 5.3 6.0 6.2" CACHE STRING "CUDA architectures to build for")
++CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_ARCH_NVCC_FLAGS ${CUDA_ARCH_BIN})
+ 
+-if(ENABLE_ZED_DEMO)
+-	add_subdirectory(sample/zed)
+-endif()
++add_subdirectory(src)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index af93aff..8c7818a 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,8 +1,6 @@
+-find_package(CUDA REQUIRED)
+-
+ include_directories(../include)
+ 
+-SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} ${CUDA_ARCH}")
++list(APPEND CUDA_NVCC_FLAGS ${CUDA_ARCH_NVCC_FLAGS})
+ 
+ SET(STEREOSRCS 
+ 	census.cu 
+@@ -15,3 +13,15 @@ SET(STEREOSRCS
+ )
+ 
+ CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} STATIC)
++
++install(
++    TARGETS sgm
++    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
++    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
++)
++
++install(
++    DIRECTORY ${CMAKE_SOURCE_DIR}/include
++    DESTINATION ${CMAKE_INSTALL_PREFIX}
++    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
++)

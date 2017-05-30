@@ -89,6 +89,7 @@ option(ENABLED_SOFA_DEPS "Set to ON to build sofa" OFF)
 option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
 option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
 option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
+option(ENABLE_LIBSGM "Set to ON to build libSGM dependencies" OFF)
 
 set(FW4SPL_OPENCV_WITH_CUDA OFF)
 
@@ -166,6 +167,10 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES jsoncpp)
         list(APPEND SUBDIRECTORIES log4cpp)
         list(APPEND SUBDIRECTORIES odil)
+    endif()
+
+    if(ENABLE_LIBSGM)
+        list(APPEND SUBDIRECTORIES libSGM)
     endif()
 
 ##ANDROID DEPS##
