@@ -17,7 +17,7 @@ set(OPENCV_CMAKE_ARGS
     -DWITH_JASPER:BOOL=OFF #jpeg2k support
     -DWITH_1394:BOOL=OFF
     -DWITH_OPENEXR:BOOL=OFF
-    -DWITH_CUDA:BOOL=OFF
+    -DWITH_CUDA:BOOL=${FW4SPL_OPENCV_WITH_CUDA}
     -DWITH_OPENCL:BOOL=OFF
 
     -DWITH_JPEG:BOOL=ON
@@ -38,7 +38,9 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_ts:BOOL=OFF
 )
 
-
+if(FW4SPL_OPENCV_WITH_CUDA)
+    list(APPEND OPENCV_CMAKE_ARGS -DCUDA_ARCH_BIN:STRING="6.0")
+endif()
 
 if(ENABLE_OPENCV_CONTRIB)
     list(APPEND OPENCV_CMAKE_ARGS
@@ -84,6 +86,9 @@ if(WIN32)
         -DWITH_FFMPEG:BOOL=OFF
         -DWITH_WEBP:BOOL=OFF
         )
+    if(${FW4SPL_OPENCV_WITH_CUDA})
+        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
+    endif()
 elseif(NOT ANDROID) #linux
     if(APPLE)
         list(APPEND OPENCV_CMAKE_ARGS
@@ -127,6 +132,19 @@ endif()
 set(OPENCV_HASHSUM b9d62dfffb8130d59d587627703d5f3e6252dce4a94c1955784998da7a39dd35)
 set(OPENCV_NAME "opencv_3.2.0.tar.gz")
 set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
+
+set(OPENCV_GPU_TARGETS opencv_cudev opencv_cudaarithm opencv_cudabgsegm
+                       opencv_cudafilters opencv_cudaimgproc opencv_cudawarping
+                       opencv_cudacodec opencv_cudafeatures2d opencv_cudalegacy
+                       opencv_cudaobjdetect opencv_cudaoptflow opencv_cudastereo)
+set(OPENCV_TARGETS opencv_modules opencv_core opencv_flann opencv_imgproc
+                   opencv_ml opencv_video opencv_imgcodecs opencv_photo opencv_shape
+                   opencv_videoio opencv_highgui opencv_highgui_autogen opencv_objdetect
+                   opencv_features2d opencv_calib3d opencv_stitching opencv_superres
+                   opencv_videostab opencv_traincascade opencv_createsamples
+                   opencv_annotation opencv_visualisation opencv_version)
+set(OPENCV_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j1 ${OPENCV_GPU_TARGETS}
+                 COMMAND ${CMAKE_MAKE_PROGRAM} ${OPENCV_TARGETS})
 
 ExternalProject_Add(
     opencv

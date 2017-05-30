@@ -90,6 +90,8 @@ option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
 option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
 option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
 
+set(FW4SPL_OPENCV_WITH_CUDA OFF)
+
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES jpeg)
