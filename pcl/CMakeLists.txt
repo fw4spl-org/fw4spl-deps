@@ -49,6 +49,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DWITH_PCAP:BOOL=OFF
                         -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
                         -DWITH_RSSDK:BOOL=OFF
+                        -DWITH_ENSENSO:BOOL=OFF
 )
 
 set(PCL_DEPENDS
