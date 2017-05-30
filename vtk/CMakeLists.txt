@@ -18,6 +18,8 @@ set(VTK_CMAKE_ARGS
     -DVTK_USE_SYSTEM_ZLIB:BOOL=ON
     -DVTK_USE_SYSTEM_FREETYPE:BOOL=ON
     -DVTK_USE_SYSTEM_TIFF:BOOL=ON
+    -DVTK_USE_SYSTEM_GLEW:BOOL=ON
+
     -DBUILD_SHARED_LIBS:BOOL=ON
 
     -DVTK_Group_StandAlone:BOOL=OFF #disabled hdf5 module
@@ -137,7 +139,9 @@ endif()
 set(VTK_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk)
 set(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(VTK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/IO_Import_CMakeLists.diff -d <SOURCE_DIR>
-    && "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/optimization.diff -d <SOURCE_DIR> )
+          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/optimization.diff -d <SOURCE_DIR>
+          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/CMakeLists_glew.diff -d <SOURCE_DIR>
+          )
 
 if(ANDROID)
     list(APPEND VTK_PATCH_CMD
@@ -155,7 +159,7 @@ ExternalProject_Add(
     URL_HASH SHA256=${VTK_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${VTK_PATCH_CMD}
-    DEPENDS zlib jpeg expat libxml freetype libpng tiff ${EXTRA_DEPENDS}
+    DEPENDS zlib jpeg expat libxml freetype libpng tiff glew ${EXTRA_DEPENDS}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CONFIGURE_COMMAND ${VTK_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE} ${VTK_SRC_DIR}
