@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ee9f1d1..9dfd6d5 100644
+index ee9f1d1..51f3ce6 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,24 +1,11 @@
+@@ -1,24 +1,5 @@
  cmake_minimum_required(VERSION 2.8)
  
 -set(CUDA_ARCH "-arch=sm_50" CACHE STRING "Value of the NVCC -arch option.")
@@ -19,21 +19,16 @@ index ee9f1d1..9dfd6d5 100644
 -
  project(libSGM)
  
--add_subdirectory(src)
-+find_package(CUDA REQUIRED)
- 
+ add_subdirectory(src)
+-
 -add_subdirectory(sample/image)
 -add_subdirectory(sample/movie)
-+# libSGM requires 3.0 or later compute capabilities
-+set(CUDA_ARCH_BIN "3.0 3.2 3.5 3.7 5.0 5.2 5.3 6.0 6.2" CACHE STRING "CUDA architectures to build for")
-+CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_ARCH_NVCC_FLAGS ${CUDA_ARCH_BIN})
- 
+-
 -if(ENABLE_ZED_DEMO)
 -	add_subdirectory(sample/zed)
 -endif()
-+add_subdirectory(src)
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index af93aff..8c7818a 100644
+index af93aff..e029d1e 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -1,8 +1,6 @@
@@ -42,7 +37,7 @@ index af93aff..8c7818a 100644
  include_directories(../include)
  
 -SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} ${CUDA_ARCH}")
-+list(APPEND CUDA_NVCC_FLAGS ${CUDA_ARCH_NVCC_FLAGS})
++find_package(CUDA REQUIRED)
  
  SET(STEREOSRCS 
  	census.cu 

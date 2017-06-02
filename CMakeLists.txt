@@ -90,8 +90,16 @@ option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
 option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
 option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
 option(ENABLE_LIBSGM "Set to ON to build libSGM dependencies" OFF)
+option(ENABLE_OPENCV_CUDA "Set to ON to build OpenCV with CUDA support" OFF)
 
-set(FW4SPL_OPENCV_WITH_CUDA OFF)
+## CUDA stuff
+# TODO: handle PCL the same way we handle OpenCV, ie provide an option to build it without CUDA even if it is detected
+set(WITH_CUDA OFF)
+if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA)
+    set(WITH_CUDA ON)
+    string(REPLACE ";" " " FW4SPL_CUDA_NVCC_ARCH_FLAGS "${FW4SPL_CUDA_NVCC_ARCH_FLAGS}")
+    message("FW4SPL NVCC arch flags: ${FW4SPL_CUDA_NVCC_ARCH_FLAGS}")
+endif()
 
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
@@ -315,4 +323,3 @@ else()
 endif()
 
 include(CPack)
-

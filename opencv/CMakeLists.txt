@@ -139,22 +139,26 @@ set(OPENCV_HASHSUM b9d62dfffb8130d59d587627703d5f3e6252dce4a94c1955784998da7a39d
 set(OPENCV_NAME "opencv_3.2.0.tar.gz")
 set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
 
-set(OPENCV_GPU_PREREQUIRED_TARGETS opencv_flann opencv_ml opencv_imgcodecs
-                                   opencv_videoio opencv_highgui opencv_features2d opencv_calib3d)
-set(OPENCV_GPU_TARGETS opencv_cudev opencv_cudaarithm opencv_cudabgsegm
-                       opencv_cudafilters opencv_cudaimgproc opencv_cudawarping
-                       opencv_cudacodec opencv_cudafeatures2d opencv_cudalegacy
-                       opencv_cudaobjdetect opencv_cudastereo
-                       opencv_cudaoptflow
-                       )
-set(OPENCV_TARGETS opencv_modules opencv_core opencv_flann opencv_imgproc
-                   opencv_ml opencv_video opencv_imgcodecs opencv_photo opencv_shape
-                   opencv_videoio opencv_highgui opencv_highgui_autogen opencv_objdetect
-                   opencv_features2d opencv_calib3d opencv_stitching opencv_superres
-                   opencv_videostab opencv_traincascade opencv_createsamples
-                   opencv_annotation opencv_visualisation opencv_version)
-set(OPENCV_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j1 ${OPENCV_GPU_TARGETS}
-                 COMMAND ${CMAKE_MAKE_PROGRAM} ${OPENCV_TARGETS})
+if(WIN32)
+    set(OPENCV_GPU_PREREQUIRED_TARGETS opencv_flann opencv_ml opencv_imgcodecs
+                                       opencv_videoio opencv_highgui opencv_features2d opencv_calib3d)
+    set(OPENCV_GPU_TARGETS opencv_cudev opencv_cudaarithm opencv_cudabgsegm
+                           opencv_cudafilters opencv_cudaimgproc opencv_cudawarping
+                           opencv_cudacodec opencv_cudafeatures2d opencv_cudalegacy
+                           opencv_cudaobjdetect opencv_cudastereo
+                           opencv_cudaoptflow
+                           )
+    set(OPENCV_TARGETS opencv_modules opencv_core opencv_flann opencv_imgproc
+                       opencv_ml opencv_video opencv_imgcodecs opencv_photo opencv_shape
+                       opencv_videoio opencv_highgui opencv_highgui_autogen opencv_objdetect
+                       opencv_features2d opencv_calib3d opencv_stitching opencv_superres
+                       opencv_videostab opencv_traincascade opencv_createsamples
+                       opencv_annotation opencv_visualisation opencv_version)
+    set(OPENCV_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j1 ${OPENCV_GPU_TARGETS}
+                     COMMAND ${CMAKE_MAKE_PROGRAM} ${OPENCV_TARGETS})
+else()
+    set(OPENCV_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${CPUS_COUNT})
+endif()
 
 ExternalProject_Add(
     opencv
