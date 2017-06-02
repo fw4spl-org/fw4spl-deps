@@ -18,10 +18,6 @@ endif()
 
 set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DBUILD_apps:BOOL=OFF
-                        -DBUILD_OPENNI:BOOL=OFF
-                        -DBUILD_OPENNI2:BOOL=ON
-                        -DBUILD_DAVIDSDK:BOOL=OFF
-                        -DBUILD_ENSENSO:BOOL=OFF
                         -DBUILD_examples:BOOL=OFF
                         -DBUILD_common:BOOL=ON
                         -DBUILD_2d:BOOL=ON
@@ -48,8 +44,11 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DWITH_PCAP:BOOL=OFF
                         -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
-                        -DWITH_RSSDK:BOOL=OFF
+                        -DCUDA_NVCC_FLAGS:STRING=${FW4SPL_CUDA_NVCC_ARCH_FLAGS}
+                        -DWITH_DAVIDSDK:BOOL=OFF
                         -DWITH_ENSENSO:BOOL=OFF
+                        -DWITH_OPENNI:BOOL=OFF
+                        -DWITH_RSSDK:BOOL=OFF
 )
 
 set(PCL_DEPENDS
