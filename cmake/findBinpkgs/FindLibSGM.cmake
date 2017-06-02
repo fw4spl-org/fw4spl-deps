@@ -29,5 +29,6 @@ mark_as_advanced(LIBSGM_FOUND)
 
 if(LIBSGM_FOUND)
     set(LIBSGM_FOUND TRUE CACHE BOOL "" FORCE)
+    set(LIBSGM_LIBRARIES ${LIBSGM_LIBRARY})
     message(STATUS "LibSGM found ( include: ${LIBSGM_INCLUDE_DIRS}, lib: ${LIBSGM_LIBRARY})")
 endif()
