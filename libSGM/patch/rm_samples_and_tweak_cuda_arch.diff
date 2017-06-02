@@ -28,7 +28,7 @@ index ee9f1d1..51f3ce6 100644
 -	add_subdirectory(sample/zed)
 -endif()
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index af93aff..e029d1e 100644
+index af93aff..e86eb03 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -1,8 +1,6 @@
@@ -41,10 +41,12 @@ index af93aff..e029d1e 100644
  
  SET(STEREOSRCS 
  	census.cu 
-@@ -15,3 +13,15 @@ SET(STEREOSRCS
+@@ -14,4 +12,16 @@ SET(STEREOSRCS
+ 	cuda_utils.cu
  )
  
- CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} STATIC)
+-CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} STATIC)
++CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} SHARED)
 +
 +install(
 +    TARGETS sgm
