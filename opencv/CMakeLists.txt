@@ -38,8 +38,14 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_ts:BOOL=OFF
 )
 
-if(FW4SPL_OPENCV_WITH_CUDA)
-    list(APPEND OPENCV_CMAKE_ARGS -DCUDA_ARCH_BIN:STRING="6.0")
+if(ENABLE_OPENCV_CUDA)
+    list(APPEND OPENCV_CMAKE_ARGS
+         -DBUILD_CUDA_STUBS:BOOL=OFF
+         -DBUILD_CUDA:BOOL=ON
+         -DWITH_CUDA:BOOL=ON
+         -DCUDA_NVCC_FLAGS=${FW4SPL_CUDA_NVCC_ARCH_FLAGS}
+         -DBUILD_opencv_cudaoptflow:BOOL=OFF
+         )
 endif()
 
 if(ENABLE_OPENCV_CONTRIB)
@@ -86,7 +92,7 @@ if(WIN32)
         -DWITH_FFMPEG:BOOL=OFF
         -DWITH_WEBP:BOOL=OFF
         )
-    if(${FW4SPL_OPENCV_WITH_CUDA})
+    if(ENABLE_OPENCV_CUDA)
         list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
     endif()
 elseif(NOT ANDROID) #linux
@@ -133,10 +139,14 @@ set(OPENCV_HASHSUM b9d62dfffb8130d59d587627703d5f3e6252dce4a94c1955784998da7a39d
 set(OPENCV_NAME "opencv_3.2.0.tar.gz")
 set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
 
+set(OPENCV_GPU_PREREQUIRED_TARGETS opencv_flann opencv_ml opencv_imgcodecs
+                                   opencv_videoio opencv_highgui opencv_features2d opencv_calib3d)
 set(OPENCV_GPU_TARGETS opencv_cudev opencv_cudaarithm opencv_cudabgsegm
                        opencv_cudafilters opencv_cudaimgproc opencv_cudawarping
                        opencv_cudacodec opencv_cudafeatures2d opencv_cudalegacy
-                       opencv_cudaobjdetect opencv_cudaoptflow opencv_cudastereo)
+                       opencv_cudaobjdetect opencv_cudastereo
+                       opencv_cudaoptflow
+                       )
 set(OPENCV_TARGETS opencv_modules opencv_core opencv_flann opencv_imgproc
                    opencv_ml opencv_video opencv_imgcodecs opencv_photo opencv_shape
                    opencv_videoio opencv_highgui opencv_highgui_autogen opencv_objdetect
@@ -154,6 +164,7 @@ ExternalProject_Add(
     DOWNLOAD_NAME ${OPENCV_NAME}
     DEPENDS ${OPENCV_DEPENDS}
     PATCH_COMMAND ${OPENCV_PATCH_CMD}
+    BUILD_COMMAND ${OPENCV_BUILD_COMMAND}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${OPENCV_CMAKE_ARGS}
 )
