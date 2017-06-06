@@ -28,7 +28,7 @@ index ee9f1d1..51f3ce6 100644
 -	add_subdirectory(sample/zed)
 -endif()
 diff --git a/include/libsgm.h b/include/libsgm.h
-index 94abeef..31c86ce 100644
+index 94abeef..59142b1 100644
 --- a/include/libsgm.h
 +++ b/include/libsgm.h
 @@ -26,6 +26,12 @@ limitations under the License.
@@ -38,7 +38,7 @@ index 94abeef..31c86ce 100644
 +#if defined WIN32
 +#define LIBSGM_EXPORT __declspec(dllexport)
 +#else
-+#define LIBSGM_EXPORT __attribute__(visibility("default"))
++#define LIBSGM_EXPORT __attribute__((visibility("default")))
 +#endif
 +
  namespace sgm {
