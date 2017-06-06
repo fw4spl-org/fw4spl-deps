@@ -97,8 +97,8 @@ option(ENABLE_OPENCV_CUDA "Set to ON to build OpenCV with CUDA support" OFF)
 set(WITH_CUDA OFF)
 if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA)
     set(WITH_CUDA ON)
-    string(REPLACE ";" " " FW4SPL_CUDA_NVCC_ARCH_FLAGS "${FW4SPL_CUDA_NVCC_ARCH_FLAGS}")
-    message("FW4SPL NVCC arch flags: ${FW4SPL_CUDA_NVCC_ARCH_FLAGS}")
+    set(FW4SPL_CUDA_ARCHS "2.0 3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
+    #CUDA_SELECT_NVCC_ARCH_FLAGS(FW4SPL_CUDA_NVCC_ARCH_FLAGS ${FW4SPL_CUDA_ARCHS})
 endif()
 
 ##DESKTOP DEPS ##

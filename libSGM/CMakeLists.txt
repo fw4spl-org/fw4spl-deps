@@ -11,7 +11,7 @@ set(CACHED_URL https://github.com/fixstars/libSGM/archive/72c24d76d0ed267d224427
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
 set(libSGM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:STRING=<INSTALL_DIR>
-                      -DCUDA_NVCC_FLAGS:STRING=${FW4SPL_CUDA_NVCC_ARCH_FLAGS})
+                      -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS})
 if(WIN32)
     set(libSGM_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j1)
 else()
