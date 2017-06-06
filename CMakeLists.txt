@@ -91,6 +91,9 @@ option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
 option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
 option(ENABLE_LIBSGM "Set to ON to build libSGM dependencies" OFF)
 option(ENABLE_OPENCV_CUDA "Set to ON to build OpenCV with CUDA support" OFF)
+if(ENABLED_PCL_DEPS)
+    option(ENABLE_PCL_CUDA "Set to ON to build PCL with CUDA support" OFF)
+endif()
 
 ## CUDA stuff
 # TODO: handle PCL the same way we handle OpenCV, ie provide an option to build it without CUDA even if it is detected

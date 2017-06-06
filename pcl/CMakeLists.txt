@@ -94,14 +94,13 @@ endif()
 
 #CUDA
 find_package(CUDA)
-set(CUDA_HOST_COMPILER_SUPPORT TRUE)
-if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
-    # Microsoft Visual Studio 2015 is supported in CUDA version > 8.0
-    if(CUDA_VERSION_MAJOR LESS 8)
-        set(CUDA_HOST_COMPILER_SUPPORT FALSE)
+if(ENABLE_PCL_CUDA)
+    if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
+        # Microsoft Visual Studio 2015 is supported in CUDA version > 8.0
+        if(CUDA_VERSION_MAJOR LESS 8)
+            message(FATAL_ERROR "MSVC 2015 is only supported with CUDA 8.0 or greater, please upgrade your CUDA installation.")
+        endif()
     endif()
-endif()
-if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
     #Enable GPU options
     list(APPEND PCL_CMAKE_ARGS -DBUILD_CUDA:BOOL=ON
                                -DBUILD_GPU:BOOL=ON
@@ -135,8 +134,6 @@ if(CUDA_FOUND AND CUDA_HOST_COMPILER_SUPPORT)
             )
         endif()
     endif()
-else()
-    message("warning, no acceptable version of CUDA or supported compiler found.\nOnly features that do not depend of CUDA will be built.")
 endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
