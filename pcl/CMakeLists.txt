@@ -114,16 +114,13 @@ if(ENABLE_PCL_CUDA)
         list(APPEND PCL_CMAKE_ARGS -DBUILD_gpu_features:BOOL=OFF)
     endif()
     set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM})
-    #Fix fatal error C1041
+    # Workaround error C1041
     if(WIN32)
         if(${CMAKE_MAKE_PROGRAM} STREQUAL "jom")
-            set(PCL_TARGETS pcl_common pcl_octree pcl_io pcl_io_ply pcl_kdtree pcl_search pcl_sample_consensus pcl_filters
-                            pcl_2d pcl_features pcl_ml pcl_segmentation pcl_visualization pcl_surface pcl_registration
-                            pcl_keypoints pcl_tracking pcl_recognition pcl_stereo pcl_outofcore pcl_people)
-            set(PCL_GPU_TARGETS pcl_cuda_segmentation pcl_cuda_sample_consensus pcl_gpu_containers pcl_gpu_utils pcl_gpu_octree
-                                pcl_gpu_features pcl_gpu_kinfu pcl_gpu_kinfu_large_scale pcl_gpu_segmentation)
-            set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} ${PCL_TARGETS}
-                COMMAND ${CMAKE_MAKE_PROGRAM} -j1 ${PCL_GPU_TARGETS})
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
+            list(APPEND PCL_CMAKE_ARGS -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+                                       -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=ON)
+            set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${NUMBER_OF_PARALLEL_BUILD})
         endif()
     else()
         set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${NUMBER_OF_PARALLEL_BUILD})
