@@ -38,14 +38,6 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_ts:BOOL=OFF
 )
 
-if(ENABLE_OPENCV_CUDA)
-    list(APPEND OPENCV_CMAKE_ARGS
-         -DBUILD_CUDA_STUBS:BOOL=OFF
-         -DWITH_CUDA:BOOL=ON
-         -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
-         )
-endif()
-
 if(ENABLE_OPENCV_CONTRIB)
     list(APPEND OPENCV_CMAKE_ARGS
 
@@ -82,6 +74,25 @@ set(OPENCV_PATCH_CMD)
 set(OPENCV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(OPENCV_DEPENDS libpng zlib tiff)
 
+if(ENABLE_OPENCV_CUDA)
+    if(WIN32)
+        # Fix link error with the MSVC compiler (fixed upstream in c4a3478)
+        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
+        # Workaround error C1041
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
+        list(APPEND OPENCV_CMAKE_ARGS
+             -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+             -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=ON
+        )
+    endif()
+    list(APPEND OPENCV_CMAKE_ARGS
+         -DBUILD_CUDA_STUBS:BOOL=OFF
+         -DWITH_CUDA:BOOL=ON
+         -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+        )
+endif()
+
+
 if(WIN32)
     list(APPEND OPENCV_CMAKE_ARGS
         -DWITH_DSHOW:BOOL=ON
@@ -90,9 +101,6 @@ if(WIN32)
         -DWITH_FFMPEG:BOOL=OFF
         -DWITH_WEBP:BOOL=OFF
         )
-    if(ENABLE_OPENCV_CUDA)
-        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
-    endif()
 elseif(NOT ANDROID) #linux
     if(APPLE)
         list(APPEND OPENCV_CMAKE_ARGS
@@ -137,27 +145,6 @@ set(OPENCV_HASHSUM b9d62dfffb8130d59d587627703d5f3e6252dce4a94c1955784998da7a39d
 set(OPENCV_NAME "opencv_3.2.0.tar.gz")
 set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
 
-if(WIN32)
-    set(OPENCV_GPU_PREREQUIRED_TARGETS opencv_flann opencv_ml opencv_imgcodecs opencv_core
-                                       opencv_videoio opencv_highgui opencv_features2d opencv_calib3d)
-    set(OPENCV_GPU_TARGETS opencv_cudev opencv_cudaarithm opencv_cudabgsegm
-                           opencv_cudafilters opencv_cudaimgproc opencv_cudawarping
-                           opencv_cudacodec opencv_cudafeatures2d opencv_cudalegacy
-                           opencv_cudaobjdetect opencv_cudastereo
-                           opencv_cudaoptflow)
-    set(OPENCV_TARGETS opencv_modules opencv_flann opencv_imgproc
-                       opencv_ml opencv_video opencv_imgcodecs opencv_photo opencv_shape
-                       opencv_videoio opencv_highgui opencv_highgui_autogen opencv_objdetect
-                       opencv_features2d opencv_calib3d opencv_stitching opencv_superres
-                       opencv_videostab opencv_traincascade opencv_createsamples
-                       opencv_annotation opencv_visualisation opencv_version)
-    set(OPENCV_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${CPUS_COUNT} ${OPENCV_GPU_PREREQUIRED_TARGETS}
-                     COMMAND ${CMAKE_MAKE_PROGRAM} -j1 ${OPENCV_GPU_TARGETS}
-                     COMMAND ${CMAKE_MAKE_PROGRAM} ${OPENCV_TARGETS})
-else()
-    set(OPENCV_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${CPUS_COUNT})
-endif()
-
 ExternalProject_Add(
     opencv
     URL ${CACHED_URL}
@@ -166,7 +153,6 @@ ExternalProject_Add(
     DOWNLOAD_NAME ${OPENCV_NAME}
     DEPENDS ${OPENCV_DEPENDS}
     PATCH_COMMAND ${OPENCV_PATCH_CMD}
-    BUILD_COMMAND ${OPENCV_BUILD_COMMAND}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${OPENCV_CMAKE_ARGS}
 )
