@@ -96,12 +96,8 @@ if(ENABLED_PCL_DEPS)
 endif()
 
 ## CUDA stuff
-# TODO: handle PCL the same way we handle OpenCV, ie provide an option to build it without CUDA even if it is detected
-set(WITH_CUDA OFF)
-if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA)
-    set(WITH_CUDA ON)
+if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
     set(FW4SPL_CUDA_ARCHS "2.0 3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
-    #CUDA_SELECT_NVCC_ARCH_FLAGS(FW4SPL_CUDA_NVCC_ARCH_FLAGS ${FW4SPL_CUDA_ARCHS})
 endif()
 
 ##DESKTOP DEPS ##
