@@ -12,13 +12,12 @@ include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
 set(libSGM_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:STRING=<INSTALL_DIR>
                       -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS})
-if(WIN32)
-    set(libSGM_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j1)
-else()
-    set(libSGM_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM})
-endif()
 set(libSGM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(libSGM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${libSGM_PATCH_DIR}/rm_samples_and_tweak_cuda_arch.diff" -d "<SOURCE_DIR>")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
+list(APPEND libSGM_CMAKE_ARGS -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+                              -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=ON)
 
 ExternalProject_Add(
     libSGM
@@ -29,7 +28,6 @@ ExternalProject_Add(
     PATCH_COMMAND "${libSGM_PATCH_CMD}"
     INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
     CMAKE_ARGS ${libSGM_CMAKE_ARGS}
-    BUILD_COMMAND "${libSGM_BUILD_COMMAND}"
 )
 
 ExternalProject_Add_Step(libSGM CopyConfigFileToInstall

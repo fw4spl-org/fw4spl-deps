@@ -66,16 +66,31 @@ index 94abeef..59142b1 100644
  	private:
  		StereoSGM(const StereoSGM&);
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index af93aff..f6c8023 100644
+index af93aff..0c43dd8 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
 @@ -1,17 +1,32 @@
--find_package(CUDA REQUIRED)
--
- include_directories(../include)
++include_directories(../include)
++
+ find_package(CUDA REQUIRED)
+ 
+-include_directories(../include)
++SET(STEREOSRCS
++    census.cu
++    matching_cost.cu
++    scan_scost.cu
++    winner_takes_all.cu
++    median_filter.cu
++    check_consistency.cu
++    cuda_utils.cu
++)
++
++unset(CUDA_NVCC_FLAGS)
++CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_NVCC_FLAGS "${CUDA_ARCH_BIN}")
  
 -SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} ${CUDA_ARCH}")
-+find_package(CUDA REQUIRED)
++CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} SHARED)
++target_link_libraries(sgm ${CUDA_nppi_LIBRARY})
  
 -SET(STEREOSRCS 
 -	census.cu 
@@ -84,30 +99,15 @@ index af93aff..f6c8023 100644
 -	winner_takes_all.cu 
 -	median_filter.cu 
 -	check_consistency.cu 
-+SET(STEREOSRCS
-+	census.cu
-+	matching_cost.cu
-+	scan_scost.cu
-+	winner_takes_all.cu
-+	median_filter.cu
-+	check_consistency.cu
- 	cuda_utils.cu
- )
- 
--CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} STATIC)
-+unset(CUDA_NVCC_FLAGS)
-+CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_NVCC_FLAGS "${CUDA_ARCH_BIN}")
-+
-+CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} SHARED)
-+target_link_libraries(sgm ${CUDA_nppi_LIBRARY})
-+
+-	cuda_utils.cu
 +install(
 +    TARGETS sgm
 +    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 +    LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
 +    RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin
-+)
-+
+ )
+ 
+-CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} STATIC)
 +install(
 +    DIRECTORY ${CMAKE_SOURCE_DIR}/include
 +    DESTINATION ${CMAKE_INSTALL_PREFIX}
