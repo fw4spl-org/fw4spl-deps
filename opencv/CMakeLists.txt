@@ -87,7 +87,6 @@ if(ENABLE_OPENCV_CUDA)
     endif()
     list(APPEND OPENCV_CMAKE_ARGS
          -DBUILD_CUDA_STUBS:BOOL=OFF
-         -DWITH_CUDA:BOOL=ON
          -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
         )
 endif()
