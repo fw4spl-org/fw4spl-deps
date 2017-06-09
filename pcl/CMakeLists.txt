@@ -44,7 +44,6 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DZLIB_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DWITH_PCAP:BOOL=OFF
                         -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
-                        -DCUDA_NVCC_FLAGS:STRING=${FW4SPL_CUDA_NVCC_ARCH_FLAGS}
                         -DWITH_DAVIDSDK:BOOL=OFF
                         -DWITH_ENSENSO:BOOL=OFF
                         -DWITH_OPENNI:BOOL=OFF
