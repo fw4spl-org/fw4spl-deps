@@ -4,11 +4,6 @@ else()
     set(MKSPEC linux-g++)
 endif()
 
-configure_file(envwrapper/env.sh.in
-    ${CMAKE_CURRENT_BINARY_DIR}/env.sh @ONLY
-)
-set(ENV_WRAPPER ${CMAKE_CURRENT_BINARY_DIR}/env.sh)
-
 # qt's configure is not an autotool configure
 set(QT_CONFIGURE_CMD ./configure
     -prefix ${CMAKE_INSTALL_PREFIX}
@@ -46,10 +41,9 @@ ExternalProject_Add(
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     URL_HASH SHA256=${QT5_HASHSUM}
     BUILD_IN_SOURCE 1
-    DEPENDS zlib jpeg libpng tiff icu4c freetype
-    CONFIGURE_COMMAND ${ENV_WRAPPER} ${QT_CONFIGURE_CMD}
-    BUILD_COMMAND ${ENV_WRAPPER} ${MAKE}
-    INSTALL_COMMAND ${ENV_WRAPPER} ${MAKE} -f Makefile ${INSTALL_ROOT} install
+    CONFIGURE_COMMAND ${QT_CONFIGURE_CMD}
+    BUILD_COMMAND ${MAKE}
+    INSTALL_COMMAND ${MAKE} -f Makefile ${INSTALL_ROOT} install
 )
 
 ExternalProject_Add_Step(qt COPY_FILES

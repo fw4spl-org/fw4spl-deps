@@ -51,12 +51,10 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DWITH_RSSDK:BOOL=OFF
 )
 
-set(PCL_DEPENDS
-    zlib
-    boost
-    eigen
-    flann
-)
+set(PCL_DEPENDS eigen boost flann)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    list(APPEND PCL_DEPENDS zlib)
+endif()
 
 if(NOT ANDROID)
     list(APPEND PCL_DEPENDS
@@ -71,9 +69,9 @@ if(NOT ANDROID)
         -DOPENNI2_INCLUDE_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/include/openni2
         -DOPENNI2_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/openni2/${OPENNI2_LIBRARY}
         -DQT_QMAKE_EXECUTABLE:PATH=${CMAKE_INSTALL_PREFIX}/bin/qmake
-        -DBUILD_ml:BOOL=ON 
-        -DBUILD_simulation:BOOL=ON 
-        -DBUILD_segmentation:BOOL=ON 
+        -DBUILD_ml:BOOL=ON
+        -DBUILD_simulation:BOOL=ON
+        -DBUILD_segmentation:BOOL=ON
         -DBUILD_registration:BOOL=ON
     )
 else()

@@ -41,10 +41,15 @@ set(OGRE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
    )
 
 set(OGRE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-   
+
 if(WIN32)
     set(OGRE_CMAKE_ARGS ${OGRE_CMAKE_ARGS} -DOGRE_INSTALL_PDB:BOOL=OFF)
     list(APPEND OGRE_PATCH_CMD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${OGRE_PATCH_DIR}/PrecompiledHeader.cmake" "<SOURCE_DIR>/CMake/Utils/PrecompiledHeader.cmake")
+endif()
+
+set(OGRE_DEPENDS zzip freeimage boost)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    list(APPEND OGRE_DEPENDS freetype)
 endif()
 
 ExternalProject_Add(
@@ -53,7 +58,7 @@ ExternalProject_Add(
     URL_HASH SHA256=${OGRE_HASH}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME v1-10-0.tar.bz2
-    DEPENDS zzip freeimage boost freetype
+    DEPENDS ${OGRE_DEPENDS}
     PATCH_COMMAND ${OGRE_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${OGRE_CMAKE_ARGS}

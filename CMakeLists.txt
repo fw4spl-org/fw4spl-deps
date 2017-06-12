@@ -92,17 +92,23 @@ option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
 
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
-    list(APPEND SUBDIRECTORIES jpeg)
-    list(APPEND SUBDIRECTORIES zlib)
-    list(APPEND SUBDIRECTORIES tiff)
-    list(APPEND SUBDIRECTORIES png)
-    list(APPEND SUBDIRECTORIES libiconv)
-    list(APPEND SUBDIRECTORIES libxml)
-    list(APPEND SUBDIRECTORIES expat)
+
+    # Use existing basic system libraries on Linux
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+        list(APPEND SUBDIRECTORIES jpeg)
+        list(APPEND SUBDIRECTORIES zlib)
+        list(APPEND SUBDIRECTORIES tiff)
+        list(APPEND SUBDIRECTORIES png)
+        list(APPEND SUBDIRECTORIES libiconv)
+        list(APPEND SUBDIRECTORIES libxml)
+        list(APPEND SUBDIRECTORIES expat)
+        list(APPEND SUBDIRECTORIES freetype)
+        list(APPEND SUBDIRECTORIES icu4c)
+    endif()
+
     list(APPEND SUBDIRECTORIES python)
     list(APPEND SUBDIRECTORIES boost)
-    list(APPEND SUBDIRECTORIES freetype)
-    list(APPEND SUBDIRECTORIES icu4c)
+
     list(APPEND SUBDIRECTORIES glew)
 
     list(APPEND SUBDIRECTORIES qt)

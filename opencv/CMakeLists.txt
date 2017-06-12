@@ -74,7 +74,10 @@ endif()
 
 set(OPENCV_PATCH_CMD)
 set(OPENCV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(OPENCV_DEPENDS libpng zlib tiff)
+
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(OPENCV_DEPENDS libpng zlib tiff)
+endif()
 
 if(WIN32)
     list(APPEND OPENCV_CMAKE_ARGS
@@ -118,7 +121,10 @@ configure_file(
 )
 
 if(NOT ANDROID)
-    list(APPEND OPENCV_DEPENDS jpeg qt)
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+        list(APPEND OPENCV_DEPENDS jpeg)
+    endif()
+    list(APPEND OPENCV_DEPENDS qt)
     list(APPEND OPENCV_CMAKE_ARGS
         -DWITH_QT:BOOL=ON
     )

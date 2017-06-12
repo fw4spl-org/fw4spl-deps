@@ -55,13 +55,17 @@ endif()
 # VXL 1.18.0 (on master)
 set(CACHED_URL https://github.com/vxl/vxl/archive/fbe829dd16e4c1bdf312cf287b33c6ea845ff782.tar.gz)
 
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(VXL_DEPENDS jpeg libpng tiff expat)
+endif()
+
 ExternalProject_Add(
     vxl
     URL ${CACHED_URL}
     URL_HASH SHA256=f4f6315dd7905e50b11cb93bb4d81a0a18b733c17629b824265f97b1b4af2644
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME vxl_1.18.0.tar.gz
-    DEPENDS zlib jpeg libpng tiff expat
+    DEPENDS ${VXL_DEPENDS}
     PATCH_COMMAND ${VXL_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${VXL_CMAKE_ARGS}

@@ -31,13 +31,12 @@ set(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${GDCM_PATCH_DIR}/zlib.diff -d <SOURCE_DIR>
                     && "${PATCH_EXECUTABLE}" -p1 -i ${GDCM_PATCH_DIR}/fixVTKOverload.diff -d <SOURCE_DIR>)
 
-
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
     URL_HASH SHA256=b8d57a3ea3464dac34252ef1cd816d9f4b61911ca9e94a74552d907ec406a579
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DEPENDS zlib expat libxml vtk
+    DEPENDS vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${GDCM_CMAKE_ARGS}
     PATCH_COMMAND ${GDCM_PATCH_CMD}

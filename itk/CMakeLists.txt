@@ -135,7 +135,7 @@ ExternalProject_Add(
     URL_HASH SHA256=ed42f94c0c0efce3cc5cbcce73052db4029ff54f33aad7340badcd589805c1b6
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${ITK_PATCH_CMD}
-    DEPENDS zlib jpeg libpng tiff vxl gdcm vtk
+    DEPENDS vxl gdcm vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
 )

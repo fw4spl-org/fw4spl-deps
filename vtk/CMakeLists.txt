@@ -56,7 +56,13 @@ if(NOT ANDROID)
         -DModule_vtkIOGeometry:BOOL=ON
         -DModule_vtkIOPLY:BOOL=ON  # request for PCL
     )
-    set(EXTRA_DEPENDS qt)
+
+    if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+        set(VTK_DEPENDS qt)
+    else()
+        set(VTK_DEPENDS jpeg expat libxml freetype libpng tiff qt)
+    endif()
+
 else( )
 
     add_definitions(-DANDROID)
@@ -107,11 +113,13 @@ else( )
         )
 
         if(ENABLE_QT_ANDROID)
-            set(EXTRA_DEPENDS qt)
+            set(VTK_DEPENDS qt)
             list(APPEND VTK_CMAKE_ARGS
                 -DVTK_QT_VERSION:STRING=5
                 -DModule_vtkGUISupportQt:BOOL=ON
             )
+        else()
+            set(VTK_DEPENDS zlib jpeg expat libxml freetype libpng tiff)
         endif()
 endif()
 
@@ -157,7 +165,7 @@ ExternalProject_Add(
     URL_HASH SHA256=${VTK_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${VTK_PATCH_CMD}
-    DEPENDS zlib jpeg expat libxml freetype libpng tiff glew ${EXTRA_DEPENDS}
+    DEPENDS glew ${VTK_DEPENDS}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CONFIGURE_COMMAND ${VTK_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE} ${VTK_SRC_DIR}

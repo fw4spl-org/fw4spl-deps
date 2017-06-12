@@ -23,18 +23,6 @@ index 2020fd8..3ec62d1 100644
          list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${GLEW_Target})
      endif()
      set(SOFA_HAVE_GLEW ${GLEW_FOUND})
-@@ -116,6 +117,11 @@ set(SOFA_HAVE_ZLIB ${ZLIB_FOUND})
- # PNG
- find_package(PNG)
- if(PNG_FOUND)
-+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-+        set(PNG_LIBRARY  ${PNG_LIBRARY_DEBUG})
-+    else()
-+        set(PNG_LIBRARY  ${PNG_LIBRARY_RELEASE})
-+    endif()
-     sofa_create_target(PNG SofaFramework "${PNG_LIBRARY}" "${PNG_INCLUDE_DIRS}")
- 	list(APPEND SOFAFRAMEWORK_DEPENDENCY_LINK ${PNG_Target})
- endif()
 @@ -184,7 +190,7 @@ add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/helper ${CMAKE_CURRENT_
  add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/defaulttype ${CMAKE_CURRENT_BINARY_DIR}/SofaDefaultType)
  add_subdirectory(${SofaFramework_ACTUAL_SOURCE_DIR}/sofa/core ${CMAKE_CURRENT_BINARY_DIR}/SofaCore)
@@ -44,23 +32,6 @@ index 2020fd8..3ec62d1 100644
  endif()
  
  # IDE folder
-diff --git a/SofaFramework/SofaFrameworkConfig.cmake.in b/SofaFramework/SofaFrameworkConfig.cmake.in
-index d6ff2f9..a853fff 100644
---- a/SofaFramework/SofaFrameworkConfig.cmake.in
-+++ b/SofaFramework/SofaFrameworkConfig.cmake.in
-@@ -38,7 +38,11 @@ endif()
- 
- if(SOFA_HAVE_PNG)
-     find_package(PNG REQUIRED)
--    sofa_create_target(PNG SofaFramework "${PNG_LIBRARY}" "${PNG_INCLUDE_DIRS}")
-+    if(${CMAKE_BUILD_TYPE} STREQUAL "DEBUG")
-+        sofa_create_target(PNG SofaFramework "${PNG_LIBRARY_DEBUG}" "${PNG_INCLUDE_DIRS}")
-+    else()
-+        sofa_create_target(PNG SofaFramework "${PNG_LIBRARY_RELEASE}" "${PNG_INCLUDE_DIRS}")
-+    endif()
- endif()
- 
- if(SOFA_HAVE_GLEW)
 diff --git a/SofaGeneral/CMakeLists.txt b/SofaGeneral/CMakeLists.txt
 index c4498b2..1d9d89a 100644
 --- a/SofaGeneral/CMakeLists.txt
