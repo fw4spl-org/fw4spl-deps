@@ -91,13 +91,13 @@ else( )
         -DModule_vtkRenderingFreeType:BOOL=OFF
         -DModule_vtkInteractionWidgets=ON
         -DCMAKE_CXX_COMPILER_VERSION=${ANDROID_COMPILER_VERSION}
-        
+
        -DModule_vtkFiltersTexture:BOOL=ON
        -DModule_vtkFiltersHybrid:BOOL=ON
-        
+
         # Find utilities build on desktop
         -DVTKCompileTools_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk-build-desktop
-        
+
         -DModule_vtkGUISupportQtOpenGL:BOOL=OFF
         -DModule_vtkGUISupportQtWebkit:BOOL=OFF
         -DModule_vtkGUISupportQtSQL:BOOL=OFF
@@ -105,7 +105,7 @@ else( )
         -DModule_vtkRenderingContextOpenGL2=OFF
         -DModule_vtkViewsQt:BOOL=OFF
         )
-        
+
         if(ENABLE_QT_ANDROID)
             set(EXTRA_DEPENDS qt)
             list(APPEND VTK_CMAKE_ARGS
