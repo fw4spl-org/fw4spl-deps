@@ -25,10 +25,10 @@ set(VTK_CMAKE_ARGS
     -DVTK_Group_StandAlone:BOOL=OFF #disabled hdf5 module
 )
 
-if(NOT ANDROID)
+set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
+set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
 
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
-    set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
+if(NOT ANDROID)
 
     list(APPEND VTK_CMAKE_ARGS
         -DVTK_USE_GL2PS:BOOL=ON
@@ -58,8 +58,6 @@ if(NOT ANDROID)
     )
     set(EXTRA_DEPENDS qt)
 else( )
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
-    set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
 
     add_definitions(-DANDROID)
 
