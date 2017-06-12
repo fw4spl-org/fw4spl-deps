@@ -66,10 +66,10 @@ index 94abeef..59142b1 100644
  	private:
  		StereoSGM(const StereoSGM&);
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index af93aff..0c43dd8 100644
+index af93aff..5187971 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -1,17 +1,32 @@
+@@ -1,17 +1,37 @@
 +include_directories(../include)
 +
  find_package(CUDA REQUIRED)
@@ -84,13 +84,12 @@ index af93aff..0c43dd8 100644
 +    check_consistency.cu
 +    cuda_utils.cu
 +)
-+
-+unset(CUDA_NVCC_FLAGS)
-+CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_NVCC_FLAGS "${CUDA_ARCH_BIN}")
  
 -SET(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} ${CUDA_ARCH}")
-+CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} SHARED)
-+target_link_libraries(sgm ${CUDA_nppi_LIBRARY})
++# libSGM requires SM >= 3.0
++if(CUDA_ARCH_BIN MATCHES "2\\..")
++    message(FATAL_ERROR "libSGM requires CUDA SM 3.0 support or greater (currently building for: ${CUDA_ARCH_BIN})")
++endif()
  
 -SET(STEREOSRCS 
 -	census.cu 
@@ -100,6 +99,12 @@ index af93aff..0c43dd8 100644
 -	median_filter.cu 
 -	check_consistency.cu 
 -	cuda_utils.cu
++unset(CUDA_NVCC_FLAGS)
++CUDA_SELECT_NVCC_ARCH_FLAGS(CUDA_NVCC_FLAGS "${CUDA_ARCH_BIN}")
++
++CUDA_ADD_LIBRARY(sgm stereo_sgm.cpp ${STEREOSRCS} SHARED)
++target_link_libraries(sgm ${CUDA_nppi_LIBRARY})
++
 +install(
 +    TARGETS sgm
 +    ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
