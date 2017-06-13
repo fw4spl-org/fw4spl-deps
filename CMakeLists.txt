@@ -97,7 +97,7 @@ endif()
 
 ## CUDA stuff
 if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
-    set(FW4SPL_CUDA_ARCHS "2.0 3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
+    set(FW4SPL_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
 endif()
 
 ##DESKTOP DEPS ##
