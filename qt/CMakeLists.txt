@@ -28,7 +28,6 @@ set(QT_SKIP_MODULES_LIST
     -skip qtcanvas3d
     -skip qtgraphicaleffects
     -skip qtscript
-    -skip qtwayland
     -skip qtserialport
     -skip qtdoc
     -skip qtlocation)
