@@ -29,6 +29,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKDCMTK:BOOL=OFF
                    -DModule_ITKIODCMTK:BOOL=OFF
                    -DModule_ITKIOHDF5:BOOL=OFF
+                   -DModule_ITKIOTransformHDF5:BOOL=OFF
 
 
                    -DModule_ITKAnisotropicSmoothing:BOOL=ON
@@ -127,7 +128,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 set(CACHED_URL http://downloads.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>
-    && "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/ConfigureChecks.cmake.diff -d <SOURCE_DIR>/Modules/ThirdParty/HDF5/src/itkhdf5/config/cmake)
+    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/HDF5.diff -d <SOURCE_DIR>)
 
 ExternalProject_Add(
     itk

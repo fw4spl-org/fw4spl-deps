@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index abe3f87..0e1f5c5 100644
+index 7eee54a..d8f1dd0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -25,7 +25,7 @@ include(ExternalProject)
+@@ -23,7 +23,7 @@ include(ExternalProject)
  if( CMAKE_HOST_WIN32 )
  
    string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )
@@ -11,7 +11,7 @@ index abe3f87..0e1f5c5 100644
      message(
        FATAL_ERROR
        "ITK source code directory path length is too long (${n} > 50)."
-@@ -34,7 +34,7 @@ if( CMAKE_HOST_WIN32 )
+@@ -32,7 +32,7 @@ if( CMAKE_HOST_WIN32 )
    endif()
  
    string( LENGTH "${CMAKE_CURRENT_BINARY_DIR}" n )
