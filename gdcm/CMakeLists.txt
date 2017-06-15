@@ -24,17 +24,18 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DUSE_ITK:BOOL=OFF
 )
 
-set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.6.4.tar.gz)
+set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.6.7.tar.gz)
 
 # Needed for windows to find our zlib but doesn't hurt on other platforms
 set(GDCM_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${GDCM_PATCH_DIR}/zlib.diff -d <SOURCE_DIR>)
+set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${GDCM_PATCH_DIR}/zlib.diff -d <SOURCE_DIR>
+                    && "${PATCH_EXECUTABLE}" -p1 -i ${GDCM_PATCH_DIR}/fixVTKOverload.diff -d <SOURCE_DIR>)
 
 
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
-    URL_HASH SHA256=bbf7eeda622cf18499bd162f3b06d0c937a5379f6f3d1445d57b3d4d0070f97e
+    URL_HASH SHA256=b8d57a3ea3464dac34252ef1cd816d9f4b61911ca9e94a74552d907ec406a579
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS zlib expat libxml vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
