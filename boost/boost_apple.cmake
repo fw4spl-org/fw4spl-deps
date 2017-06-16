@@ -1,5 +1,7 @@
 list(APPEND BOOST_ARGS
     --prefix=${INSTALL_PREFIX_boost}/${CMAKE_INSTALL_PREFIX}
+    cxxflags=-std=c++11
+    cxxflags=-stdlib=libc++
     cxxflags=-ftemplate-depth=256
     linkflags=-headerpad_max_install_names
 )
@@ -8,7 +10,7 @@ list(APPEND BOOST_ARGS
 set( BOOST_USER_CONFIG "using clang : : ${CMAKE_CXX_COMPILER} ;")
 list(APPEND BOOST_ARGS toolset=clang)
 
-if(${IS_DEBUG})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     list(APPEND BOOST_ARGS python-debugging=on)
     set(PYTHON_DEBUGGING "<python-debugging>on")
 endif()
