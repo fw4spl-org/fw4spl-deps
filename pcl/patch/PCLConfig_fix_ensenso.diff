@@ -1,0 +1,13 @@
+diff --git a/PCLConfig.cmake.in b/PCLConfig.cmake.in
+index 994d20e5d..b2dc98cf6 100644
+--- a/PCLConfig.cmake.in
++++ b/PCLConfig.cmake.in
+@@ -263,7 +263,7 @@ macro(find_ensenso)
+   endif()
+ 
+   if(NOT ENSENSO_ROOT AND ("@HAVE_ENSENSO@" STREQUAL "TRUE"))
+-    get_filename_component(ENSENSO_ABI_HINT @ENSENSO_INCLUDE_DIR@ PATH)
++    get_filename_component(ENSENSO_ABI_HINT "@ENSENSO_INCLUDE_DIR@" PATH)
+   endif()
+ 
+   find_path(ENSENSO_INCLUDE_DIR nxLib.h

@@ -89,6 +89,16 @@ option(ENABLED_SOFA_DEPS "Set to ON to build sofa" OFF)
 option(ENABLED_PCL_DEPS "Set to ON to build PCL" OFF)
 option(ENABLED_REALSENSE "Set to ON to build librealsense" OFF)
 option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
+option(ENABLE_LIBSGM "Set to ON to build libSGM dependencies" OFF)
+option(ENABLE_OPENCV_CUDA "Set to ON to build OpenCV with CUDA support" OFF)
+if(ENABLED_PCL_DEPS)
+    option(ENABLE_PCL_CUDA "Set to ON to build PCL with CUDA support" OFF)
+endif()
+
+## CUDA stuff
+if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
+    set(FW4SPL_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
+endif()
 
 ##DESKTOP DEPS ##
 if(NOT ANDROID)
@@ -170,6 +180,10 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES jsoncpp)
         list(APPEND SUBDIRECTORIES log4cpp)
         list(APPEND SUBDIRECTORIES odil)
+    endif()
+
+    if(ENABLE_LIBSGM)
+        list(APPEND SUBDIRECTORIES libSGM)
     endif()
 
 ##ANDROID DEPS##
@@ -314,4 +328,3 @@ else()
 endif()
 
 include(CPack)
-
