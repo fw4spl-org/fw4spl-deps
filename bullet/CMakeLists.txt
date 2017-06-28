@@ -23,13 +23,13 @@ else(UNIX)
     )
 endif(UNIX)
 
-set(CACHED_URL https://github.com/bulletphysics/bullet3/archive/2.82.tar.gz)
+set(CACHED_URL https://github.com/bulletphysics/bullet3/archive/2.86.1.tar.gz)
 
 
 ExternalProject_Add(
     bullet
     URL ${CACHED_URL}
-    URL_HASH SHA256=93ffcdfdd7aa67159fc18d336456945538a6602e3cd318eed9963280620b55bd
+    URL_HASH SHA256=c058b2e4321ba6adaa656976c1a138c07b18fc03b29f5b82880d5d8228fbf059
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${BULLET_CMAKE_ARGS}
