@@ -31,7 +31,7 @@ set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:$
 
 ExternalProject_Add(
     boost
-    DEPENDS zlib python libiconv
+    DEPENDS python
     URL ${CACHED_URL}
     URL_HASH SHA256=${BOOST_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}

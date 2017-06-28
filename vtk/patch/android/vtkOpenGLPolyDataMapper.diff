@@ -1,0 +1,12 @@
+diff -uNr a/Rendering/OpenGL2/vtkOpenGLPolyDataMapper.cxx b/Rendering/OpenGL2/vtkOpenGLPolyDataMapper.cxx 
+--- a/Rendering/OpenGL2/vtkOpenGLPolyDataMapper.cxx	2017-04-07 15:20:26.000000000 +0200
++++ b/Rendering/OpenGL2/vtkOpenGLPolyDataMapper.cxx	2017-04-07 15:21:25.000000000 +0200
+@@ -1581,7 +1581,7 @@
+ #if GL_ES_VERSION_3_0 != 1
+   bool multisampling = glIsEnabled(GL_MULTISAMPLE) == GL_TRUE;
+ #else
+-  bool multisample = false;
++  bool multisampling = false;
+ #endif
+ 
+   if (!multisampling)

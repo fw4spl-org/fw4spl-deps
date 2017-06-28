@@ -17,7 +17,7 @@ set(OPENCV_CMAKE_ARGS
     -DWITH_JASPER:BOOL=OFF #jpeg2k support
     -DWITH_1394:BOOL=OFF
     -DWITH_OPENEXR:BOOL=OFF
-    -DWITH_CUDA:BOOL=OFF
+    -DWITH_CUDA:BOOL=${ENABLE_OPENCV_CUDA}
     -DWITH_OPENCL:BOOL=OFF
 
     -DWITH_JPEG:BOOL=ON
@@ -37,8 +37,6 @@ set(OPENCV_CMAKE_ARGS
     # Doesn't compile with Clang >= 3.5
     -DBUILD_opencv_ts:BOOL=OFF
 )
-
-
 
 if(ENABLE_OPENCV_CONTRIB)
     list(APPEND OPENCV_CMAKE_ARGS
@@ -74,7 +72,28 @@ endif()
 
 set(OPENCV_PATCH_CMD)
 set(OPENCV_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(OPENCV_DEPENDS libpng zlib tiff)
+
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(OPENCV_DEPENDS libpng zlib tiff)
+endif()
+
+if(ENABLE_OPENCV_CUDA)
+    if(WIN32)
+        # Fix link error with the MSVC compiler (fixed upstream in c4a3478)
+        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
+        # Workaround error C1041
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
+        list(APPEND OPENCV_CMAKE_ARGS
+             -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+             -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=ON
+        )
+    endif()
+    list(APPEND OPENCV_CMAKE_ARGS
+         -DBUILD_CUDA_STUBS:BOOL=OFF
+         -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+        )
+endif()
+
 
 if(WIN32)
     list(APPEND OPENCV_CMAKE_ARGS
@@ -118,7 +137,10 @@ configure_file(
 )
 
 if(NOT ANDROID)
-    list(APPEND OPENCV_DEPENDS jpeg qt)
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+        list(APPEND OPENCV_DEPENDS jpeg)
+    endif()
+    list(APPEND OPENCV_DEPENDS qt)
     list(APPEND OPENCV_CMAKE_ARGS
         -DWITH_QT:BOOL=ON
     )

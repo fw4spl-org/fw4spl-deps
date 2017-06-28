@@ -18,15 +18,17 @@ set(VTK_CMAKE_ARGS
     -DVTK_USE_SYSTEM_ZLIB:BOOL=ON
     -DVTK_USE_SYSTEM_FREETYPE:BOOL=ON
     -DVTK_USE_SYSTEM_TIFF:BOOL=ON
+    -DVTK_USE_SYSTEM_GLEW:BOOL=ON
+
     -DBUILD_SHARED_LIBS:BOOL=ON
 
     -DVTK_Group_StandAlone:BOOL=OFF #disabled hdf5 module
 )
 
-if(NOT ANDROID)
+set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
+set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
 
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.0.0.tar.gz)
-    set(VTK_HASHSUM 8edb4a681b948f9c7c318f50d57bc23146095464539bfd00ae09e5158de17b97)
+if(NOT ANDROID)
 
     list(APPEND VTK_CMAKE_ARGS
         -DVTK_USE_GL2PS:BOOL=ON
@@ -54,11 +56,15 @@ if(NOT ANDROID)
         -DModule_vtkIOGeometry:BOOL=ON
         -DModule_vtkIOPLY:BOOL=ON  # request for PCL
     )
-    set(EXTRA_DEPENDS qt)
+
+    if(CMAKE_SYSTEM_NAME STREQUAL Linux)
+        set(VTK_DEPENDS qt)
+    else()
+        set(VTK_DEPENDS jpeg expat libxml freetype libpng tiff qt)
+    endif()
+
 else( )
-    set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.0.0.tar.gz)
-    set(VTK_HASHSUM 8edb4a681b948f9c7c318f50d57bc23146095464539bfd00ae09e5158de17b97)
-    
+
     add_definitions(-DANDROID)
 
     list(APPEND VTK_CMAKE_ARGS
@@ -91,13 +97,13 @@ else( )
         -DModule_vtkRenderingFreeType:BOOL=OFF
         -DModule_vtkInteractionWidgets=ON
         -DCMAKE_CXX_COMPILER_VERSION=${ANDROID_COMPILER_VERSION}
-        
+
        -DModule_vtkFiltersTexture:BOOL=ON
        -DModule_vtkFiltersHybrid:BOOL=ON
-        
+
         # Find utilities build on desktop
         -DVTKCompileTools_DIR:PATH=${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk-build-desktop
-        
+
         -DModule_vtkGUISupportQtOpenGL:BOOL=OFF
         -DModule_vtkGUISupportQtWebkit:BOOL=OFF
         -DModule_vtkGUISupportQtSQL:BOOL=OFF
@@ -105,13 +111,15 @@ else( )
         -DModule_vtkRenderingContextOpenGL2=OFF
         -DModule_vtkViewsQt:BOOL=OFF
         )
-        
+
         if(ENABLE_QT_ANDROID)
-            set(EXTRA_DEPENDS qt)
+            set(VTK_DEPENDS qt)
             list(APPEND VTK_CMAKE_ARGS
                 -DVTK_QT_VERSION:STRING=5
                 -DModule_vtkGUISupportQt:BOOL=ON
             )
+        else()
+            set(VTK_DEPENDS zlib jpeg expat libxml freetype libpng tiff)
         endif()
 endif()
 
@@ -137,13 +145,15 @@ endif()
 set(VTK_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/vtk-prefix/src/vtk)
 set(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(VTK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/IO_Import_CMakeLists.diff -d <SOURCE_DIR>
-    && "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/optimization.diff -d <SOURCE_DIR> )
+          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/optimization.diff -d <SOURCE_DIR>
+          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/CMakeLists_glew.diff -d <SOURCE_DIR>
+          )
 
 if(ANDROID)
     list(APPEND VTK_PATCH_CMD
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/Core_CMakeLists.diff -d <SOURCE_DIR>
          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkModuleMacros.diff -d <SOURCE_DIR>
-         COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkEGL.diff -d <SOURCE_DIR>
+                  COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/android/vtkOpenGLPolyDataMapper.diff -d <SOURCE_DIR>
     )
 endif()
 
@@ -155,7 +165,7 @@ ExternalProject_Add(
     URL_HASH SHA256=${VTK_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${VTK_PATCH_CMD}
-    DEPENDS zlib jpeg expat libxml freetype libpng tiff ${EXTRA_DEPENDS}
+    DEPENDS glew ${VTK_DEPENDS}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CONFIGURE_COMMAND ${VTK_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE} ${VTK_SRC_DIR}

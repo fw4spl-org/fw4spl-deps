@@ -7,10 +7,22 @@ include(ExternalProject)
 set(CACHED_URL http://downloads.sourceforge.net/boost/boost_1_61_0.tar.gz)
 set(BOOST_HASHSUM a77c7cc660ec02704c6884fbb20c552d52d60a18f26573c9cee0788bf00ed7e6)
 
-string(TOLOWER "${CMAKE_BUILD_TYPE}" BUILD_TYPE)
-set(BOOST_BUILD_TYPE debug)
-if(BUILD_TYPE MATCHES "release")
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set(BOOST_BUILD_TYPE debug)
+    set(BOOST_DEBUG_SYMBOLS on)
+    set(BOOST_OPTIMIZATION off)
+elseif(${CMAKE_BUILD_TYPE} STREQUAL "Release")
     set(BOOST_BUILD_TYPE release)
+    set(BOOST_DEBUG_SYMBOLS off)
+    set(BOOST_OPTIMIZATION speed)
+elseif(${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+    set(BOOST_BUILD_TYPE release)
+    set(BOOST_DEBUG_SYMBOLS on)
+    set(BOOST_OPTIMIZATION speed)
+elseif(${CMAKE_BUILD_TYPE} STREQUAL "MinSizeRel")
+    set(BOOST_BUILD_TYPE release)
+    set(BOOST_DEBUG_SYMBOLS off)
+    set(BOOST_OPTIMIZATION space)
 endif()
 
 if(WIN32)
@@ -21,7 +33,7 @@ if(WIN32)
 else()
     set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
     set(PYTHON_BIN ${PYTHON_DIR}/bin)
-    if(${IS_DEBUG})
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python3.5dm)
     else()
         set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python3.5m)
@@ -42,6 +54,8 @@ set(BOOST_ARGS
     --build-type=minimal
     --without-test
     variant=${BOOST_BUILD_TYPE}
+    debug-symbols=${BOOST_DEBUG_SYMBOLS}
+    optimization=${BOOST_OPTIMIZATION}
     link=shared
     address-model=${BITS}
     threading=multi

@@ -13,7 +13,7 @@ set(CACHED_URL http://www.libarchive.org/downloads/libarchive-3.1.2.zip)
 set(PATCH_CMD "")
 
 if(ANDROID)
-    list(APPEND LIBARCHIVE_CMAKE_ARGS 
+    list(APPEND LIBARCHIVE_CMAKE_ARGS
         -DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL}
     )
     set(PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/libarchive_android.diff -d <SOURCE_DIR>)
@@ -22,9 +22,11 @@ endif()
 
 if(UNIX)
     list(APPEND LIBARCHIVE_CMAKE_ARGS -DENABLE_ICONV:BOOL=OFF -DENABLE_EXPAT:BOOL=ON)
-    set(LIBARCHIVE_DEPENDS zlib expat libxml)
+    if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+        set(LIBARCHIVE_DEPENDS zlib expat libxml)
+    endif()
 elseif(WIN32)
-    list(APPEND LIBARCHIVE_CMAKE_ARGS -DENABLE_ICONV:BOOL=ON 
+    list(APPEND LIBARCHIVE_CMAKE_ARGS -DENABLE_ICONV:BOOL=ON
                                       -DENABLE_EXPAT:BOOL=OFF
                                       -DCMAKE_C_FLAGS_DEBUG:STRING=/W2
     )
@@ -44,10 +46,10 @@ ExternalProject_Add(
 )
 if(WIN32)
     ExternalProject_Add_Step(libarchive ZlibCopy
-        COMMAND ${CMAKE_COMMAND} -E copy 
-                ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll 
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll
                 ${CMAKE_CURRENT_BINARY_DIR}/libarchive-prefix/src/libarchive-build/${ZLIB_LIB_NAME}.dll
-        DEPENDEES download 
+        DEPENDEES download
         COMMENT "Copy ZLib"
     )
 endif()

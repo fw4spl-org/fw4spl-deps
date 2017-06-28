@@ -1,0 +1,22 @@
+diff -uNr a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt    2017-05-30 08:57:09.012280746 +0200
++++ b/CMakeLists.txt    2017-05-30 08:56:37.368664755 +0200
+@@ -210,7 +210,7 @@
+ endif()
+
+ # default to not using the system GLEW as ours has fixes in it right now
+-set(VTK_USE_SYSTEM_GLEW OFF CACHE BOOL "do not use a system glew" FORCE)
++set(VTK_USE_SYSTEM_GLEW OFF CACHE BOOL "do not use a system glew" )
+
+ set(VTK_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+
+--- a/CMake/vtkOpenGL.cmake    2017-06-12 16:46:19.000000000 +0200
++++ b/CMake/vtkOpenGL.cmake    2017-06-12 16:47:25.000000000 +0200
+@@ -102,6 +102,6 @@
+     vtk_module_link_libraries(${target} LINK_PRIVATE ${EGL_LIBRARIES})
+   endif()
+   if(VTK_CAN_DO_ONSCREEN)
+-    vtk_module_link_libraries(${target} LINK_PRIVATE ${OPENGL_LIBRARIES})
++    vtk_module_link_libraries(${target} LINK_PRIVATE ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
+   endif()
+ endfunction()

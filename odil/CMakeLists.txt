@@ -41,13 +41,18 @@ else()
 endif()
 
 
+set(ODIL_DEPENDS boost dcmtk jsoncpp log4cpp)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    list(APPEND ODIL_DEPENDS icu4c)
+endif()
+
 ExternalProject_Add(
     odil
     URL ${CACHED_URL}
     URL_HASH SHA256=a133760bc0f69087b2c574fb09b69d15ae7558e9b60ade3fc259d86d35851956
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME odil-${VERSION}.zip
-    DEPENDS boost dcmtk jsoncpp icu4c log4cpp
+    DEPENDS ${ODIL_DEPENDS}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ODIL_CMAKE_ARGS}
 )

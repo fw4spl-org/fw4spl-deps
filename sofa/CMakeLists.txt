@@ -34,13 +34,13 @@ set(SOFA_PATCH_CMD ${CMAKE_COMMAND} -E remove_directory "<SOURCE_DIR>/extlibs/mi
                    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/sofa.patch -d <SOURCE_DIR>
 )
 
-set(DEPENDENCIES
-    zlib
-    eigen
-    boost
-    libpng
-    glew
-)
+set(DEPENDENCIES eigen boost glew)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    list(APPEND DEPENDENCIES libpng)
+    set(SOFA_PATCH_CMD ${SOFA_PATCH_CMD}
+                       COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/png.patch -d <SOURCE_DIR>
+    )
+endif()
 
 if(NOT APPLE)
     list(APPEND DEPENDENCIES

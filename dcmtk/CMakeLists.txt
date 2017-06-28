@@ -29,6 +29,10 @@ endif()
 set(CACHED_URL http://dicom.offis.de/download/dcmtk/snapshot/old/dcmtk-3.6.1_20150217.tar.gz)
 set(DCMTK_HASHSUM 3cf8f3e52ed8a5240a7facc3a118de411aa54bc9beccba0cf7a975735da35304)
 
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
+    set(DCMTK_DEPENDS tiff libpng libxml)
+endif()
+
 ExternalProject_Add(
     dcmtk
     URL ${CACHED_URL}
@@ -37,7 +41,7 @@ ExternalProject_Add(
     PATCH_COMMAND ${DCMTK_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${DCMTK_CMAKE_ARGS}
-    DEPENDS tiff libpng libxml
+    DEPENDS ${DCMTK_DEPENDS}
 )
 
 ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
