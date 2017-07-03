@@ -72,9 +72,6 @@ if(NOT ANDROID)
         -DBUILD_segmentation:BOOL=ON
         -DBUILD_registration:BOOL=ON
     )
-    if(WIN32)
-        list(APPEND PCL_CMAKE_ARGS -DOPENNI2_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/openni2/${OPENNI2_LIBRARY})
-    endif()
 else()
     list(APPEND PCL_CMAKE_ARGS
         -DBUILD_visualization:BOOL=OFF
