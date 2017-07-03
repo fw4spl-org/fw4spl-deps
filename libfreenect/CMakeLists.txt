@@ -22,7 +22,7 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add_Step(libfreenect INSTALL_LIBFREENECT
-        COMMAND ${CMAKE_COMMAND} -E copy_directory lib/OpenNI2-FreenectDriver lib/openni2/OpenNI2/Drivers
+        COMMAND ${CMAKE_COMMAND} -E copy_directory lib/OpenNI2-FreenectDriver lib/OpenNI2/Drivers
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
         DEPENDEES install
 )

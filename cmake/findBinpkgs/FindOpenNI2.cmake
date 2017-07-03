@@ -34,6 +34,8 @@ if(OPENNI2_FOUND)
     if(WIN32)
         # Find the driver folder
         find_path(OPENNI2_DRIVERS_DIR NAMES Drivers PATH_SUFFIXES bin/OpenNI2)
+    else()
+        find_path(OPENNI2_DRIVERS_DIR NAMES Drivers PATH_SUFFIXES lib/OpenNI2)        
     endif()
     message(STATUS "OpenNI2 found ( include: ${OPENNI2_INCLUDE_DIRS}, lib: ${OPENNI2_LIBRARY})")
 endif()

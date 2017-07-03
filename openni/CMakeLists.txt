@@ -68,9 +68,9 @@ else()
     )
 
     ExternalProject_Add_Step(openni INSTALL_OPENNI
-            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Config/ ${CMAKE_INSTALL_PREFIX}/lib/openni2/
-            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2/ ${CMAKE_INSTALL_PREFIX}/lib/openni2/OpenNI2
-            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/libOpenNI2${EXT} ${CMAKE_INSTALL_PREFIX}/lib/openni2/libOpenNI2${EXT}
+            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Config/OpenNI2/ ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2/
+            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2 ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2
+            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/libOpenNI2${EXT} ${CMAKE_INSTALL_PREFIX}/lib/libOpenNI2${EXT}
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Include ${CMAKE_INSTALL_PREFIX}/include/openni2
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDEES install
