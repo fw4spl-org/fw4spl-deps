@@ -42,15 +42,6 @@ macro(_FIND_BULLET_LIBRARY _var)
   mark_as_advanced(${_var})
 endmacro()
 
-macro(_BULLET_APPEND_LIBRARIES _list _release)
-   set(_debug ${_release}_DEBUG)
-   if(${_debug})
-      set(${_list} ${${_list}} optimized ${${_release}} debug ${${_debug}})
-   else()
-      set(${_list} ${${_list}} ${${_release}})
-   endif()
-endmacro()
-
 find_path(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
   HINTS
     ${BULLET_ROOT}/include
@@ -59,10 +50,10 @@ find_path(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
 )
 
 # Find the libraries
-_FIND_BULLET_LIBRARY(BULLET_DYNAMICS_LIBRARY        BulletDynamics)
-_FIND_BULLET_LIBRARY(BULLET_COLLISION_LIBRARY       BulletCollision)
-_FIND_BULLET_LIBRARY(BULLET_MATH_LIBRARY            BulletMath LinearMath)
-_FIND_BULLET_LIBRARY(BULLET_SOFTBODY_LIBRARY        BulletSoftBody)
+_FIND_BULLET_LIBRARY(BULLET_DYNAMICS_LIBRARY        BulletDynamics BulletDynamics_Debug)
+_FIND_BULLET_LIBRARY(BULLET_COLLISION_LIBRARY       BulletCollision BulletCollision_Debug)
+_FIND_BULLET_LIBRARY(BULLET_MATH_LIBRARY            BulletMath LinearMath BulletMath_Debug LinearMath_Debug)
+_FIND_BULLET_LIBRARY(BULLET_SOFTBODY_LIBRARY        BulletSoftBody BulletSoftBody_Debug)
 
 
 # handle the QUIETLY and REQUIRED arguments and set BULLET_FOUND to TRUE if
@@ -72,10 +63,11 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(Bullet DEFAULT_MSG
     BULLET_DYNAMICS_LIBRARY BULLET_COLLISION_LIBRARY BULLET_MATH_LIBRARY
     BULLET_SOFTBODY_LIBRARY BULLET_INCLUDE_DIR)
 
-set(BULLET_INCLUDE_DIRS ${BULLET_INCLUDE_DIR})
 if(BULLET_FOUND)
-   _BULLET_APPEND_LIBRARIES(BULLET_LIBRARIES BULLET_DYNAMICS_LIBRARY)
-   _BULLET_APPEND_LIBRARIES(BULLET_LIBRARIES BULLET_COLLISION_LIBRARY)
-   _BULLET_APPEND_LIBRARIES(BULLET_LIBRARIES BULLET_MATH_LIBRARY)
-   _BULLET_APPEND_LIBRARIES(BULLET_LIBRARIES BULLET_SOFTBODY_LIBRARY)
+    set(BULLET_INCLUDE_DIRS ${BULLET_INCLUDE_DIR})
+    
+    list(APPEND BULLET_LIBRARIES ${BULLET_DYNAMICS_LIBRARY} 
+                             ${BULLET_COLLISION_LIBRARY} 
+                             ${BULLET_MATH_LIBRARY} 
+                             ${BULLET_SOFTBODY_LIBRARY})
 endif()
