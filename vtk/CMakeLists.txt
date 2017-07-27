@@ -25,8 +25,8 @@ set(VTK_CMAKE_ARGS
     -DVTK_Group_StandAlone:BOOL=OFF #disabled hdf5 module
 )
 
-set(CACHED_URL https://github.com/Kitware/VTK/archive/v7.1.0.tar.gz)
-set(VTK_HASHSUM 86adabff0bc410566abdac50cf3935ed2bb90628b40b571ceb756c9638e8e4f6)
+set(CACHED_URL https://github.com/Kitware/VTK/archive/v8.0.0.tar.gz)
+set(VTK_HASHSUM fed9774f448e7b0ddc34a13a0812b31f6fba5233cda06312a62ca8fea7b8390b)
 
 if(NOT ANDROID)
 
@@ -147,6 +147,7 @@ set(VTK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(VTK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/IO_Import_CMakeLists.diff -d <SOURCE_DIR>
           COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/optimization.diff -d <SOURCE_DIR>
           COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/CMakeLists_glew.diff -d <SOURCE_DIR>
+          COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${VTK_PATCH_DIR}/QVTKOpenGLWidget.diff -d <SOURCE_DIR>
           )
 
 if(ANDROID)
