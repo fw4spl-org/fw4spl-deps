@@ -4,7 +4,7 @@ project(flannBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://people.cs.ubc.ca/~mariusm/uploads/FLANN/flann-1.8.4-src.zip)
+set(CACHED_URL https://github.com/mariusmuja/flann/archive/1.8.4.zip)
 
 set(FLANN_CMAKE_ARGS    ${COMMON_CMAKE_ARGS}
                         -DBUILD_C_BINDINGS:BOOL=OFF
@@ -22,7 +22,7 @@ set(FLANN_PATCH_COMMAND  ${FLANN_PATCH_COMMAND}
 ExternalProject_Add(
     flann
     URL ${CACHED_URL}
-    URL_HASH SHA256=dfbb9321b0d687626a644c70872a2c540b16200e7f4c7bd72f91ae032f445c08
+    URL_HASH SHA256=22dfa2ef97b696f7ea5bf5b44aaa8590067244cddcfa1f6837f0c0d8c88c6e5c
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${FLANN_CMAKE_ARGS}
