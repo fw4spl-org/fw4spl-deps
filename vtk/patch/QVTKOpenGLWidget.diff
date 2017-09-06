@@ -1,0 +1,28 @@
+diff -uNr a/GUISupport/Qt/QVTKOpenGLWidget.h b/GUISupport/Qt/QVTKOpenGLWidget.h
+--- a/GUISupport/Qt/QVTKOpenGLWidget.h	2017-07-27 09:48:56.000000000 +0200
++++ b/GUISupport/Qt/QVTKOpenGLWidget.h	2017-07-27 09:54:51.000000000 +0200
+@@ -164,13 +164,13 @@
+    */
+   virtual void setEnableHiDPI(bool enable);
+
+-signals:
++Q_SIGNALS:
+   /**
+    * This signal will be emitted whenever a mouse event occurs within the QVTK window.
+    */
+   void mouseEvent(QMouseEvent* event);
+
+-protected slots:
++protected Q_SLOTS:
+   /**
+    * Called as a response to `QOpenGLContext::aboutToBeDestroyed`. This may be
+    * called anytime during the widget lifecycle. We need to release any OpenGL
+@@ -178,7 +178,7 @@
+    */
+   virtual void cleanupContext();
+
+-private slots:
++private Q_SLOTS:
+   /**
+    * recreates the FBO used for VTK rendering.
+    */

@@ -4,8 +4,8 @@ project(qtBuilder)
 
 include(ExternalProject)
 
-set(QT5_URL "http://download.qt.io/official_releases/qt/5.7/5.7.0/single/qt-everywhere-opensource-src-5.7.0.tar.gz")
-set(QT5_HASHSUM 4661905915d6265243e17fe59852930a229cf5b054ce5af5f48b34da9112ab5f)
+set(QT5_URL "http://download.qt.io/official_releases/qt/5.9/5.9.1/single/qt-everywhere-opensource-src-5.9.1.tar.xz")
+set(QT5_HASHSUM 7b41a37d4fe5e120cdb7114862c0153f86c07abbec8db71500443d2ce0c89795)
 
 set(CACHED_URL ${QT5_URL})
 
@@ -14,7 +14,7 @@ string(TOLOWER "${CMAKE_BUILD_TYPE}" QT_BUILD_TYPE)
 set(QT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(QT_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/qt-prefix/src/qt)
 
-set(QT_SKIP_MODULES_LIST 
+set(QT_SKIP_MODULES_LIST
     -skip qtactiveqt
     -skip qtconnectivity
     -skip qtsensors
@@ -28,10 +28,10 @@ set(QT_SKIP_MODULES_LIST
     -skip qtcanvas3d
     -skip qtgraphicaleffects
     -skip qtscript
-    -skip qtwayland
     -skip qtserialport
-    -skip qtdoc)
-    
+    -skip qtdoc
+    -skip qtlocation)
+
 if(WIN32)
     include(qt_windows.cmake)
 elseif(APPLE)
