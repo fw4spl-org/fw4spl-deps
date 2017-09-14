@@ -146,7 +146,7 @@ if(NOT ANDROID)
     )
 endif()
 
-set(OPENCV_HASHSUM b9d62dfffb8130d59d587627703d5f3e6252dce4a94c1955784998da7a39dd35)
+set(OPENCV_HASHSUM 9541efbf68f298f45914b4e837490647f4d5e472b4c0c04414a787d116a702b2)
 set(OPENCV_NAME "opencv_3.2.0.tar.gz")
 set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
 

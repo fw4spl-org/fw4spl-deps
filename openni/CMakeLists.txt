@@ -58,7 +58,7 @@ else()
     ExternalProject_Add(
             openni
             URL ${CACHED_URL}
-            URL_HASH SHA256=a86911d2ff9c76598d620d5b193ec0fad56037a11a7d7f0f4a493ccff6ba638c
+            URL_HASH SHA256=ac50b56c7deda0e893c443c7e2614855a9f78bc3458af88e77b9727c97995cae
             DOWNLOAD_DIR ${ARCHIVE_DIR}
             DOWNLOAD_NAME openni_2.2.0.xx.tar.gz
             BUILD_IN_SOURCE 1
