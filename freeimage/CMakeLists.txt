@@ -6,6 +6,8 @@ include(ExternalProject)
 
 set(CACHED_URL https://github.com/fw4spl-org/FreeImage/archive/FreeImage_3.16.0.c.tar.gz)
 
+set(FREEIMAGE_HASHSUM 9f13ba99e176e97a39ea9387ec79bea52620114d4d37e673942b8cababf99ecb)
+
 set(FREEIMAGE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DBUILD_SHARED_LIBS:BOOL=ON
                         -DFREEIMAGE_BUILD_STATIC:BOOL=OFF
@@ -23,7 +25,7 @@ endif()
 ExternalProject_Add(
     freeimage
     URL ${CACHED_URL}
-    URL_HASH SHA256=1a9c1854f434e4c301b5af94b6b64ea586c0e49944b57de4f1d8daca6cd560bc
+    URL_HASH SHA256=${FREEIMAGE_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS ${FREEIMAGE_DEPENDS}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
