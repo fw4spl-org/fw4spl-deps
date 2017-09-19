@@ -4,7 +4,7 @@ project(ceresSolverBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://ceres-solver.org/ceres-solver-1.9.0.tar.gz)
+set(CACHED_URL http://ceres-solver.org/ceres-solver-1.13.0.tar.gz)
 
 set(CERES_SOLVER_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
@@ -19,7 +19,7 @@ set(CERES_SOLVER_CMAKE_ARGS
     -DLAPACK:BOOL=OFF # unused if you choose CXPARSE, only used by SUITESPARSE
     -DSUITESPARSE:BOOL=OFF
     -DCXSPARSE:BOOL=ON
-    -DGFLAGS:BOOL=ON # only needed to build examples and tests.
+    -DGFLAGS:BOOL=OFF # only needed to build examples and tests.
     -DMINIGLOG:BOOL=OFF
     -DSCHUR_SPECIALIZATIONS:BOOL=ON
     -DBUILD_DOCUMENTATION:BOOL=OFF
@@ -35,10 +35,8 @@ if(NOT WIN32)
 endif()
 
 set(CERES_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(CERES_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${CERES_PATCH_DIR}/FindGlog.cmake.diff -d <SOURCE_DIR>)
 
 if (UNIX AND NOT APPLE AND NOT ANDROID)
-    list (APPEND CERES_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i "${CERES_PATCH_DIR}/CMakeLists.diff" -d "<SOURCE_DIR>")
     list( APPEND CERES_SOLVER_CMAKE_ARGS -DCXSPARSE_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/libCXSparse.so)    
 endif()
 
@@ -52,7 +50,7 @@ endif()
 ExternalProject_Add(
         ceresSolver
         URL ${CACHED_URL}
-        URL_HASH SHA256=30ac0729249f908afe80cb6fd06ae6d037f25a60d9fac54f61344389adab9c1a
+        URL_HASH SHA256=1df490a197634d3aab0a65687decd362912869c85a61090ff66f073c967a7dcd
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         PATCH_COMMAND ${CERES_PATCH_CMD}
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
