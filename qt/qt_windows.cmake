@@ -32,7 +32,7 @@ set(QT_CONFIGURE_CMD ./configure.bat
     -L ${CMAKE_INSTALL_PREFIX}/lib
     -${QT_BUILD_TYPE}
     -I ${CMAKE_INSTALL_PREFIX}/include/icu
-    -plugindir ${CMAKE_INSTALL_PREFIX}/lib/qt5/plugins
+    -plugindir ${CMAKE_INSTALL_PREFIX}/bin/qt5/plugins
     -no-angle
     -platform ${PLATFORM}
     -mediaplayer-backend wmf
