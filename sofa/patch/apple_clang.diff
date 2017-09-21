@@ -1,0 +1,20 @@
+diff --git a/framework/sofa/core/objectmodel/Data.cpp b/framework/sofa/core/objectmodel/Data.cpp
+index a485264877..7716fa0a75 100644
+--- a/framework/sofa/core/objectmodel/Data.cpp
++++ b/framework/sofa/core/objectmodel/Data.cpp
+@@ -38,7 +38,6 @@ namespace objectmodel
+ 
+ /// Specialization for reading strings
+ template<>
+-inline
+ bool SOFA_CORE_API TData<std::string>::read( const std::string& str )
+ {
+     virtualSetValue(str);
+@@ -47,7 +46,6 @@ bool SOFA_CORE_API TData<std::string>::read( const std::string& str )
+ 
+ /// Specialization for reading booleans
+ template<>
+-inline
+ bool SOFA_CORE_API TData<bool>::read( const std::string& str )
+ {
+     if (str.empty())

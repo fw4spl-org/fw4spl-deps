@@ -32,6 +32,7 @@ set(SOFA_REV afce0f18c733f4b6e9dabc4a2f7214007432be3e)
 set(SOFA_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(SOFA_PATCH_CMD ${CMAKE_COMMAND} -E remove_directory "<SOURCE_DIR>/extlibs/miniBoost/"
                    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/sofa.patch -d <SOURCE_DIR>
+                   COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/apple_clang.diff -d <SOURCE_DIR>
 )
 
 set(DEPENDENCIES eigen boost glew)
