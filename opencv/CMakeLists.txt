@@ -130,8 +130,13 @@ else() #ANDROID
     list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/android.diff -d <SOURCE_DIR> )
 endif()
 
+set(OPENCV_VERSION 3.3.0)
+set(CACHED_URL https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz)
+set(OPENCV_HASHSUM 8bb312b9d9fd17336dc1f8b3ac82f021ca50e2034afc866098866176d985adc6)
+set(OPENCV_NAME "opencv_${OPENCV_VERSION}.tar.gz")
+
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/opencvContrib.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/opencvContrib.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/scripts/opencvContrib.cmake
     IMMEDIATE @ONLY
 )
@@ -145,10 +150,6 @@ if(NOT ANDROID)
         -DWITH_QT:BOOL=ON
     )
 endif()
-
-set(OPENCV_HASHSUM 9541efbf68f298f45914b4e837490647f4d5e472b4c0c04414a787d116a702b2)
-set(OPENCV_NAME "opencv_3.2.0.tar.gz")
-set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
 
 ExternalProject_Add(
     opencv
