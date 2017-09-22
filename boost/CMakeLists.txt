@@ -4,8 +4,8 @@ project(boostBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://downloads.sourceforge.net/boost/boost_1_61_0.tar.gz)
-set(BOOST_HASHSUM a77c7cc660ec02704c6884fbb20c552d52d60a18f26573c9cee0788bf00ed7e6)
+set(CACHED_URL http://downloads.sourceforge.net/boost/boost_1_65_1.tar.gz)
+set(BOOST_HASHSUM a13de2c8fbad635e6ba9c8f8714a0e6b4264b60a29b964b940a22554705b6b60)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(BOOST_BUILD_TYPE debug)
