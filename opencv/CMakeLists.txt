@@ -8,11 +8,13 @@ set(ENABLE_OPENCV_CONTRIB OFF CACHE BOOL "Choose whether openCV_contrib extra mo
 
 set(OPENCV_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
+    -ENABLE_CXX11:BOOL=ON
     -DBUILD_DOCS:BOOL=OFF
     -DBUILD_TESTS:BOOL=OFF
     -DBUILD_PERF_TESTS:BOOL=OFF
     -DBUILD_SHARED_LIBS:BOOL=ON
     -DBUILD_WITH_DEBUG_INFO:BOOL=OFF
+    -DBUILD_opencv_apps:BOOL=OFF
 
     -DWITH_JASPER:BOOL=OFF #jpeg2k support
     -DWITH_1394:BOOL=OFF
@@ -36,6 +38,7 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_python:BOOL=OFF
     # Doesn't compile with Clang >= 3.5
     -DBUILD_opencv_ts:BOOL=OFF
+    -DBUILD_PROTOBUF:BOOL=OFF
 )
 
 if(ENABLE_OPENCV_CONTRIB)
@@ -67,6 +70,8 @@ if(ENABLE_OPENCV_CONTRIB)
         -DBUILD_opencv_cvv:BOOL=OFF
         -DBUILD_opencv_dpm:BOOL=OFF
         -DBUILD_opencv_aruco:BOOL=OFF
+        -DBUILD_opencv_dnn:BOOL=OFF
+        -DBUILD_opencv_dnn_modern:BOOL=OFF
     )
 endif()
 
