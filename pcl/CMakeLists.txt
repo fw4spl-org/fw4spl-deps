@@ -4,7 +4,7 @@ project(pclBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.0.tar.gz)
+set(CACHED_URL https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz)
 
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
@@ -131,22 +131,18 @@ endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(PCL_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>")
-# Enable support for SM 6.1 hardware in pcl::gpu
-list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/cuda_pascal_support.diff -d <SOURCE_DIR>)
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()
 if(WIN32)
-    list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/win.diff -d <SOURCE_DIR>)
     # Fix compilation on Windows for Ensenso grabber
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/ensenso_grabber.diff -d <SOURCE_DIR>)
-    list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/PCLConfig_fix_ensenso.diff -d <SOURCE_DIR>)
 endif()
 
 ExternalProject_Add(
     pcl
     URL ${CACHED_URL}
-    URL_HASH SHA256=9e54b0c1b59a67a386b9b0f4acb2d764272ff9a0377b825c4ed5eedf46ebfcf4
+    URL_HASH SHA256=5a102a2fbe2ba77c775bf92c4a5d2e3d8170be53a68c3a76cfc72434ff7b9783
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS ${PCL_DEPENDS}
     PATCH_COMMAND ${PCL_PATCH_CMD}
