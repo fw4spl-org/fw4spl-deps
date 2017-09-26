@@ -36,9 +36,15 @@ set(OGRE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DOGRE_BUILD_COMPONENT_VOLUME:BOOL=OFF
                     -DOGRE_USE_STD11:BOOL=OFF # Do not compile yet with clang
                     -DOGRE_CONFIG_THREAD_PROVIDER:STRING=boost
+                    -DOGRE_BUILD_LIBS_AS_FRAMEWORKS=OFF # No, we don't want framework, even on macOS
    )
 
 set(OGRE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+
+if(APPLE)
+    list(APPEND OGRE_PATCH_CMD COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${OGRE_PATCH_DIR}/macos_paths.diff -d <SOURCE_DIR>)
+    list(APPEND OGRE_PATCH_CMD COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${OGRE_PATCH_DIR}/macos_libc++.diff -d <SOURCE_DIR>)
+endif()
 
 if(WIN32)
     set(OGRE_CMAKE_ARGS ${OGRE_CMAKE_ARGS} -DOGRE_INSTALL_PDB:BOOL=OFF)
