@@ -35,6 +35,8 @@ if(${QT_BUILD_TYPE} STREQUAL "debug")
     )
 endif()
 
+set(QT_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/macos/InvalidContext.patch -d <SOURCE_DIR>)
+
 set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
 ExternalProject_Add(
     qt
