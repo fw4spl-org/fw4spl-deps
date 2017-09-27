@@ -4,7 +4,7 @@ project(glewBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://sourceforge.net/projects/glew/files/glew/2.0.0/glew-2.0.0.tgz/download)
+set(CACHED_URL http://sourceforge.net/projects/glew/files/glew/2.0.0/glew-2.0.0.tgz/download https://github.com/nigels-com/glew/releases/download/glew-2.0.0/glew-2.0.0.tgz )
 
 set(GLEW_CMAKE_ARGS ${COMMON_CMAKE_ARGS} 
         -DGLEW_MX:BOOL=OFF 

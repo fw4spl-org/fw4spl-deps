@@ -125,7 +125,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
-set(CACHED_URL http://downloads.sourceforge.net/project/itk/itk/4.6/InsightToolkit-4.6.1.tar.gz)
+set(CACHED_URL https://github.com/InsightSoftwareConsortium/ITK/archive/v4.6.1.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>
     COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/HDF5.diff -d <SOURCE_DIR>)
@@ -133,7 +133,7 @@ set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.d
 ExternalProject_Add(
     itk
     URL ${CACHED_URL}
-    URL_HASH SHA256=ed42f94c0c0efce3cc5cbcce73052db4029ff54f33aad7340badcd589805c1b6
+    URL_HASH SHA256=36dce1264216417cc90ff82025d646d4f6cd02039e7c7ca9a6cbed3bc8df2648
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${ITK_PATCH_CMD}
     DEPENDS vxl gdcm vtk
