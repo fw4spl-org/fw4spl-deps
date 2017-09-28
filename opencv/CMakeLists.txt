@@ -84,8 +84,6 @@ endif()
 
 if(ENABLE_OPENCV_CUDA)
     if(WIN32)
-        # Fix link error with the MSVC compiler (fixed upstream in c4a3478)
-        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
         # Workaround error C1041
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
         list(APPEND OPENCV_CMAKE_ARGS
