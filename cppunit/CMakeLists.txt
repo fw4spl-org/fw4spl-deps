@@ -4,7 +4,8 @@ project(cppunitBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://downloads.sourceforge.net/cppunit/cppunit-1.12.1.tar.gz)
+set(CACHED_URL http://dev-www.libreoffice.org/src/cppunit-1.14.0.tar.gz)
+set(CPPUNIT_HASHSUM 3d569869d27b48860210c758c4f313082103a5e58219a7669b52bfd29d674780)
 
 if(WIN32)
     set(CPPUNIT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
@@ -14,7 +15,7 @@ if(WIN32)
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
-        URL_HASH SHA256=ac28a04c8e6c9217d910b0ae7122832d28d9917fa668bcc9e0b8b09acb4ea44a
+        URL_HASH SHA256=${CPPUNIT_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_if_different "${CPPUNIT_PATCH_DIR}/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt"
         INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
@@ -29,13 +30,13 @@ else()
     ExternalProject_Add(
         cppunit
         URL ${CACHED_URL}
-        URL_HASH SHA256=ac28a04c8e6c9217d910b0ae7122832d28d9917fa668bcc9e0b8b09acb4ea44a
+        URL_HASH SHA256=${CPPUNIT_HASHSUM}
         DOWNLOAD_DIR ${ARCHIVE_DIR}
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                         --enable-shared
                         --disable-static
-                        LDFLAGS=-ldl
+                        --disable-doxygen
                         --prefix=${CMAKE_INSTALL_PREFIX}
                         ${FIX_CONFIGURE}
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile
