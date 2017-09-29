@@ -1,0 +1,26 @@
+diff -uNr a/CMake/Templates/SDK_CMakeLists.txt.in b/CMake/Templates/SDK_CMakeLists.txt.in
+--- a/CMake/Templates/SDK_CMakeLists.txt.in	2017-09-26 14:07:37.000000000 +0200
++++ b/CMake/Templates/SDK_CMakeLists.txt.in	2017-09-26 14:12:36.000000000 +0200
+@@ -92,7 +92,7 @@
+     set(CMAKE_OSX_SYSROOT iphoneos)
+   endif()
+ 
+-  set(CMAKE_OSX_DEPLOYMENT_TARGET "")
++  set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
+   set(CMAKE_EXE_LINKER_FLAGS "-framework Foundation -framework CoreGraphics -framework QuartzCore -framework UIKit")
+   set(XCODE_ATTRIBUTE_GCC_UNROLL_LOOPS "YES")
+   set(XCODE_ATTRIBUTE_LLVM_VECTORIZE_LOOPS "YES")
+diff -uNr a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2017-09-26 14:07:37.000000000 +0200
++++ b/CMakeLists.txt	2017-09-26 14:11:56.000000000 +0200
+@@ -325,8 +325,8 @@
+     endif()
+   endif()
+ 
+-  # 10.7 is the minimum for libc++ support
+-  set(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
++  # 10.9 is the minimum for libc++ support
++  set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
+ 
+   # Make sure that the OpenGL render system is selected for non-iOS Apple builds
+   set(OGRE_BUILD_RENDERSYSTEM_GLES FALSE)
