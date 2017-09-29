@@ -29,6 +29,7 @@ set(OPENCV_CMAKE_ARGS
     -DWITH_TBB:BOOL=OFF
     -DWITH_TIFF:BOOL=ON
     -DWITH_ZLIB:BOOL=ON
+    -DWITH_IPP:BOOL=OFF
 
     -DBUILD_JPEG:BOOL=OFF
     -DBUILD_PNG:BOOL=OFF
@@ -38,6 +39,7 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_python:BOOL=OFF
     # Doesn't compile with Clang >= 3.5
     -DBUILD_opencv_ts:BOOL=OFF
+    -DBUILD_opencv_dnn:BOOL=OFF
     -DBUILD_PROTOBUF:BOOL=OFF
 )
 
@@ -70,7 +72,6 @@ if(ENABLE_OPENCV_CONTRIB)
         -DBUILD_opencv_cvv:BOOL=OFF
         -DBUILD_opencv_dpm:BOOL=OFF
         -DBUILD_opencv_aruco:BOOL=OFF
-        -DBUILD_opencv_dnn:BOOL=OFF
         -DBUILD_opencv_dnn_modern:BOOL=OFF
     )
 endif()
