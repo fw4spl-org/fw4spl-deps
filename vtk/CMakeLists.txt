@@ -5,6 +5,9 @@ project(vtkBuilder)
 
 include(ExternalProject)
 
+set(CACHED_URL https://github.com/Kitware/VTK/archive/v8.0.1.tar.gz)
+set(VTK_HASHSUM 964391f95522465bd4d154dd09657c7b56e0f339bac8647c503227f8b5083590)
+
 set(VTK_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
     -DBUILD_EXAMPLES:BOOL=OFF
@@ -25,8 +28,15 @@ set(VTK_CMAKE_ARGS
     -DVTK_Group_StandAlone:BOOL=OFF #disabled hdf5 module
 )
 
-set(CACHED_URL https://github.com/Kitware/VTK/archive/v8.0.1.tar.gz)
-set(VTK_HASHSUM 964391f95522465bd4d154dd09657c7b56e0f339bac8647c503227f8b5083590)
+if(WIN32)
+    list(APPEND VTK_CMAKE_ARGS
+        -DVTK_INSTALL_QT_PLUGIN_DIR:PATH=${CMAKE_INSTALL_PREFIX}/bin/qt5/plugins
+    )
+else()
+    list(APPEND VTK_CMAKE_ARGS
+        -DVTK_INSTALL_QT_PLUGIN_DIR:PATH=${CMAKE_INSTALL_PREFIX}/lib/qt5/plugins
+    )
+endif()
 
 if(NOT ANDROID)
 
