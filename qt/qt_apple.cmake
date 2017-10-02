@@ -9,6 +9,7 @@ set(QT_CONFIGURE_CMD ./configure
     -prefix ${CMAKE_INSTALL_PREFIX}
     -I ${CMAKE_INSTALL_PREFIX}/include
     -L ${CMAKE_INSTALL_PREFIX}/lib
+    -plugindir ${CMAKE_INSTALL_PREFIX}/lib/qt5/plugins
     -${QT_BUILD_TYPE}
     ${QT_SKIP_MODULES_LIST}
 
