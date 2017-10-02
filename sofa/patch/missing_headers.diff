@@ -1,0 +1,36 @@
+diff --git a/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/PrimitivePositioning.cpp b/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/PrimitivePositioning.cpp
+index 5c86dee..a8a900a 100644
+--- a/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/PrimitivePositioning.cpp
++++ b/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/PrimitivePositioning.cpp
+@@ -85,7 +85,6 @@
+ 
+ 
+ 
+-#include <algorithm>
+ #include "Primitive.h"
+ #include "AxisAlignedBox.h"
+ #include "PrimitivePositioning.h"
+diff --git a/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector2.cpp b/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector2.cpp
+index f2d7ac7..14aba5a 100644
+--- a/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector2.cpp
++++ b/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector2.cpp
+@@ -44,7 +44,6 @@
+ 
+ #include "Vector2.h"
+ #include "Vector3.h"
+-#include <algorithm>
+ #include <math.h>
+ 
+ #ifdef WIN32
+diff --git a/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector3.cpp b/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector3.cpp
+index 8a1ae40..c629370 100644
+--- a/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector3.cpp
++++ b/extlibs/libQGLViewer-2.6.3/QGLViewer/VRender/Vector3.cpp
+@@ -45,7 +45,6 @@
+ #include <iostream>
+ #include "Vector3.h"
+ #include "NVector3.h"
+-#include <algorithm>
+ #include <math.h>
+ 
+ #ifdef WIN32
