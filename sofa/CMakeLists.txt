@@ -13,6 +13,7 @@ set(SOFA_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(SOFA_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -R -i${SOFA_PATCH_DIR}/missing_headers.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/windows_pack.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/install_SofaGuiMain.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/apple_clang.diff -d <SOURCE_DIR>
 )
 
 set(SOFA_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
