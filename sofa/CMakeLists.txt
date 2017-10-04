@@ -10,9 +10,8 @@ set(CACHED_URL https://github.com/sofa-framework/sofa/archive/v17.06.tar.gz)
 set(SOFA_HASHSUM 5aba39ccf01d1097670c37dee4c6673aea2b1935c52151685ab15bb576eaaff2)
 
 set(SOFA_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(SOFA_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -R -i${SOFA_PATCH_DIR}/missing_headers.diff -d <SOURCE_DIR>
+set(SOFA_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/missing_headers.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/windows_pack.diff -d <SOURCE_DIR>
-           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/install_SofaGuiMain.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/apple_clang.diff -d <SOURCE_DIR>
 )
 
@@ -36,7 +35,6 @@ if(WIN32)
     list(APPEND SOFA_CMAKE_ARGS
                 -DCMAKE_CXX_FLAGS:STRING=${SOFA_CMAKE_CXX_FLAGS}
                 -DGLUT_glut_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/freeglut.lib
-                ${LIBPNG_PATH}
     )
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
