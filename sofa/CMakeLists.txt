@@ -34,13 +34,16 @@ if(WIN32)
 
     list(APPEND SOFA_CMAKE_ARGS
                 -DCMAKE_CXX_FLAGS:STRING=${SOFA_CMAKE_CXX_FLAGS}
-                -DGLUT_glut_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/freeglut.lib
     )
 
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        list(APPEND SOFA_CMAKE_ARGS -DPNG_LIBRARY_DEBUG:PATH=${CMAKE_INSTALL_PREFIX}/lib/libpng.lib)
+        list(APPEND SOFA_CMAKE_ARGS -DPNG_LIBRARY_DEBUG:PATH=${CMAKE_INSTALL_PREFIX}/lib/libpng.lib
+                                    -DGLUT_glut_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/freeglutd.lib
+        )
     else()
-        list(APPEND SOFA_CMAKE_ARGS -DPNG_LIBRARY_RELEASE:PATH=${CMAKE_INSTALL_PREFIX}/lib/libpng.lib)
+        list(APPEND SOFA_CMAKE_ARGS -DPNG_LIBRARY_RELEASE:PATH=${CMAKE_INSTALL_PREFIX}/lib/libpng.lib
+                                    -DGLUT_glut_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/freeglut.lib
+        )
     endif()
 endif()
 
