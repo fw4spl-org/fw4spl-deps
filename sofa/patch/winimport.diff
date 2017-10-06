@@ -1,0 +1,20 @@
+diff --git a/SofaKernel/framework/sofa/helper/fixed_array.h b/SofaKernel/framework/sofa/helper/fixed_array.h
+index 5d45bf6..38bd00d 100644
+--- a/SofaKernel/framework/sofa/helper/fixed_array.h
++++ b/SofaKernel/framework/sofa/helper/fixed_array.h
+@@ -498,8 +498,14 @@ inline fixed_array<T, 10> make_array(const T& v0, const T& v1, const T& v2, cons
+     return v;
+ }
+ 
++
+ #ifndef FIXED_ARRAY_CPP
+-extern template class fixed_array<float, 4> ;
++#if defined(WIN32) && defined(SOFA_BUILD_MISC_ENGINE)
++#define PLEASE_KILL_ME __declspec(dllimport)
++#else
++#define PLEASE_KILL_ME
++#endif
++extern template class PLEASE_KILL_ME fixed_array<float, 4> ;
+ #endif //
+ 
+ } // namespace helper
