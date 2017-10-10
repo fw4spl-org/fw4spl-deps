@@ -26,7 +26,7 @@ ExternalProject_Add(
         CMAKE_ARGS ${PNG_CMAKE_ARGS}
 )
 
-if(${IS_DEBUG})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(LIBPNG_LIB_NAME "libpng16d")
 else()
     set(LIBPNG_LIB_NAME "libpng16")

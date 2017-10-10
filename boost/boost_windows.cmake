@@ -21,7 +21,7 @@ list(APPEND BOOST_ARGS
 
 set(BOOST_USER_CONFIG)
 
-if(${IS_DEBUG})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     list(APPEND BOOST_ARGS python-debugging=on)
     set(PYTHON_DEBUGGING "<python-debugging>on")
 endif()

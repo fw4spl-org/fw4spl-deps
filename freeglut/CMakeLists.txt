@@ -23,7 +23,7 @@ ExternalProject_Add(
 )
 
 if(WIN32)
-    if(${IS_DEBUG})
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set(FREEGLUT_LIBNAME freeglutd.lib)
     else()
         set(FREEGLUT_LIBNAME freeglut.lib)

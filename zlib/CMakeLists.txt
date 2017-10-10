@@ -10,7 +10,7 @@ set(ZLIB_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 set(PATCH_CMD)
 if(ANDROID)
     set(PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/patch/android/CMakeLists.txt" "<SOURCE_DIR>/CMakeLists.txt")
-endif() 
+endif()
 
 ExternalProject_Add(
     zlib
@@ -23,7 +23,7 @@ ExternalProject_Add(
 )
 
 if(WIN32)
-    if(${IS_DEBUG})
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set(ZLIB_LIB_NAME "zlibd" PARENT_SCOPE)
     else()
         set(ZLIB_LIB_NAME "zlib" PARENT_SCOPE)
@@ -37,7 +37,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 endif()
 
 if(WIN32)
-    if(${IS_DEBUG})
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set(RENAME_ZLIB_CMD ${CMAKE_COMMAND} -E copy_if_different zlibd.lib zdll.lib
                             COMMAND ${CMAKE_COMMAND} -E copy_if_different zlibd.lib zlib.lib)
     else()

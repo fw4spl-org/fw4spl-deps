@@ -16,11 +16,10 @@ set(CXSPARSE_PATCH_CMD ${CMAKE_COMMAND} -E  copy_if_different "${CXSPARSE_PATCH_
 set(CXSPARSE_CMAKE_ARGS ${COMMON_CMAKE_ARGS})
 
 if(NOT WIN32)
-    list(APPEND CXSPARSE_CMAKE_ARGS 
-                -DBUILD_SHARED_LIBS:BOOL=ON
-                -DCMAKE_BUILD_TYPE=Release) #Force Release for performance
+    list(APPEND CXSPARSE_CMAKE_ARGS
+                -DBUILD_SHARED_LIBS:BOOL=ON)
 else()
-    list(APPEND CXSPARSE_CMAKE_ARGS 
+    list(APPEND CXSPARSE_CMAKE_ARGS
                 -DBUILD_SHARED_LIBS:BOOL=OFF)
 endif()
 

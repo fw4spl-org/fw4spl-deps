@@ -5,12 +5,17 @@ project(openniBuilder)
 include(ExternalProject)
 
 set (SHA256 ac50b56c7deda0e893c443c7e2614855a9f78bc3458af88e77b9727c97995cae)
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set(OPENNI_DEBUG "Debug")
+else()
+    set(OPENNI_DEBUG "Release")
+endif()
 
 if(WIN32)
 
     # make sure Kinect SDK is installed before adding its related build step
     if(DEFINED ENV{KINECTSDK10_DIR})
-        set (KINECT_BUILD_STEP devenv OpenNI.sln /project Kinect /build ${CMAKE_BUILD_TYPE})
+        set (KINECT_BUILD_STEP devenv OpenNI.sln /project Kinect /build ${OPENNI_DEBUG})
     else()
         message(WARNING "Kinect SDK is not found, the kinect driver will not be compiled.")
         set (KINECT_BUILD_STEP "")
@@ -25,18 +30,18 @@ if(WIN32)
             DOWNLOAD_DIR ${ARCHIVE_DIR}
             BUILD_IN_SOURCE 1
             CONFIGURE_COMMAND ""
-            BUILD_COMMAND devenv OpenNI.sln /project OpenNI /build ${CMAKE_BUILD_TYPE}
-                  COMMAND devenv OpenNI.sln /project PS1080 /build ${CMAKE_BUILD_TYPE}
-                  COMMAND devenv OpenNI.sln /project ORBBEC /build ${CMAKE_BUILD_TYPE}
+            BUILD_COMMAND devenv OpenNI.sln /project OpenNI /build ${OPENNI_DEBUG}
+                  COMMAND devenv OpenNI.sln /project PS1080 /build ${OPENNI_DEBUG}
+                  COMMAND devenv OpenNI.sln /project ORBBEC /build ${OPENNI_DEBUG}
                   COMMAND ${KINECT_BUILD_STEP}
             INSTALL_COMMAND ""
     )
     ExternalProject_Add_Step(
             openni INSTALL_OPENNI
-            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2/ ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2
-            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2.lib ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2.lib
-            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2.dll ${CMAKE_INSTALL_PREFIX}/bin/OpenNI2.dll
-            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2 ${CMAKE_INSTALL_PREFIX}/bin/OpenNI2
+            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${OPENNI_DEBUG}/OpenNI2/ ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2
+            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${OPENNI_DEBUG}/OpenNI2.lib ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2.lib
+            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${OPENNI_DEBUG}/OpenNI2.dll ${CMAKE_INSTALL_PREFIX}/bin/OpenNI2.dll
+            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${OPENNI_DEBUG}/OpenNI2 ${CMAKE_INSTALL_PREFIX}/bin/OpenNI2
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Config ${CMAKE_INSTALL_PREFIX}/bin
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Include ${CMAKE_INSTALL_PREFIX}/include/openni2
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -64,14 +69,14 @@ else()
             DOWNLOAD_NAME openni_2.2.0.xx.tar.gz
             BUILD_IN_SOURCE 1
             CONFIGURE_COMMAND ""
-            BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${CMAKE_BUILD_TYPE} ALLOW_WARNINGS=1 GLUT_SUPPORTED=0 INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile main
+            BUILD_COMMAND ${SET_COMPILER_ENV} ${MAKE} CFG=${OPENNI_DEBUG} ALLOW_WARNINGS=1 GLUT_SUPPORTED=0 INSTALL_LIB_DIR=${CMAKE_INSTALL_PREFIX}/lib INSTALL_INCLUDE_DIR=${CMAKE_INSTALL_PREFIX}/include -f <SOURCE_DIR>/Makefile main
             INSTALL_COMMAND ""
     )
 
     ExternalProject_Add_Step(openni INSTALL_OPENNI
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Config/OpenNI2/ ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2/
-            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/OpenNI2 ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2
-            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${CMAKE_BUILD_TYPE}/libOpenNI2${EXT} ${CMAKE_INSTALL_PREFIX}/lib/libOpenNI2${EXT}
+            COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Bin/x64-${OPENNI_DEBUG}/OpenNI2 ${CMAKE_INSTALL_PREFIX}/lib/OpenNI2
+            COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/Bin/x64-${OPENNI_DEBUG}/libOpenNI2${EXT} ${CMAKE_INSTALL_PREFIX}/lib/libOpenNI2${EXT}
             COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/Include ${CMAKE_INSTALL_PREFIX}/include/openni2
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDEES install
