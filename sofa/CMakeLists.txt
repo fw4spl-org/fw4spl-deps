@@ -6,15 +6,14 @@ include(ExternalProject)
 
 include(${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake)
 
-set(CACHED_URL https://github.com/sofa-framework/sofa/archive/v17.06.tar.gz)
-set(SOFA_HASHSUM 5aba39ccf01d1097670c37dee4c6673aea2b1935c52151685ab15bb576eaaff2)
+set(CACHED_URL https://github.com/sofa-framework/sofa/archive/v17.06.02.tar.gz)
+set(SOFA_HASHSUM 1f7f2c00f87570b29c40db34145acb385da4b2db6173d0f6cd61b25e887dc168)
 
 set(SOFA_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(SOFA_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/missing_headers.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/windows_pack.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/libpng_pragma.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/winimport.diff -d <SOURCE_DIR>
-           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/apple_clang.diff -d <SOURCE_DIR>
 )
 
 set(SOFA_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
@@ -73,7 +72,7 @@ ExternalProject_Add(
     URL ${CACHED_URL}
     URL_HASH SHA256=${SOFA_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME sofa-v17.06.tar.gz
+    DOWNLOAD_NAME sofa-v17.06.02.tar.gz
     PATCH_COMMAND ${SOFA_PATCH_CMD}
     DEPENDS ${DEPENDENCIES}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
