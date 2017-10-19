@@ -14,6 +14,7 @@ set(SOFA_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/missing_headers
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/windows_pack.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/libpng_pragma.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/winimport.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/no_dependencies_install.diff -d <SOURCE_DIR>
 )
 
 set(SOFA_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
