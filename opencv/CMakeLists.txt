@@ -102,6 +102,7 @@ if(ENABLE_OPENCV_CUDA)
     list(APPEND OPENCV_CMAKE_ARGS
          -DBUILD_CUDA_STUBS:BOOL=OFF
          -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+         -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
         )
 endif()
 
@@ -128,7 +129,15 @@ elseif(NOT ANDROID) #linux
             -DWITH_V4L:BOOL=ON
             -DWITH_GSTREAMER:BOOL=OFF
             )
+        # Clang >= 3.8 is not supported by CUDA 7.5
+        if(UNIX AND ${CMAKE_C_COMPILER_ID} STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7)
+            list(APPEND OPENCV_CMAKE_ARGS -DCUDA_HOST_COMPILER:PATH=/usr/bin/gcc
+                                          -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=OFF
+            )
+        endif()
+        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/cuda_clang.diff -d <SOURCE_DIR> )
     endif()
+
 else() #ANDROID
     set(ANDROID_ARCH_NAME arm)
     list(APPEND OPENCV_CMAKE_ARGS
