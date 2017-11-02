@@ -8,16 +8,17 @@ set(ENABLE_OPENCV_CONTRIB OFF CACHE BOOL "Choose whether openCV_contrib extra mo
 
 set(OPENCV_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
+    -ENABLE_CXX11:BOOL=ON
     -DBUILD_DOCS:BOOL=OFF
     -DBUILD_TESTS:BOOL=OFF
     -DBUILD_PERF_TESTS:BOOL=OFF
     -DBUILD_SHARED_LIBS:BOOL=ON
     -DBUILD_WITH_DEBUG_INFO:BOOL=OFF
+    -DBUILD_opencv_apps:BOOL=OFF
 
     -DWITH_JASPER:BOOL=OFF #jpeg2k support
     -DWITH_1394:BOOL=OFF
     -DWITH_OPENEXR:BOOL=OFF
-    -DWITH_CUDA:BOOL=${ENABLE_OPENCV_CUDA}
     -DWITH_OPENCL:BOOL=OFF
 
     -DWITH_JPEG:BOOL=ON
@@ -27,6 +28,7 @@ set(OPENCV_CMAKE_ARGS
     -DWITH_TBB:BOOL=OFF
     -DWITH_TIFF:BOOL=ON
     -DWITH_ZLIB:BOOL=ON
+    -DWITH_IPP:BOOL=OFF
 
     -DBUILD_JPEG:BOOL=OFF
     -DBUILD_PNG:BOOL=OFF
@@ -36,7 +38,17 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_python:BOOL=OFF
     # Doesn't compile with Clang >= 3.5
     -DBUILD_opencv_ts:BOOL=OFF
+    -DBUILD_opencv_dnn:BOOL=OFF
+    -DBUILD_PROTOBUF:BOOL=OFF
 )
+
+if(ENABLE_OPENCV_CUDA)
+    find_package(CUDA REQUIRED)
+
+    list(APPEND OPENCV_CMAKE_ARGS
+        -DWITH_CUDA:BOOL=${ENABLE_OPENCV_CUDA}
+    )
+endif()
 
 if(ENABLE_OPENCV_CONTRIB)
     list(APPEND OPENCV_CMAKE_ARGS
@@ -67,6 +79,7 @@ if(ENABLE_OPENCV_CONTRIB)
         -DBUILD_opencv_cvv:BOOL=OFF
         -DBUILD_opencv_dpm:BOOL=OFF
         -DBUILD_opencv_aruco:BOOL=OFF
+        -DBUILD_opencv_dnn_modern:BOOL=OFF
     )
 endif()
 
@@ -79,8 +92,6 @@ endif()
 
 if(ENABLE_OPENCV_CUDA)
     if(WIN32)
-        # Fix link error with the MSVC compiler (fixed upstream in c4a3478)
-        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/CUDA_link_VS.diff -d <SOURCE_DIR> )
         # Workaround error C1041
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
         list(APPEND OPENCV_CMAKE_ARGS
@@ -91,6 +102,7 @@ if(ENABLE_OPENCV_CUDA)
     list(APPEND OPENCV_CMAKE_ARGS
          -DBUILD_CUDA_STUBS:BOOL=OFF
          -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+         -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
         )
 endif()
 
@@ -117,7 +129,15 @@ elseif(NOT ANDROID) #linux
             -DWITH_V4L:BOOL=ON
             -DWITH_GSTREAMER:BOOL=OFF
             )
+        # Clang >= 3.8 is not supported by CUDA 7.5
+        if(UNIX AND ${CMAKE_C_COMPILER_ID} STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7)
+            list(APPEND OPENCV_CMAKE_ARGS -DCUDA_HOST_COMPILER:PATH=/usr/bin/gcc
+                                          -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=OFF
+            )
+        endif()
+        list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/cuda_clang.diff -d <SOURCE_DIR> )
     endif()
+
 else() #ANDROID
     set(ANDROID_ARCH_NAME arm)
     list(APPEND OPENCV_CMAKE_ARGS
@@ -130,8 +150,13 @@ else() #ANDROID
     list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/android.diff -d <SOURCE_DIR> )
 endif()
 
+set(OPENCV_VERSION 3.3.0)
+set(CACHED_URL https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz)
+set(OPENCV_HASHSUM 8bb312b9d9fd17336dc1f8b3ac82f021ca50e2034afc866098866176d985adc6)
+set(OPENCV_NAME "opencv_${OPENCV_VERSION}.tar.gz")
+
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/opencvContrib.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/opencvContrib.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/scripts/opencvContrib.cmake
     IMMEDIATE @ONLY
 )
@@ -145,10 +170,6 @@ if(NOT ANDROID)
         -DWITH_QT:BOOL=ON
     )
 endif()
-
-set(OPENCV_HASHSUM 9541efbf68f298f45914b4e837490647f4d5e472b4c0c04414a787d116a702b2)
-set(OPENCV_NAME "opencv_3.2.0.tar.gz")
-set(CACHED_URL https://github.com/opencv/opencv/archive/3.2.0.tar.gz)
 
 ExternalProject_Add(
     opencv

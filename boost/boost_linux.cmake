@@ -24,8 +24,8 @@ configure_file(${BOOST_PATCH_DIR}/user-config.jam.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam @ONLY
 )
 
-set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/user-config.jam" "<SOURCE_DIR>/user-config.jam"
-    COMMAND ${PATCH_EXECUTABLE} -p1 -i ${BOOST_PATCH_DIR}/cpp11/adjacency_list.hpp.diff -d <SOURCE_DIR> )
+set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/user-config.jam" "<SOURCE_DIR>/user-config.jam" )
+
 set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&
            export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:${PYTHON_INCLUDE} &&)
 

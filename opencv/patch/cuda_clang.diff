@@ -1,0 +1,15 @@
+diff -uNr a/cmake/OpenCVDetectCUDA.cmake b/cmake/OpenCVDetectCUDA.cmake
+--- a/cmake/OpenCVDetectCUDA.cmake	2017-10-26 16:09:03.536565801 +0200
++++ b/cmake/OpenCVDetectCUDA.cmake	2017-10-26 16:09:35.132722478 +0200
+@@ -3,11 +3,6 @@
+   return()
+ endif()
+ 
+-if(CMAKE_COMPILER_IS_GNUCXX AND NOT APPLE AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+-  message(STATUS "CUDA compilation is disabled (due to Clang unsupported on your platform).")
+-  return()
+-endif()
+-
+ set(CMAKE_MODULE_PATH "${OpenCV_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+ 
+ if(ANDROID)

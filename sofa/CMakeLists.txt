@@ -4,70 +4,78 @@ project(sofaBuilder)
 
 include(ExternalProject)
 
-include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
+include(${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake)
 
-set(SOFA_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
-                    -DBoost_COMPILER:STRING=${Boost_COMPILER}
-                    -DBoost_USE_DEBUG_PYTHON:BOOL=TRUE
-                    -DBOOST_ROOT:PATH=${CMAKE_INSTALL_PREFIX}
-                    -DSOFAADVANCED_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFABASE_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFACOMMON_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFAFRAMEWORK_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFAGENERAL_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFAGUI_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFAMISC_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFASIMULATION_INSTALL_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include/sofa
-                    -DSOFA_USE_MINIBOOST:BOOL=OFF
-                    -DSOFA_FLOATING_POINT_TYPE:STRING=double
-                    -DSOFA_TESTS:BOOL=OFF
-)
-
-set(CACHED_URL https://github.com/sofa-framework/sofa.git)
-
-
-# Getting fixed rev with working compilations in all plateforms (except Mac)
-set(SOFA_REV afce0f18c733f4b6e9dabc4a2f7214007432be3e)
+set(CACHED_URL https://github.com/sofa-framework/sofa/archive/v17.06.02.tar.gz)
+set(SOFA_HASHSUM 1f7f2c00f87570b29c40db34145acb385da4b2db6173d0f6cd61b25e887dc168)
 
 set(SOFA_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(SOFA_PATCH_CMD ${CMAKE_COMMAND} -E remove_directory "<SOURCE_DIR>/extlibs/miniBoost/"
-                   COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/sofa.patch -d <SOURCE_DIR>
-                   COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/apple_clang.diff -d <SOURCE_DIR>
+set(SOFA_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/missing_headers.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/windows_pack.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/libpng_pragma.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/winimport.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i${SOFA_PATCH_DIR}/no_dependencies_install.diff -d <SOURCE_DIR>
 )
 
-set(DEPENDENCIES eigen boost glew)
-if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
-    list(APPEND DEPENDENCIES libpng)
-    set(SOFA_PATCH_CMD ${SOFA_PATCH_CMD}
-                       COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${SOFA_PATCH_DIR}/png.patch -d <SOURCE_DIR>
+set(SOFA_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
+                    -DPLUGIN_CIMGPLUGIN:BOOL=OFF
+                    -DSOFA_FLOATING_POINT_TYPE:STRING=double
+                    -DSOFA_BUILD_TESTS:BOOL=OFF
+)
+
+if(WIN32)
+    # Grab compile definitions from fw-boost.cmake
+    get_directory_property(SOFA_DEFINITIONS COMPILE_DEFINITIONS)
+    foreach(DEF ${SOFA_DEFINITIONS})
+        if(NOT ${DEF} STREQUAL "WIN32_LEAN_AND_MEAN")
+            set(SOFA_CMAKE_CXX_FLAGS "/D${DEF} ${SOFA_CMAKE_CXX_FLAGS}")
+        endif()
+    endforeach()
+
+    set(SOFA_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SOFA_CMAKE_CXX_FLAGS}")
+
+    list(APPEND SOFA_CMAKE_ARGS
+                -DCMAKE_CXX_FLAGS:STRING=${SOFA_CMAKE_CXX_FLAGS}
     )
+
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+        list(APPEND SOFA_CMAKE_ARGS -DPNG_LIBRARY_DEBUG:PATH=${CMAKE_INSTALL_PREFIX}/lib/libpng.lib
+                                    -DGLUT_glut_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/freeglutd.lib
+        )
+    else()
+        list(APPEND SOFA_CMAKE_ARGS -DPNG_LIBRARY_RELEASE:PATH=${CMAKE_INSTALL_PREFIX}/lib/libpng.lib
+                                    -DGLUT_glut_LIBRARY:PATH=${CMAKE_INSTALL_PREFIX}/lib/freeglut.lib
+        )
+    endif()
+endif()
+
+if(${ENABLE_OPEN_MP})
+    list(APPEND SOFA_CMAKE_ARGS
+                -DSOFA_OPENMP:BOOL=ON
+        )
+endif()
+
+set(DEPENDENCIES eigen boost glew qt)
+if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux) # Use system lib on linux.
+    list(APPEND DEPENDENCIES libpng)
 endif()
 
 if(NOT APPLE)
-    list(APPEND DEPENDENCIES
-        freeglut
-    )
+    list(APPEND DEPENDENCIES freeglut)
 else()
     list(APPEND SOFA_CMAKE_ARGS
-        -DGLUT_glut_LIBRARY=/System/Library/Frameworks/GLUT.framework/GLUT
+                -DGLUT_glut_LIBRARY=/System/Library/Frameworks/GLUT.framework/GLUT
     )
 endif()
 
 ExternalProject_Add(
     sofa
-    GIT_REPOSITORY ${CACHED_URL}
-    GIT_TAG ${SOFA_REV}
+    URL ${CACHED_URL}
+    URL_HASH SHA256=${SOFA_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
+    DOWNLOAD_NAME sofa-v17.06.02.tar.gz
     PATCH_COMMAND ${SOFA_PATCH_CMD}
     DEPENDS ${DEPENDENCIES}
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E chdir <BINARY_DIR> ${CMAKE_COMMAND} <SOURCE_DIR> -G ${CMAKE_GENERATOR} ${SOFA_CMAKE_ARGS} && ${CMAKE_COMMAND} <BINARY_DIR> -G ${CMAKE_GENERATOR}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CMAKE_ARGS ${SOFA_CMAKE_ARGS}
 )
-
-if(UNIX AND NOT APPLE AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-    ExternalProject_Add_Step(sofa RENAME_TINYXML
-        COMMAND ${CMAKE_COMMAND} -E create_symlink libtinyxml_d.so.2.6.2 libtinyxml.so.2.6.2
-        WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib
-        DEPENDEES install
-        )
-endif()

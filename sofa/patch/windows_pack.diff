@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1be1cdd..be6f027 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -165,47 +165,6 @@ endif()
+ 
+ find_package(Boost ${BOOST_MIN_VERSION} REQUIRED)
+ 
+-### Dependency pack for Windows
+-if(MSVC)
+-    #define BOOST_ALL_DYN_LINK needed for dynamic linking with boost libraries
+-    add_definitions(-DBOOST_ALL_DYN_LINK)
+-
+-    set(SOFA_DEPENDENCY_PACK_DIR "" CACHE PATH "sofa windows dependency pack path")
+-    if(SOFA_DEPENDENCY_PACK_DIR)
+-        set(DEPENDENCY_PACK_DIR "${SOFA_DEPENDENCY_PACK_DIR}")
+-    else()
+-        # Default
+-        set(DEPENDENCY_PACK_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+-    endif()
+-
+-    list(APPEND CMAKE_INCLUDE_PATH ${DEPENDENCY_PACK_DIR}/include)
+-    if(CMAKE_CL_64)
+-        list(APPEND CMAKE_LIBRARY_PATH ${DEPENDENCY_PACK_DIR}/lib/win64)
+-    else()
+-        list(APPEND CMAKE_LIBRARY_PATH ${DEPENDENCY_PACK_DIR}/lib/win32)
+-    endif()
+-
+-    if(CMAKE_CL_64)
+-        file(GLOB DLLS "${DEPENDENCY_PACK_DIR}/lib/win64/*.dll")
+-        file(GLOB LIBS "${DEPENDENCY_PACK_DIR}/lib/win64/*.lib")
+-    else()
+-        file(GLOB DLLS "${DEPENDENCY_PACK_DIR}/lib/win32/*.dll")
+-        file(GLOB LIBS "${DEPENDENCY_PACK_DIR}/lib/win32/*.lib")
+-    endif()
+-    ## Copy DLLs to the build tree
+-    if(CMAKE_CONFIGURATION_TYPES) # Multi-config generator (MSVC)
+-        foreach(CONFIG ${CMAKE_CONFIGURATION_TYPES})
+-            file(COPY ${DLLS} DESTINATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CONFIG}")
+-        endforeach()
+-    else()                      # Single-config generator (nmake)
+-        file(COPY ${DLLS} DESTINATION "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+-    endif()
+-    ## Install DLLs
+-    install(FILES ${DLLS} DESTINATION ${LIBRARY_OUTPUT_DIRECTORY})
+-    install(FILES ${LIBS} DESTINATION ${ARCHIVE_OUTPUT_DIRECTORY})
+-    install(DIRECTORY ${DEPENDENCY_PACK_DIR}/include/ DESTINATION include)
+-endif()
+-
+ ### Mask
+ option(SOFA_USE_MASK "Use mask optimization" ON)
+ 
