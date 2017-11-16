@@ -115,6 +115,7 @@ if(WIN32)
         -DWITH_FFMPEG:BOOL=OFF
         -DWITH_WEBP:BOOL=OFF
         )
+    list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/win_install.diff -d <SOURCE_DIR> )
 elseif(NOT ANDROID) #linux
     if(APPLE)
         list(APPEND OPENCV_CMAKE_ARGS
