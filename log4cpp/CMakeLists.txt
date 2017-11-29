@@ -19,7 +19,7 @@ if(UNIX)
                                 --disable-static
                                 --prefix=${CMAKE_INSTALL_PREFIX}
                                 COMMAND
-                                ${CMAKE_COMMAND} -E chdir <BINARY_DIR> ${CMAKE_COMMAND} <SOURCE_DIR> -G ${CMAKE_GENERATOR} ${LOG4CPP_CMAKE_ARGS})
+                                ${CMAKE_COMMAND} -E chdir <BINARY_DIR> ${CMAKE_COMMAND} <SOURCE_DIR> -G "Unix Makefiles" ${LOG4CPP_CMAKE_ARGS})
 endif()
 
 ExternalProject_Add(

@@ -35,24 +35,6 @@ if(CROSS_COMPILING)
                                   -DANDROID_NATIVE_API_LEVEL=${ANDROID_NATIVE_API_LEVEL})
 endif()
 
-if(WIN32 OR CMAKE_HOST_WIN32 )
-    set(MAKE nmake)
-else()
-    # This important to use '$(MAKE)' and not just 'make' to forward the flags from the command line (-j for instance)
-    set(MAKE $(MAKE))
-    if(NOT APPLE)
-        # Do not set the runtime path in the install step, this allows to get "portable" libraries
-        list(APPEND COMMON_CMAKE_ARGS
-            -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
-            -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
-        )
-    else()
-        list(APPEND COMMON_CMAKE_ARGS
-            -DCMAKE_MACOSX_RPATH:BOOL=ON
-        )
-    endif()
-endif()
-
 set(ARCHIVE_DIR ${CMAKE_SOURCE_DIR}/archive CACHE PATH "Archive directory")
 
 #Debug/Release
@@ -78,6 +60,29 @@ endif()
 
 mark_as_advanced(NUMBER_OF_PARALLEL_BUILD)
 set(NUMBER_OF_PARALLEL_BUILD ${CPUS_COUNT} CACHE STRING "Number of parallel build for non-make based subprojects (Boost for instance)")
+
+if(WIN32 OR CMAKE_HOST_WIN32 )
+    set(MAKE nmake)
+else()
+    if(${CMAKE_GENERATOR} STREQUAL "Ninja")
+        # We can not use '$(MAKE)' with Ninja
+        set(MAKE make -j${NUMBER_OF_PARALLEL_BUILD})
+    else()
+        # This important to use '$(MAKE)' and not just 'make' to forward the flags from the command line (-j for instance)
+        set(MAKE $(MAKE))
+    endif()
+    if(NOT APPLE)
+        # Do not set the runtime path in the install step, this allows to get "portable" libraries
+        list(APPEND COMMON_CMAKE_ARGS
+            -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
+            -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
+        )
+    else()
+        list(APPEND COMMON_CMAKE_ARGS
+            -DCMAKE_MACOSX_RPATH:BOOL=ON
+        )
+    endif()
+endif()
 
 set(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
 
