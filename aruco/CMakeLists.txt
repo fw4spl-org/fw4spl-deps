@@ -10,6 +10,7 @@ set(ARUCO_CMAKE_ARGS    ${COMMON_CMAKE_ARGS}
                         -DBUILD_SHARED_LIBS:BOOL=ON
                         -DINSTALL_DOC:BOOL=OFF
                         -DBUILD_UTILS:BOOL=OFF
+                        -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
 )
 
 #seems to be not revelant since there is a fin_package(OpenMP in the aruco CMakeLists.txt)
