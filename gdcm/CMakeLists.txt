@@ -24,13 +24,13 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DUSE_ITK:BOOL=OFF
 )
 
-set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.3.tar.gz)
-set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/export.patch -d <SOURCE_DIR>)
+set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.4.tar.gz)
+set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/vtk_8_1.diff -d <SOURCE_DIR>)
 
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
-    URL_HASH SHA256=90dd778b629debc60090f33ac0119704e025f8e37a8b61fbf21e0c2de99904e0
+    URL_HASH SHA256=c0859b306865c689cb570f5e2450417642cd95988960682cff0c675e0ff0732d
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS vtk
     PATCH_COMMAND ${GDCM_PATCH_CMD}
