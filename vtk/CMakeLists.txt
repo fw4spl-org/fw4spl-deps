@@ -5,8 +5,8 @@ project(vtkBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/Kitware/VTK/archive/v8.0.1.tar.gz)
-set(VTK_HASHSUM 964391f95522465bd4d154dd09657c7b56e0f339bac8647c503227f8b5083590)
+set(CACHED_URL https://github.com/Kitware/VTK/archive/v8.1.0.tar.gz)
+set(VTK_HASHSUM 6b9274ae872ad84683ce03dd70c5ce0018c73cb11c001a30818b3b8de3ceef7a)
 
 set(VTK_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
