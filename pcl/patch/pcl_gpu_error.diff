@@ -1,0 +1,22 @@
+diff --git a/gpu/containers/src/error.cpp b/gpu/containers/src/error.cpp
+index 6ab609c9c..d3787b9e8 100644
+--- a/gpu/containers/src/error.cpp
++++ b/gpu/containers/src/error.cpp
+@@ -37,10 +37,14 @@
+ #include <pcl/gpu/containers/initialization.h>
+ 
+ #include <iostream>
++#include <fstream>
+ #include <stdlib.h>
+ 
+ void pcl::gpu::error(const char *error_string, const char *file, const int line, const char *func)
+-{	
+-    std::cout << "Error: " << error_string << "\t" << file << ":" << line << std::endl;
+-    exit(0);
++{
++    std::cerr << "Error: " << error_string << "\t" << file << ":" << line << std::endl;
++    std::fstream of("pcl_cuda_log.txt", std::ios_base::out | std::ios_base::trunc);
++    of << "Error: " << error_string << "\t" << file << ":" << line << std::endl;
++    of.close();
++    exit(EXIT_FAILURE);
+ }
