@@ -50,10 +50,15 @@ find_path(BULLET_INCLUDE_DIR NAMES btBulletCollisionCommon.h
 )
 
 # Find the libraries
-_FIND_BULLET_LIBRARY(BULLET_DYNAMICS_LIBRARY        BulletDynamics BulletDynamics_Debug)
-_FIND_BULLET_LIBRARY(BULLET_COLLISION_LIBRARY       BulletCollision BulletCollision_Debug)
-_FIND_BULLET_LIBRARY(BULLET_MATH_LIBRARY            BulletMath LinearMath BulletMath_Debug LinearMath_Debug)
-_FIND_BULLET_LIBRARY(BULLET_SOFTBODY_LIBRARY        BulletSoftBody BulletSoftBody_Debug)
+_FIND_BULLET_LIBRARY(BULLET_DYNAMICS_LIBRARY
+                     BulletDynamics BulletDynamics_Debug BulletDynamics_RelWithDebugInfo)
+_FIND_BULLET_LIBRARY(BULLET_COLLISION_LIBRARY
+                     BulletCollision BulletCollision_Debug BulletCollision_RelWithDebugInfo)
+_FIND_BULLET_LIBRARY(BULLET_MATH_LIBRARY
+                     BulletMath LinearMath BulletMath_Debug LinearMath_Debug
+                     BulletMath_RelWithDebugInfo LinearMath_RelWithDebugInfo)
+_FIND_BULLET_LIBRARY(BULLET_SOFTBODY_LIBRARY
+                     BulletSoftBody BulletSoftBody_Debug BulletSoftBody_RelWithDebugInfo)
 
 
 # handle the QUIETLY and REQUIRED arguments and set BULLET_FOUND to TRUE if

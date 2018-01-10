@@ -1,0 +1,35 @@
+diff -uNr a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	2017-11-29 15:14:37.000000000 +0100
++++ b/CMakeLists.txt	2017-11-29 15:05:06.000000000 +0100
+@@ -302,26 +302,14 @@
+ elseif (APPLE AND NOT APPLE_IOS)
+ 
+   set(XCODE_ATTRIBUTE_SDKROOT macosx)
+-  if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+-    execute_process(COMMAND xcodebuild -version -sdk "${XCODE_ATTRIBUTE_SDKROOT}" Path | head -n 1 OUTPUT_VARIABLE CMAKE_OSX_SYSROOT)
+-    string(REGEX REPLACE "(\r?\n)+$" "" CMAKE_OSX_SYSROOT "${CMAKE_OSX_SYSROOT}")
+-  else()
+-    set(CMAKE_OSX_SYSROOT macosx)
+-  endif()
+-
++  execute_process(COMMAND xcodebuild -version -sdk "${XCODE_ATTRIBUTE_SDKROOT}" Path | head -n 1 OUTPUT_VARIABLE CMAKE_OSX_SYSROOT)
++  string(REGEX REPLACE "(\r?\n)+$" "" CMAKE_OSX_SYSROOT "${CMAKE_OSX_SYSROOT}")
++  
+   if (NOT CMAKE_OSX_ARCHITECTURES)
+     if(OGRE_BUILD_RENDERSYSTEM_GL3PLUS)
+-      if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+-        set(CMAKE_OSX_ARCHITECTURES "${ARCHS_STANDARD_64_BIT}")
+-      else()
+-        set(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD_64_BIT)")
+-      endif()
++      set(CMAKE_OSX_ARCHITECTURES "${ARCHS_STANDARD_64_BIT}")      
+     else()
+-      if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")
+-        set(CMAKE_OSX_ARCHITECTURES "${ARCHS_STANDARD_32_64_BIT}")
+-      else()
+-        set(CMAKE_OSX_ARCHITECTURES "$(ARCHS_STANDARD_32_64_BIT)")
+-      endif()
++      set(CMAKE_OSX_ARCHITECTURES "${ARCHS_STANDARD_32_64_BIT}")
+     endif()
+   endif()
+ 

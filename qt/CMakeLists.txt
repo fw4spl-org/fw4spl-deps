@@ -9,7 +9,13 @@ set(QT5_HASHSUM 7b41a37d4fe5e120cdb7114862c0153f86c07abbec8db71500443d2ce0c89795
 
 set(CACHED_URL ${QT5_URL})
 
-string(TOLOWER "${CMAKE_BUILD_TYPE}" QT_BUILD_TYPE)
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+    set(QT_BUILD_TYPE debug)
+elseif(${CMAKE_BUILD_TYPE} STREQUAL "RelWithDebInfo")
+    set(QT_BUILD_TYPE release -force-debug-info)
+else()
+    set(QT_BUILD_TYPE release)
+endif()
 
 set(QT_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(QT_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/qt-prefix/src/qt)

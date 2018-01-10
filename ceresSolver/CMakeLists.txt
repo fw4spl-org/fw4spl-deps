@@ -29,10 +29,6 @@ set(CERES_SOLVER_CMAKE_ARGS
     -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS} -std=c++11
 
 )
-if(NOT WIN32)
-    list(APPEND CERES_SOLVER_CMAKE_ARGS 
-                -DCMAKE_BUILD_TYPE=Release) # Force Release for performances
-endif()
 
 set(CERES_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 

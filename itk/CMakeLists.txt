@@ -128,7 +128,8 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 set(CACHED_URL https://github.com/InsightSoftwareConsortium/ITK/archive/v4.6.1.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>
-    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/HDF5.diff -d <SOURCE_DIR>)
+    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/HDF5.diff -d <SOURCE_DIR>
+    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/linux.diff -d <SOURCE_DIR>)
 
 ExternalProject_Add(
     itk

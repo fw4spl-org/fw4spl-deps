@@ -9,7 +9,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     list(APPEND BOOST_ARGS toolset=clang)
 endif()
 
-if(${IS_DEBUG})
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     list(APPEND BOOST_ARGS ${BOOST_ARGS} python-debugging=on)
     set(PYTHON_DEBUGGING "<python-debugging>on")
 endif()

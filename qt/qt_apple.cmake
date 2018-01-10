@@ -30,7 +30,7 @@ set(QT_CONFIGURE_CMD ./configure
     -no-xcb
 )
 
-if(${QT_BUILD_TYPE} STREQUAL "debug")
+if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     list(APPEND QT_CONFIGURE_CMD
         -no-framework
     )

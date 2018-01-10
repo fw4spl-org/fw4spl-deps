@@ -5,7 +5,7 @@ project(odilBuilder)
 include(ExternalProject)
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
-set(VERSION binpkg_20170427)
+set(VERSION 5d8a9f47fc1edd8ea3dc1a5c02c2b42b1e3d19bf)
 
 set(CACHED_URL https://github.com/fw4spl-org/odil/archive/${VERSION}.zip)
 if(WIN32)
@@ -19,9 +19,11 @@ if(WIN32)
     set(ODIL_CMAKE_CXX_FLAGS "${ODIL_CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
 
     set(ODIL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
-                        -DBUILD_WRAPPERS=OFF
+                        -DBUILD_PYTHON_WRAPPERS=OFF
+                        -DBUILD_JAVASCRIPT_WRAPPERS=OFF
                         -DBUILD_EXAMPLES=OFF
                         -DBUILD_TESTING=OFF
+                        -DBUILD_SHARED_LIBS=ON
                         -DPC_ICU_INCLUDE_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/include/icu
                         -DLog4Cpp_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
                         -DJsonCpp_INCLUDE_DIR:PATH=${CMAKE_INSTALL_PREFIX}/include
@@ -31,9 +33,11 @@ if(WIN32)
     )
 else()
     set(ODIL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
-                        -DBUILD_WRAPPERS=OFF
+                        -DBUILD_PYTHON_WRAPPERS=OFF
+                        -DBUILD_JAVASCRIPT_WRAPPERS=OFF
                         -DBUILD_EXAMPLES=OFF
                         -DBUILD_TESTING=OFF
+                        -DBUILD_SHARED_LIBS=ON
                         -DBoost_USE_DEBUG_PYTHON=ON
                         -DBoost_USE_MULTITHREADED=ON
                         -DBoost_COMPILER:STRING=${Boost_COMPILER}
@@ -49,7 +53,7 @@ endif()
 ExternalProject_Add(
     odil
     URL ${CACHED_URL}
-    URL_HASH SHA256=a133760bc0f69087b2c574fb09b69d15ae7558e9b60ade3fc259d86d35851956
+    URL_HASH SHA256=046b15ac38227f33e124d3154a6920a11733d2f341d37bec71fe21292b600432
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME odil-${VERSION}.zip
     DEPENDS ${ODIL_DEPENDS}

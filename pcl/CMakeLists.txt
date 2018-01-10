@@ -64,7 +64,6 @@ if(NOT ANDROID)
 
     list(APPEND PCL_CMAKE_ARGS
         -DBUILD_TESTS:BOOL=OFF
-        -DBUILD_WITH_DEBUG_INFO:BOOL=OFF
         -DOPENNI2_INCLUDE_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/include/openni2
         -DQT_QMAKE_EXECUTABLE:PATH=${CMAKE_INSTALL_PREFIX}/bin/qmake
         -DBUILD_ml:BOOL=ON
@@ -80,12 +79,6 @@ else()
         -DWITH_OPENGL:BOOL=OFF
         -DHAVE_POSIX_MEMALIGN_EXITCODE:BOOL=OFF
     )
-endif()
-
-#OpenMP
-find_package(OpenMP)
-if(OPENMP_FOUND)
-    list(APPEND PCL_CMAKE_ARGS -DENABLE_OPENMP=ON)
 endif()
 
 #CUDA
@@ -110,17 +103,12 @@ if(ENABLE_PCL_CUDA)
     if (APPLE)
         list(APPEND PCL_CMAKE_ARGS -DBUILD_gpu_features:BOOL=OFF)
     endif()
-    set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM})
     # Workaround error C1041
     if(WIN32)
-        if(${CMAKE_MAKE_PROGRAM} STREQUAL "jom")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
-            list(APPEND PCL_CMAKE_ARGS -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
-                                       -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=ON)
-            set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${NUMBER_OF_PARALLEL_BUILD})
-        endif()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
+        list(APPEND PCL_CMAKE_ARGS -DCMAKE_CXX_FLAGS:STRING=${CMAKE_CXX_FLAGS}
+                                   -DCUDA_PROPAGATE_HOST_FLAGS:BOOL=ON)
     else()
-        set(PCL_BUILD_COMMAND ${CMAKE_MAKE_PROGRAM} -j${NUMBER_OF_PARALLEL_BUILD})
         # Clang >= 3.8 is not supported by CUDA 7.5
         if(UNIX AND ${CMAKE_C_COMPILER_ID} STREQUAL "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 3.7)
             list(APPEND PCL_CMAKE_ARGS -DCUDA_HOST_COMPILER:PATH=/usr/bin/gcc
@@ -132,6 +120,7 @@ endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(PCL_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>")
+list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_gpu_error.diff -d <SOURCE_DIR>)
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()
@@ -149,5 +138,4 @@ ExternalProject_Add(
     PATCH_COMMAND ${PCL_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${PCL_CMAKE_ARGS}
-    BUILD_COMMAND ${PCL_BUILD_COMMAND}
 )

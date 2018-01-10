@@ -10,12 +10,12 @@ set(PYTHON_HASHSUM 1524b840e42cf3b909e8f8df67c1724012c7dc7f9d076d4feef2d3eff031e
 if(WIN32)
 
     set(PYTHON_BUILD_CMD PCbuild/build.bat)
-    if(${IS_DEBUG})
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -c Debug)
     else()
         set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -c Release)
     endif()
-    
+
     if(CMAKE_SIZEOF_VOID_P EQUAL 8) #x64
         set(PYTHON_BUILD_CMD ${PYTHON_BUILD_CMD} -p x64)
     else()
@@ -37,7 +37,7 @@ else()
 
     if(NOT APPLE)
         if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-            set(SETENV export CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS=-Wno-unused-value &&)  
+            set(SETENV export CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CFLAGS=-Wno-unused-value &&)
         endif()
     endif()
 
@@ -46,8 +46,8 @@ else()
                       --disable-static
                       --prefix=${CMAKE_INSTALL_PREFIX}
     )
-    
-    if(${IS_DEBUG})
+
+    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         list(APPEND CONFIGURE_CMD --with-debug --with-pydebug)
     else()
         list(APPEND CONFIGURE_CMD --without-debug)
