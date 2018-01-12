@@ -10,11 +10,11 @@ set(INSTALL_INC_DIR "${CMAKE_INSTALL_PREFIX}/include/icu"
     CACHE PATH "Installation directory for headers")
 
 set(ICU_MAJOR_VERSION 51)
-set(ICU_MINOR_VERSION 2)
-set(ICU_VERSION "${ICU_MAJOR_VERSION}.${ICU_MINOR_VERSION}")
     
 set(CMAKE_DEBUG_POSTFIX "${ICU_MAJOR_VERSION}d")
 set(CMAKE_RELEASE_POSTFIX ${ICU_MAJOR_VERSION})
+set(CMAKE_RELWITHDEBINFO_POSTFIX ${ICU_MAJOR_VERSION})
+set(CMAKE_MINSIZEREL_POSTFIX ${ICU_MAJOR_VERSION})
  
 add_subdirectory(source/stubdata)
 add_subdirectory(source/common)
