@@ -23,7 +23,7 @@ set(OPENIGTLINK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                            -DCMAKE_CXX_FLAGS:STRING=${OPENIGTLINK_CMAKE_CXX_FLAGS}
 )
 
-set(CACHED_URL https://github.com/openigtlink/OpenIGTLink/archive/5a501817c2da52e81db4db3eca6dd5111f94fed9.tar.gz)
+set(CACHED_URL https://github.com/openigtlink/OpenIGTLink/archive/v2.1.tar.gz)
 
 
 if(ANDROID)
@@ -42,7 +42,7 @@ endif()
 ExternalProject_Add(
     openigtlink
     URL ${CACHED_URL}
-    URL_HASH SHA256=dae54b032e061dd3f3ddd37291fdfc7fdb15181c5544ad8d74a8b93f06bc697f
+    URL_HASH SHA256=669b34e4a1dd545b3af24514f2f068bc83a0fb8db11e8c34e5f7574e5accc500
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME openigtlink.tar.gz
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
