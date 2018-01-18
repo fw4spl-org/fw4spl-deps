@@ -44,6 +44,12 @@ set(OPENCV_CMAKE_ARGS
 
 if(ENABLE_OPENCV_CUDA)
     find_package(CUDA REQUIRED)
+
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0)
+            message(WARNING "Your gcc version might not be supported by CUDA, please see http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html for compatibility.")
+        endif()
+    endif()
 endif()
 
 list(APPEND OPENCV_CMAKE_ARGS
