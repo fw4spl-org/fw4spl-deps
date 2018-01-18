@@ -5,6 +5,7 @@ project(FreeImageBuilder)
 include(ExternalProject)
 
 set(FREEIMAGE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+set(FREEIMAGE_PATCH_CMD "")
 
 set(CACHED_URL https://github.com/fw4spl-org/FreeImage/archive/FreeImage_3.16.0.c.tar.gz)
 
@@ -26,18 +27,7 @@ endif()
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0)
     set(FREEIMAGE_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${FREEIMAGE_PATCH_DIR}/cpp11-narrowing.diff -d <SOURCE_DIR>)
-
-    ExternalProject_Add(
-        freeimage
-        URL ${CACHED_URL}
-        URL_HASH SHA256=${FREEIMAGE_HASHSUM}
-        DOWNLOAD_DIR ${ARCHIVE_DIR}
-        DEPENDS ${FREEIMAGE_DEPENDS}
-        PATCH_COMMAND ${FREEIMAGE_PATCH_CMD}
-        INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
-        CMAKE_ARGS ${FREEIMAGE_CMAKE_ARGS}
-    )
-else()
+endif()
 
 ExternalProject_Add(
     freeimage
@@ -49,5 +39,3 @@ ExternalProject_Add(
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${FREEIMAGE_CMAKE_ARGS}
 )
-endif()
-
