@@ -48,6 +48,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DWITH_ENSENSO:BOOL=OFF
                         -DWITH_OPENNI:BOOL=OFF
                         -DWITH_RSSDK:BOOL=OFF
+                        -DPCL_ENABLE_SSE:BOOL=${ENABLE_SSE_SUPPORT}
 )
 
 set(PCL_DEPENDS eigen boost flann)
