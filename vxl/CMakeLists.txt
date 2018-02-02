@@ -9,6 +9,7 @@ set(VXL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_TESTING:BOOL=OFF
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_CONTRIB_VIDL2:BOOL=OFF
+                   -DBUILD_CORE_IMAGING:BOOL=OFF
                    -DBUILD_CORE_VIDEO=OFF
                    -DBUILD_CONTRIB=OFF
                    -DVNL_CONFIG_LEGACY_METHODS:BOOL=ON
@@ -26,7 +27,6 @@ if(ANDROID)
         -DBUILD_CORE_SERIALISATION:BOOL=OFF
         -DBUILD_CORE_UTILITIES:BOOL=OFF
         -DBUILD_CORE_GEOMETRY:BOOL=ON
-        -DBUILD_CORE_IMAGING:BOOL=OFF
         -DVXL_LEGACY_ERROR_REPORTING:BOOL=OFF
     )
 endif()
@@ -34,6 +34,7 @@ endif()
 if(WIN32)
     #VXL does not support the CMake "Shared Library" feature on MSVC.
     list(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=OFF)
+    set(VXL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/fix_compile_without_vil.diff -d <SOURCE_DIR>)
 else()
     list(APPEND VXL_CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
     #fixed error: 'constexpr' needed for in-class initialization of static data member 'tolerance' of non-integral type
