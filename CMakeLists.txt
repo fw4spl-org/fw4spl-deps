@@ -5,6 +5,20 @@ project(BinPkgs)
 
 #looking for patch command
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/patch.cmake)
+include( ${CMAKE_SOURCE_DIR}/cmake/utils/find_sse.cmake)
+
+# Build with SSE support if possible
+fwFindSSE()
+
+option(ENABLE_SSE_SUPPORT "Use SSE/SSE2/SSE3/SSE4 if available" ON)
+
+if(ENABLE_SSE_SUPPORT)
+    # Build with SSE support if possible
+    fwFindSSE()
+
+    set(CMAKE_C_FLAGS "${SSE_DEFINITIONS} ${CMAKE_C_FLAGS} ${SSE_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${SSE_DEFINITIONS} ${CMAKE_CXX_FLAGS} ${SSE_FLAGS} ")
+endif()
 
 set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
@@ -12,6 +26,8 @@ set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                       -DCMAKE_LINKER=${CMAKE_LINKER}
+                      -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+                      -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
 )
 
 if(NOT WIN32 AND NOT APPLE)

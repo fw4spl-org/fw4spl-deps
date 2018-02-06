@@ -1,0 +1,12 @@
+diff -uNr a/core/vpgl/file_formats/CMakeLists.txt b/core/vpgl/file_formats/CMakeLists.txt
+--- a/core/vpgl/file_formats/CMakeLists.txt   2018-02-02 16:04:12.762212000 +0100
++++ b/core/vpgl/file_formats/CMakeLists.txt   2018-02-02 16:04:08.832426200 +0100
+@@ -7,7 +7,7 @@
+   vpgl_nitf_rational_camera.h  vpgl_nitf_rational_camera.cxx
+ )
+
+-INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
++#INCLUDE(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+ IF(TIFF_FOUND)
+   INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
+   INCLUDE( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
