@@ -51,6 +51,10 @@ else()
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcsl_CMakeLists.diff -d <SOURCE_DIR>
         )
     endif()
+
+    list(APPEND VXL_PATCH_CMD
+        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/fix_compile_without_vil.diff -d <SOURCE_DIR>
+    )
 endif()
 
 # VXL 1.18.0 (on master)
