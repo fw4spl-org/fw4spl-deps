@@ -329,7 +329,7 @@ add_custom_target(fix_path
 
 # Install the configuration file
 configure_file(cmake/config/BinPkgsConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake cmake/utils/find_sse.cmake
         DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake)
 
 ####################################################################################################################
