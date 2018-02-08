@@ -4,17 +4,17 @@ project(libfreenect)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/OpenKinect/libfreenect/archive/v0.5.3.tar.gz)
-    
+set(CACHED_URL https://github.com/OpenKinect/libfreenect/archive/v0.5.7.tar.gz)
+
 set(LIBFREENECT_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                            -DBUILD_OPENNI2_DRIVER=ON
                            -DBUILD_EXAMPLES=OFF
 )
-    
+
 ExternalProject_Add(
     libfreenect
     URL ${CACHED_URL}
-    URL_HASH SHA256=9eeba91c4419c1809b5b5ea3bce59c270d8fd6f5b9e8ac3dd2a909a998c0e102
+    URL_HASH SHA256=5f22c9a0260efd5a31d8e6465bb06b2b389f61b8f7714e0b42b7b20314e5ef59
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS openni
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
@@ -26,7 +26,7 @@ ExternalProject_Add_Step(libfreenect INSTALL_LIBFREENECT
         WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
         DEPENDEES install
 )
-    
+
 if(UNIX AND NOT APPLE)
     ExternalProject_Add_Step(libfreenect INSTALL_RULES
             COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/platform/linux/udev/51-kinect.rules ${CMAKE_INSTALL_PREFIX}/51-kinect.rules
