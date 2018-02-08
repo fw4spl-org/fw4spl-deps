@@ -99,7 +99,7 @@ if(ENABLE_PCL_CUDA)
                                -DBUILD_gpu_kinfu_large_scale:BOOL=ON
                                -DBUILD_visualization:BOOL=ON
                                -DBUILD_surface:BOOL=ON
-                               -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+                               -DCUDA_ARCH_BIN:STRING=${BINPKGS_CUDA_ARCHS}
     )
     if (APPLE)
         list(APPEND PCL_CMAKE_ARGS -DBUILD_gpu_features:BOOL=OFF)
