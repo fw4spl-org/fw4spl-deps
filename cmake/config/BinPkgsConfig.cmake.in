@@ -1,0 +1,7 @@
+# This file was generated automatically, do not edit!
+
+# Whether the binpkgs were built with SSE support.
+set(BINPKGS_HAS_SSE @ENABLE_SSE_SUPPORT@)
+
+# Supported CUDA SM architectures
+set(BINPKGS_CUDA_ARCHS @BINPKGS_CUDA_ARCHS@)
