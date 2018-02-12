@@ -4,6 +4,10 @@ macro(fwFindSSE)
     set(SSE_FLAGS)
     set(SSE_DEFINITIONS)
 
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        set(CMAKE_COMPILER_IS_CLANG 1)
+    endif()
+
     # Test GCC/G++
     if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
         execute_process(COMMAND ${CMAKE_CXX_COMPILER} "-dumpversion"
