@@ -4,7 +4,7 @@ macro(fwFindSSE)
     set(SSE_FLAGS)
     set(SSE_DEFINITIONS)
 
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
         set(CMAKE_COMPILER_IS_CLANG 1)
     endif()
 

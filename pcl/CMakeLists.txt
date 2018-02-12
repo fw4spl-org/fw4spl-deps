@@ -118,8 +118,10 @@ if(ENABLE_PCL_CUDA)
 endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(PCL_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>")
-list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_gpu_error.diff -d <SOURCE_DIR>)
+set(PCL_PATCH_CMD   "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>"
+            COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_gpu_error.diff -d <SOURCE_DIR>
+            COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/clang_macos.diff -d <SOURCE_DIR>)
+
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()
