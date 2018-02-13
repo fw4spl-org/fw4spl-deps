@@ -41,6 +41,12 @@ else()
     # -> define VCL_CAN_STATIC_CONST_INIT_FLOAT to 0
     set(VXL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/vcl_config_compiler.h.in.diff -d <SOURCE_DIR>
               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/gcc5.diff -d <SOURCE_DIR>)
+
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0)
+        list(APPEND VXL_PATCH_CMD
+              COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/gcc6_template_depth.diff -d <SOURCE_DIR>)
+    endif()
+
     if(ANDROID)
         list(APPEND VXL_PATCH_CMD
             COMMAND ${PATCH_EXECUTABLE} -p1 -i ${VXL_PATCH_DIR}/config_CMakeLists.txt.diff -d <SOURCE_DIR>

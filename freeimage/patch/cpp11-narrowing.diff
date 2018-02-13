@@ -1,0 +1,10 @@
+diff -uNr a/Source/LibRawLite/CMakeLists.txt b/Source/LibRawLite/CMakeLists.txt
+--- a/Source/LibRawLite/CMakeLists.txt
++++ b/Source/LibRawLite/CMakeLists.txt
+@@ -28,4 +28,6 @@
+   add_definitions(-fPIC) 
+ endif()
++
++add_compile_options(-Wno-narrowing)
+ 
+ add_library ( LibRawLite_s STATIC ${LIBRAWLITE_SOURCES} )
