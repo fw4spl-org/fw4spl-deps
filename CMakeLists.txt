@@ -116,7 +116,8 @@ endif()
 
 ## CUDA stuff
 if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
-    set(FW4SPL_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
+    set(BINPKGS_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl dependencies for.")
+    find_package(CUDA REQUIRED)
 endif()
 
 ##DESKTOP DEPS ##
@@ -326,6 +327,11 @@ add_custom_target(fix_path
     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils/fix_path.py "${CMAKE_INSTALL_PREFIX}"
     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
 )
+
+# Install the configuration file
+configure_file(cmake/config/BinPkgsConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake cmake/utils/find_sse.cmake
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake)
 
 ####################################################################################################################
 # CPack related code

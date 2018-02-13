@@ -1,0 +1,10 @@
+# This file was generated automatically, do not edit!
+
+# Whether the binpkgs were built with SSE support.
+set(BINPKGS_HAS_SSE @ENABLE_SSE_SUPPORT@)
+
+# Path to the version of the CUDA toolkit used for building the BinPkgs.
+set(BINPKGS_CUDA_TOOLKIT_ROOT_DIR @CUDA_TOOLKIT_ROOT_DIR@)
+
+# Supported CUDA SM architectures
+set(BINPKGS_CUDA_ARCHS @BINPKGS_CUDA_ARCHS@)

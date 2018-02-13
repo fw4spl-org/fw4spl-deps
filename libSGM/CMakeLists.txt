@@ -11,7 +11,7 @@ set(CACHED_URL https://github.com/fixstars/libSGM/archive/72c24d76d0ed267d224427
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
 set(libSGM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
-                      -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+                      -DCUDA_ARCH_BIN:STRING=${BINPKGS_CUDA_ARCHS}
                       -DCUDA_HOST_COMPILER:STRING=${CUDA_HOST_COMPILER}
                       -DCUDA_TOOLKIT_ROOT_DIR:PATH=${CUDA_TOOLKIT_ROOT_DIR}
 )
