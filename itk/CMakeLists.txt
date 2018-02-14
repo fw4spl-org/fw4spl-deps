@@ -8,7 +8,7 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_SHARED_LIBS:BOOL=ON
                    -DBUILD_TESTING:BOOL=OFF
-                   -DBUILD_DOXYGEN:BOOL=OFF
+                   -DBUILD_DOCUMENTATION:BOOL=OFF
                    -DITK_USE_REVIEW:BOOL=ON
 
                    -DITK_USE_SYSTEM_DCMTK:BOOL=ON
@@ -17,7 +17,6 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DITK_USE_SYSTEM_TIFF:BOOL=ON
                    -DITK_USE_SYSTEM_ZLIB:BOOL=ON
                    -DITK_USE_SYSTEM_JPEG:BOOL=ON
-                   -DITK_USE_OPTIMIZED_REGISTRATION_METHODS:BOOL=ON
 
                    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF
                    -DModule_ITKDeprecated:BOOL=OFF
@@ -29,7 +28,6 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKIODCMTK:BOOL=OFF
                    -DModule_ITKIOHDF5:BOOL=OFF
                    -DModule_ITKIOTransformHDF5:BOOL=OFF
-
 
                    -DModule_ITKAnisotropicSmoothing:BOOL=ON
                    -DModule_ITKAntiAlias:BOOL=ON
