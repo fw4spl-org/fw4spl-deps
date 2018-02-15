@@ -8,17 +8,15 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DBUILD_EXAMPLES:BOOL=OFF
                    -DBUILD_SHARED_LIBS:BOOL=ON
                    -DBUILD_TESTING:BOOL=OFF
-                   -DBUILD_DOXYGEN:BOOL=OFF
+                   -DBUILD_DOCUMENTATION:BOOL=OFF
                    -DITK_USE_REVIEW:BOOL=ON
 
                    -DITK_USE_SYSTEM_DCMTK:BOOL=ON
                    -DITK_USE_SYSTEM_GDCM:BOOL=ON
                    -DITK_USE_SYSTEM_PNG:BOOL=ON
                    -DITK_USE_SYSTEM_TIFF:BOOL=ON
-                   -DITK_USE_SYSTEM_VXL:BOOL=ON
                    -DITK_USE_SYSTEM_ZLIB:BOOL=ON
                    -DITK_USE_SYSTEM_JPEG:BOOL=ON
-                   -DITK_USE_OPTIMIZED_REGISTRATION_METHODS:BOOL=ON
 
                    -DITK_BUILD_DEFAULT_MODULES:BOOL=OFF
                    -DModule_ITKDeprecated:BOOL=OFF
@@ -30,7 +28,6 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKIODCMTK:BOOL=OFF
                    -DModule_ITKIOHDF5:BOOL=OFF
                    -DModule_ITKIOTransformHDF5:BOOL=OFF
-
 
                    -DModule_ITKAnisotropicSmoothing:BOOL=ON
                    -DModule_ITKAntiAlias:BOOL=ON
@@ -125,25 +122,18 @@ set(ITK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                    -DModule_ITKVideoBridgeVXL:BOOL=OFF
 )
 
-set(CACHED_URL https://github.com/InsightSoftwareConsortium/ITK/archive/v4.6.1.tar.gz)
+set(CACHED_URL https://github.com/InsightSoftwareConsortium/ITK/archive/v4.13.0.tar.gz)
 set(ITK_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(ITK_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/CMakeLists.txt.diff -d <SOURCE_DIR>
-    COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/HDF5.diff -d <SOURCE_DIR>
     COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${ITK_PATCH_DIR}/linux.diff -d <SOURCE_DIR>)
 
 ExternalProject_Add(
     itk
     URL ${CACHED_URL}
-    URL_HASH SHA256=36dce1264216417cc90ff82025d646d4f6cd02039e7c7ca9a6cbed3bc8df2648
+    URL_HASH SHA256=37122d65b89699df33f34e0859f1e7adf5a6222060dc1c47383ff7aa4531223a
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${ITK_PATCH_CMD}
-    DEPENDS vxl gdcm vtk
+    DEPENDS gdcm vtk
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ITK_CMAKE_ARGS}
-)
-
-ExternalProject_Add_Step(itk CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-ITK.cmake ${CMAKE_INSTALL_PREFIX}/fw-ITK.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
 )
