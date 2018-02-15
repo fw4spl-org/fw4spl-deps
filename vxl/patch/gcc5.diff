@@ -19,7 +19,8 @@ diff -uNr a/vcl/vcl_compiler.h b/vcl/vcl_compiler.h
 +#   define VCL_GCC_50
 +#  endif
  # else
- #  error "Dunno about this gcc"
+-#  error "Dunno about this gcc"
++#  define VCL_GCC_5
  # endif
 @@ -248,7 +248,7 @@
  

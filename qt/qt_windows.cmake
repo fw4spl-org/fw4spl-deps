@@ -42,8 +42,7 @@ set(QT_CONFIGURE_CMD ./configure.bat
 
 #hack: rcc.exe need zlib in path
 set(QT_PATCH_CMD ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll ${QT_SRC_DIR}/qtbase/bin/${ZLIB_LIB_NAME}.dll
-         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll ${QT_SRC_DIR}/qttools/bin/${ZLIB_LIB_NAME}.dll
-         COMMAND ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/windows/qt59.patch -d <SOURCE_DIR>)
+         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_INSTALL_PREFIX}/bin/${ZLIB_LIB_NAME}.dll ${QT_SRC_DIR}/qttools/bin/${ZLIB_LIB_NAME}.dll)
 
 ExternalProject_Add(
     qt

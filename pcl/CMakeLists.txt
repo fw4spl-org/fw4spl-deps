@@ -48,6 +48,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DWITH_ENSENSO:BOOL=OFF
                         -DWITH_OPENNI:BOOL=OFF
                         -DWITH_RSSDK:BOOL=OFF
+                        -DPCL_ENABLE_SSE:BOOL=${ENABLE_SSE_SUPPORT}
 )
 
 set(PCL_DEPENDS eigen boost flann)
@@ -83,8 +84,6 @@ endif()
 
 #CUDA
 if(ENABLE_PCL_CUDA)
-    find_package(CUDA REQUIRED)
-
     if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
         # Microsoft Visual Studio 2015 is supported in CUDA version > 8.0
         if(CUDA_VERSION_MAJOR LESS 8)
@@ -98,7 +97,7 @@ if(ENABLE_PCL_CUDA)
                                -DBUILD_gpu_kinfu_large_scale:BOOL=ON
                                -DBUILD_visualization:BOOL=ON
                                -DBUILD_surface:BOOL=ON
-                               -DCUDA_ARCH_BIN:STRING=${FW4SPL_CUDA_ARCHS}
+                               -DCUDA_ARCH_BIN:STRING=${BINPKGS_CUDA_ARCHS}
     )
     if (APPLE)
         list(APPEND PCL_CMAKE_ARGS -DBUILD_gpu_features:BOOL=OFF)
@@ -119,8 +118,10 @@ if(ENABLE_PCL_CUDA)
 endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-set(PCL_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>")
-list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_gpu_error.diff -d <SOURCE_DIR>)
+set(PCL_PATCH_CMD   "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>"
+            COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_gpu_error.diff -d <SOURCE_DIR>
+            COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/clang_macos.diff -d <SOURCE_DIR>)
+
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()

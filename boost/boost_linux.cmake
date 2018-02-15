@@ -7,6 +7,8 @@ list(APPEND BOOST_ARGS
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(BOOST_USER_CONFIG "using clang : : ${CMAKE_CXX_COMPILER} ;")
     list(APPEND BOOST_ARGS toolset=clang)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(BOOST_USER_CONFIG "using gcc : : ${CMAKE_CXX_COMPILER} ;")
 endif()
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")

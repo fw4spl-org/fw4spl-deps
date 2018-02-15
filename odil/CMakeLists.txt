@@ -31,6 +31,10 @@ if(WIN32)
                         -DPC_ICU_LIBRARY_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/lib
                         -DCMAKE_CXX_FLAGS:STRING=${ODIL_CMAKE_CXX_FLAGS}
     )
+    set(ODIL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
+    # In Windows 10 Creators Update, ICU was integrated into Windows
+    # FindICU is patched to use our version of ICU first (temporarily, because everyone doesn't use Windows10 Creators Update)
+    set(ODIL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${ODIL_PATCH_DIR}/FindICU.cmake.patch -d <SOURCE_DIR>)
 else()
     set(ODIL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DBUILD_PYTHON_WRAPPERS=OFF
@@ -42,6 +46,7 @@ else()
                         -DBoost_USE_MULTITHREADED=ON
                         -DBoost_COMPILER:STRING=${Boost_COMPILER}
     )
+    set(ODIL_PATCH_CMD)
 endif()
 
 
@@ -56,6 +61,7 @@ ExternalProject_Add(
     URL_HASH SHA256=046b15ac38227f33e124d3154a6920a11733d2f341d37bec71fe21292b600432
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DOWNLOAD_NAME odil-${VERSION}.zip
+    PATCH_COMMAND ${ODIL_PATCH_CMD}
     DEPENDS ${ODIL_DEPENDS}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${ODIL_CMAKE_ARGS}

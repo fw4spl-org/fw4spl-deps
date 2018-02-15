@@ -1,0 +1,13 @@
+diff --git a/FindICU.cmake b/FindICU.cmake.new
+index f9ce7e2..174b105 100644
+--- a/FindICU.cmake
++++ b/FindICU.cmake.new
+@@ -23,7 +23,7 @@ if(ICU_INCLUDE_DIR AND EXISTS "${ICU_INCLUDE_DIR}/unicode/uvernum.h")
+ 	unset(icu_version_string)
+ endif()
+ 
+-find_library(ICU_LIBRARY NAMES icuuc icuuc${ICU_VERSION} icuuc${ICU_VERSION}d HINTS ${PC_ICU_LIBRARY_DIRS} )
++find_library(ICU_LIBRARY NAMES icuuc${ICU_VERSION} icuuc${ICU_VERSION}d icuuc HINTS ${PC_ICU_LIBRARY_DIRS})
+ 
+ set(ICU_LIBRARIES ${ICU_LIBRARY} )
+ set(ICU_INCLUDE_DIRS ${ICU_INCLUDE_DIR} )

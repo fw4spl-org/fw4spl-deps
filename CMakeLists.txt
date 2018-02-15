@@ -5,6 +5,20 @@ project(BinPkgs)
 
 #looking for patch command
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/patch.cmake)
+include( ${CMAKE_SOURCE_DIR}/cmake/utils/find_sse.cmake)
+
+# Build with SSE support if possible
+fwFindSSE()
+
+option(ENABLE_SSE_SUPPORT "Use SSE/SSE2/SSE3/SSE4 if available" ON)
+
+if(ENABLE_SSE_SUPPORT)
+    # Build with SSE support if possible
+    fwFindSSE()
+
+    set(CMAKE_C_FLAGS "${SSE_DEFINITIONS} ${CMAKE_C_FLAGS} ${SSE_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${SSE_DEFINITIONS} ${CMAKE_CXX_FLAGS} ${SSE_FLAGS} ")
+endif()
 
 set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
@@ -12,6 +26,8 @@ set(COMMON_CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
                       -DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}
                       -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
                       -DCMAKE_LINKER=${CMAKE_LINKER}
+                      -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+                      -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
 )
 
 if(NOT WIN32 AND NOT APPLE)
@@ -100,7 +116,8 @@ endif()
 
 ## CUDA stuff
 if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
-    set(FW4SPL_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl and dependencies for.")
+    set(BINPKGS_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl dependencies for.")
+    find_package(CUDA REQUIRED)
 endif()
 
 ##DESKTOP DEPS ##
@@ -310,6 +327,11 @@ add_custom_target(fix_path
     COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/utils/fix_path.py "${CMAKE_INSTALL_PREFIX}"
     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
 )
+
+# Install the configuration file
+configure_file(cmake/config/BinPkgsConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/BinPkgsConfig.cmake cmake/utils/find_sse.cmake
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake)
 
 ####################################################################################################################
 # CPack related code
