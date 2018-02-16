@@ -118,6 +118,8 @@ endif()
 if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
     set(BINPKGS_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl dependencies for.")
     find_package(CUDA REQUIRED)
+    # Strip any quotes from the CUDA toolkit directory if manually specified
+    string(REPLACE "\"" "" CUDA_TOOLKIT_ROOT_DIR ${CUDA_TOOLKIT_ROOT_DIR})
 endif()
 
 ##DESKTOP DEPS ##
