@@ -82,7 +82,7 @@ if(ENABLE_OPENCV_CONTRIB)
         -DBUILD_opencv_xphoto:BOOL=OFF
         -DBUILD_opencv_cvv:BOOL=OFF
         -DBUILD_opencv_dpm:BOOL=OFF
-        -DBUILD_opencv_aruco:BOOL=OFF
+        -DBUILD_opencv_aruco:BOOL=ON
         -DBUILD_opencv_dnn_modern:BOOL=OFF
     )
 endif()
