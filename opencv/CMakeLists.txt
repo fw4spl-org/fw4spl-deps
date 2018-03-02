@@ -4,7 +4,7 @@ project(opencvBuilder)
 
 include(ExternalProject)
 
-set(ENABLE_OPENCV_CONTRIB OFF CACHE BOOL "Choose whether openCV_contrib extra modules should be build")
+set(ENABLE_OPENCV_NONFREE OFF CACHE BOOL "Choose whether non-free modules should be build")
 
 set(OPENCV_CMAKE_ARGS
     ${COMMON_CMAKE_ARGS}
@@ -40,6 +40,36 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_ts:BOOL=OFF
     -DBUILD_opencv_dnn:BOOL=OFF
     -DBUILD_PROTOBUF:BOOL=OFF
+
+    # OpenCV_contrib module
+    -DOPENCV_EXTRA_MODULES_PATH=${CMAKE_CURRENT_BINARY_DIR}/opencv_contrib/src/modules
+
+    # Enable Aruco module
+    -DBUILD_opencv_aruco:BOOL=ON
+
+    -DBUILD_opencv_adas:BOOL=OFF
+    -DBUILD_opencv_bgsegm:BOOL=OFF
+    -DBUILD_opencv_bioinspired:BOOL=OFF
+    -DBUILD_opencv_ccalib:BOOL=OFF
+    -DBUILD_opencv_datasets:BOOL=OFF
+    -DBUILD_opencv_face:BOOL=OFF
+    -DBUILD_opencv_latentsvm:BOOL=OFF
+    -DBUILD_opencv_line_descriptor:BOOL=OFF
+    -DBUILD_opencv_optflow:BOOL=OFF
+    -DBUILD_opencv_reg:BOOL=OFF
+    -DBUILD_opencv_rgbd:BOOL=OFF
+    -DBUILD_opencv_saliency:BOOL=OFF
+    -DBUILD_opencv_surface_matching:BOOL=OFF
+    -DBUILD_opencv_text:BOOL=OFF
+    -DBUILD_opencv_tracking:BOOL=OFF
+    -DBUILD_opencv_ximgproc:BOOL=OFF
+    -DBUILD_opencv_xobjdetect:BOOL=OFF
+    -DBUILD_opencv_xphoto:BOOL=OFF
+    -DBUILD_opencv_cvv:BOOL=OFF
+    -DBUILD_opencv_dpm:BOOL=OFF
+    -DBUILD_opencv_dnn_modern:BOOL=OFF
+
+
 )
 
 if(ENABLE_OPENCV_CUDA)
@@ -54,36 +84,14 @@ list(APPEND OPENCV_CMAKE_ARGS
     -DWITH_CUDA:BOOL=${ENABLE_OPENCV_CUDA}
 )
 
-if(ENABLE_OPENCV_CONTRIB)
+if(ENABLE_OPENCV_NONFREE)
+
+    message(WARNING "By activating opencv non-free modules you should be aware that modules contains algorithms that may be patented in some countries or have some other limitations on the use")
     list(APPEND OPENCV_CMAKE_ARGS
 
-        -DOPENCV_EXTRA_MODULES_PATH=${CMAKE_CURRENT_BINARY_DIR}/opencv_contrib/src/modules
+    #OpenCv non-free modules
+    -DBUILD_opencv_xfeatures2d:BOOL=ON
 
-        #OpenCv_contrib module
-        -DBUILD_opencv_xfeatures2d:BOOL=ON
-
-        -DBUILD_opencv_adas:BOOL=OFF
-        -DBUILD_opencv_bgsegm:BOOL=OFF
-        -DBUILD_opencv_bioinspired:BOOL=OFF
-        -DBUILD_opencv_ccalib:BOOL=OFF
-        -DBUILD_opencv_datasets:BOOL=OFF
-        -DBUILD_opencv_face:BOOL=OFF
-        -DBUILD_opencv_latentsvm:BOOL=OFF
-        -DBUILD_opencv_line_descriptor:BOOL=OFF
-        -DBUILD_opencv_optflow:BOOL=OFF
-        -DBUILD_opencv_reg:BOOL=OFF
-        -DBUILD_opencv_rgbd:BOOL=OFF
-        -DBUILD_opencv_saliency:BOOL=OFF
-        -DBUILD_opencv_surface_matching:BOOL=OFF
-        -DBUILD_opencv_text:BOOL=OFF
-        -DBUILD_opencv_tracking:BOOL=OFF
-        -DBUILD_opencv_ximgproc:BOOL=OFF
-        -DBUILD_opencv_xobjdetect:BOOL=OFF
-        -DBUILD_opencv_xphoto:BOOL=OFF
-        -DBUILD_opencv_cvv:BOOL=OFF
-        -DBUILD_opencv_dpm:BOOL=OFF
-        -DBUILD_opencv_aruco:BOOL=ON
-        -DBUILD_opencv_dnn_modern:BOOL=OFF
     )
 endif()
 
@@ -188,11 +196,10 @@ ExternalProject_Add(
     CMAKE_ARGS ${OPENCV_CMAKE_ARGS}
 )
 
-if(ENABLE_OPENCV_CONTRIB)
-    ExternalProject_Add_Step(opencv OpenCVContrib
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/scripts/opencvContrib.cmake
-        DEPENDEES download
-        DEPENDERS build
-        COMMENT "Download opencv contribution repository"
-    )
-endif()
+
+ExternalProject_Add_Step(opencv OpenCVContrib
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/scripts/opencvContrib.cmake
+    DEPENDEES download
+    DEPENDERS build
+    COMMENT "Download opencv contribution repository"
+)
