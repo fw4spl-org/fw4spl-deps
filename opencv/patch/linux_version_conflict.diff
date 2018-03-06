@@ -1,0 +1,122 @@
+diff -uNr a/modules/core/include/opencv2/core/types_c.h b/modules/core/include/opencv2/core/types_c.h
+--- a/modules/core/include/opencv2/core/types_c.h	2018-03-06 16:32:41.889857529 +0100
++++ b/modules/core/include/opencv2/core/types_c.h	2018-03-06 16:32:31.413857774 +0100
+@@ -381,7 +381,7 @@
+ #define IPL_BORDER_TRANSPARENT    5
+ 
+ #define IPL_IMAGE_MAGIC_VAL  ((int)sizeof(IplImage))
+-#define CV_TYPE_NAME_IMAGE "opencv-image"
++#define CV_TYPE_NAME_IMAGE "opencv-image3"
+ 
+ #define CV_IS_IMAGE_HDR(img) \
+     ((img) != NULL && ((const IplImage*)(img))->nSize == sizeof(IplImage))
+@@ -407,7 +407,7 @@
+ 
+ #define CV_MAGIC_MASK       0xFFFF0000
+ #define CV_MAT_MAGIC_VAL    0x42420000
+-#define CV_TYPE_NAME_MAT    "opencv-matrix"
++#define CV_TYPE_NAME_MAT    "opencv-matrix3"
+ 
+ /** Matrix elements are stored row by row. Element (i, j) (i - 0-based row index, j - 0-based column
+ index) of a matrix can be retrieved or modified using CV_MAT_ELEM macro:
+@@ -611,7 +611,7 @@
+ \****************************************************************************************/
+ 
+ #define CV_MATND_MAGIC_VAL    0x42430000
+-#define CV_TYPE_NAME_MATND    "opencv-nd-matrix"
++#define CV_TYPE_NAME_MATND    "opencv-nd-matrix3"
+ 
+ #define CV_MAX_DIM            32
+ #define CV_MAX_DIM_HEAP       1024
+@@ -666,7 +666,7 @@
+ \****************************************************************************************/
+ 
+ #define CV_SPARSE_MAT_MAGIC_VAL    0x42440000
+-#define CV_TYPE_NAME_SPARSE_MAT    "opencv-sparse-matrix"
++#define CV_TYPE_NAME_SPARSE_MAT    "opencv-sparse-matrix3"
+ 
+ struct CvSet;
+ 
+@@ -1253,8 +1253,8 @@
+ }
+ CvSeq;
+ 
+-#define CV_TYPE_NAME_SEQ             "opencv-sequence"
+-#define CV_TYPE_NAME_SEQ_TREE        "opencv-sequence-tree"
++#define CV_TYPE_NAME_SEQ             "opencv-sequence3"
++#define CV_TYPE_NAME_SEQ_TREE        "opencv-sequence-tree3"
+ 
+ /*************************************** Set ********************************************/
+ /** @brief Set
+@@ -1357,7 +1357,7 @@
+ }
+ CvGraph;
+ 
+-#define CV_TYPE_NAME_GRAPH "opencv-graph"
++#define CV_TYPE_NAME_GRAPH "opencv-graph3"
+ 
+ /** @} */
+ 
+diff -uNr a/modules/core/src/persistence.cpp b/modules/core/src/persistence.cpp
+--- a/modules/core/src/persistence.cpp	2018-03-06 16:32:41.897857528 +0100
++++ b/modules/core/src/persistence.cpp	2018-03-06 16:32:31.421857774 +0100
+@@ -6521,27 +6521,27 @@
+ }
+ 
+ 
+-CvType seq_type( CV_TYPE_NAME_SEQ, icvIsSeq, icvReleaseSeq, icvReadSeq,
++static CvType seq_type( CV_TYPE_NAME_SEQ, icvIsSeq, icvReleaseSeq, icvReadSeq,
+                  icvWriteSeqTree /* this is the entry point for
+                  writing a single sequence too */, icvCloneSeq );
+ 
+-CvType seq_tree_type( CV_TYPE_NAME_SEQ_TREE, icvIsSeq, icvReleaseSeq,
++static CvType seq_tree_type( CV_TYPE_NAME_SEQ_TREE, icvIsSeq, icvReleaseSeq,
+                       icvReadSeqTree, icvWriteSeqTree, icvCloneSeq );
+ 
+-CvType seq_graph_type( CV_TYPE_NAME_GRAPH, icvIsGraph, icvReleaseGraph,
++static CvType seq_graph_type( CV_TYPE_NAME_GRAPH, icvIsGraph, icvReleaseGraph,
+                        icvReadGraph, icvWriteGraph, icvCloneGraph );
+ 
+-CvType sparse_mat_type( CV_TYPE_NAME_SPARSE_MAT, icvIsSparseMat,
++static CvType sparse_mat_type( CV_TYPE_NAME_SPARSE_MAT, icvIsSparseMat,
+                         (CvReleaseFunc)cvReleaseSparseMat, icvReadSparseMat,
+                         icvWriteSparseMat, (CvCloneFunc)cvCloneSparseMat );
+ 
+-CvType image_type( CV_TYPE_NAME_IMAGE, icvIsImage, (CvReleaseFunc)cvReleaseImage,
++static CvType image_type( CV_TYPE_NAME_IMAGE, icvIsImage, (CvReleaseFunc)cvReleaseImage,
+                    icvReadImage, icvWriteImage, (CvCloneFunc)cvCloneImage );
+ 
+-CvType mat_type( CV_TYPE_NAME_MAT, icvIsMat, (CvReleaseFunc)cvReleaseMat,
++static CvType mat_type( CV_TYPE_NAME_MAT, icvIsMat, (CvReleaseFunc)cvReleaseMat,
+                  icvReadMat, icvWriteMat, (CvCloneFunc)cvCloneMat );
+ 
+-CvType matnd_type( CV_TYPE_NAME_MATND, icvIsMatND, (CvReleaseFunc)cvReleaseMatND,
++static CvType matnd_type( CV_TYPE_NAME_MATND, icvIsMatND, (CvReleaseFunc)cvReleaseMatND,
+                    icvReadMatND, icvWriteMatND, (CvCloneFunc)cvCloneMatND );
+ 
+ CV_IMPL  void
+@@ -6633,9 +6633,21 @@
+     CvTypeInfo* info = 0;
+ 
+     if (type_name)
+-      for( info = CvType::first; info != 0; info = info->next )
+-        if( strcmp( info->type_name, type_name ) == 0 )
+-      break;
++      for( info = CvType::last; info != 0; info = info->prev )
++      {
++          // HACK: please close your eyes
++          const size_t len = strlen(info->type_name);
++          if( info->type_name[ len - 1] == '3')
++          {
++              if( strncmp( info->type_name, type_name, len-1 ) == 0 )
++                  break;
++          }
++          else
++          {
++            if( strcmp( info->type_name, type_name ) == 0 )
++                break;
++          }
++      }
+ 
+     return info;
+ }

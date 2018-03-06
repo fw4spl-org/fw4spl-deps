@@ -150,6 +150,11 @@ elseif(NOT ANDROID) #linux
             )
         endif()
         list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/cuda_clang.diff -d <SOURCE_DIR> )
+
+        # Patch needed because of Linux distributions that ship gst-plugins-bad linked with opencv 2.4
+        # As soon as we play a video, the cv register types are erased by the system library
+        # This patch hacks that problem but we can't ensure there are not other hidden troubles...
+        list(APPEND OPENCV_PATCH_CMD COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/linux_version_conflict.diff -d <SOURCE_DIR> )
     endif()
 
 else() #ANDROID
