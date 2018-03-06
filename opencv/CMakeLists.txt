@@ -68,8 +68,6 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_cvv:BOOL=OFF
     -DBUILD_opencv_dpm:BOOL=OFF
     -DBUILD_opencv_dnn_modern:BOOL=OFF
-
-
 )
 
 if(ENABLE_OPENCV_CUDA)
@@ -89,9 +87,12 @@ if(ENABLE_OPENCV_NONFREE)
     message(WARNING "By activating opencv non-free modules you should be aware that modules contains algorithms that may be patented in some countries or have some other limitations on the use")
     list(APPEND OPENCV_CMAKE_ARGS
 
-    #OpenCv non-free modules
-    -DBUILD_opencv_xfeatures2d:BOOL=ON
-
+        #OpenCv non-free modules
+        -DBUILD_opencv_xfeatures2d:BOOL=ON
+    )
+else()
+    list(APPEND OPENCV_CMAKE_ARGS
+        -DBUILD_opencv_xfeatures2d:BOOL=OFF
     )
 endif()
 
