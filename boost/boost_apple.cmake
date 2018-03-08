@@ -18,10 +18,13 @@ endif()
 set(BOOTSTRAP_CMD bash
                   bootstrap.sh
                   --with-icu=${CMAKE_INSTALL_PREFIX}
-                  --with-python-root=${CMAKE_INSTALL_PREFIX}
+                  --with-python=${PYTHON_BIN}/python3 
+                  --with-python-version=3.5
+                  --with-python-root=${PYTHON_DIR}
 )
 
-set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&)
+set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&
+           export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}:${PYTHON_INCLUDE} &&)
 
 ExternalProject_Add(
     boost
