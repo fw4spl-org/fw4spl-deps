@@ -1,7 +1,8 @@
-diff -uNr itk/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx b/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx
---- itk/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx	2014-09-29 16:28:35.000000000 +0200
-+++ b/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx	2017-12-14 17:26:20.823155098 +0100
-@@ -80,24 +80,24 @@
+diff --git a/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx b/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx
+index e58f3f9..baa9ee8 100644
+--- a/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx
++++ b/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrelationImageFilter.hxx
+@@ -80,24 +80,24 @@ public:
      return !( *this != other );
    }
  
@@ -30,21 +31,21 @@ diff -uNr itk/Modules/Filtering/Convolution/include/itkMaskedFFTNormalizedCorrel
      }
      return outputValue;
    }
-@@ -227,7 +227,7 @@
+@@ -227,7 +227,7 @@ void MaskedFFTNormalizedCorrelationImageFilter<TInputImage, TOutputImage, TMaskI
    // Determine a tolerance on the precision of the denominator values.
    const double precisionTolerance = CalculatePrecisionTolerance<RealImageType>( denominator );
  
 -  RealImagePointer NCC = this->ElementQuotient<RealImageType>(numerator,denominator);
-+  RealImagePointer ncc = this->ElementQuotient<RealImageType>(numerator,denominator);
++  RealImagePointer _NCC = this->ElementQuotient<RealImageType>(numerator,denominator);
    numerator = ITK_NULLPTR; // No longer needed
  
    // Given the numberOfOverlapPixels, we can check that the m_RequiredNumberOfOverlappingPixels is not set higher than
-@@ -256,7 +256,7 @@
+@@ -256,7 +256,7 @@ void MaskedFFTNormalizedCorrelationImageFilter<TInputImage, TOutputImage, TMaskI
    typename PostProcessType::Pointer postProcessor = PostProcessType::New();
    postProcessor->GetFunctor().SetRequiredNumberOfOverlappingPixels( requiredNumberOfOverlappingPixels );
    postProcessor->GetFunctor().SetPrecisionTolerance( precisionTolerance );
 -  postProcessor->SetInput1( NCC );
-+  postProcessor->SetInput1( ncc );
++  postProcessor->SetInput1( _NCC );
    postProcessor->SetInput2( denominator );
    postProcessor->SetInput3( numberOfOverlapPixels );
    postProcessor->SetInPlace( true ); // Save some memory
