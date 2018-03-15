@@ -21,3 +21,8 @@ ExternalProject_Add_Step(geodesic CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-geodesic.cmake ${CMAKE_INSTALL_PREFIX}/fw-geodesic.cmake
     COMMENT "Install configuration file"
 )
+add_custom_target(geodesic_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-geodesic.cmake
+    COMMENT "Uninstall geodesic configuration file"
+)
+add_dependencies(geodesic_uninstall geodesic_cmake_uninstall)

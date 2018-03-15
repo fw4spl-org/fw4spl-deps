@@ -63,9 +63,19 @@ ExternalProject_Add_Step(qt CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(qt_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
+    COMMENT "Uninstall Qt configuration file"
+)
+add_dependencies(qt_uninstall qt_cmake_uninstall)
 
 ExternalProject_Add_Step(qt CopyFonts
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/fonts ${CMAKE_INSTALL_PREFIX}/lib/fonts
     COMMENT "Install fonts"
     DEPENDEES install
 )
+add_custom_target(qt_fonts_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_INSTALL_PREFIX}/lib/fonts
+    COMMENT "Uninstall Qt fonts"
+)
+add_dependencies(qt_uninstall qt_fonts_uninstall)

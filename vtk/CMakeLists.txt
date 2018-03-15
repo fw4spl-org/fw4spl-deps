@@ -195,3 +195,8 @@ ExternalProject_Add_Step(vtk CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(vtk_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-VTK.cmake
+    COMMENT "Uninstall VTK configuration file"
+)
+add_dependencies(vtk_uninstall vtk_cmake_uninstall)

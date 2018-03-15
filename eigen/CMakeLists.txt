@@ -41,3 +41,8 @@ ExternalProject_Add_Step(eigen CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(eigen_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindEigen.cmake
+    COMMENT "Uninstall eigen configuration file"
+)
+add_dependencies(eigen_uninstall eigen_cmake_uninstall)

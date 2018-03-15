@@ -72,3 +72,8 @@ ExternalProject_Add_Step(odil CopyConfigFileToInstall
     COMMENT "Install CMake find package"
     DEPENDEES install
 )
+add_custom_target(odil_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindODIL.cmake
+    COMMENT "Uninstall odil CMake find package"
+)
+add_dependencies(odil_uninstall odil_cmake_uninstall)

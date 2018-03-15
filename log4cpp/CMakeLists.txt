@@ -39,3 +39,8 @@ ExternalProject_Add_Step(log4cpp CopyConfigFileToInstall
     COMMENT "Install CMake find package"
     DEPENDEES install
 )
+add_custom_target(log4cpp_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindLog4Cpp.cmake
+    COMMENT "Uninstall log4cpp CMake find package"
+)
+add_dependencies(log4cpp_uninstall log4cpp_cmake_uninstall)

@@ -26,5 +26,8 @@ ExternalProject_Add_Step(realsense CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
-
-
+add_custom_target(realsense_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/Findlibrealsense.cmake
+    COMMENT "Uninstall realsense CMake find package"
+)
+add_dependencies(realsense_uninstall realsense_cmake_uninstall)

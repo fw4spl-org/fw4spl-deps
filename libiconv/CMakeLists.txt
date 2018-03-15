@@ -65,8 +65,14 @@ if(NOT WIN32)
         DEPENDEES install
     )
 endif()
+
 ExternalProject_Add_Step(libiconv CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(libiconv_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
+    COMMENT "Uninstall libiconv configuration file"
+)
+add_dependencies(libiconv_uninstall libiconv_cmake_uninstall)

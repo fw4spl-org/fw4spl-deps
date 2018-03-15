@@ -55,3 +55,8 @@ ExternalProject_Add_Step(openigtlink CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(openigtlink_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-IGTL.cmake
+    COMMENT "Uninstall openigtlink configuration file"
+)
+add_dependencies(openigtlink_uninstall openigtlink_cmake_uninstall)

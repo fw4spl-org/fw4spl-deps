@@ -37,3 +37,8 @@ ExternalProject_Add_Step(bullet CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindBullet.cmake ${CMAKE_INSTALL_PREFIX}/FindBullet.cmake
     COMMENT "Install configuration file"
 )
+add_custom_target(bullet_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindBullet.cmake
+    COMMENT "Uninstall Bullet configuration file"
+)
+add_dependencies(bullet_uninstall bullet_cmake_uninstall)

@@ -23,16 +23,26 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add_Step(zeromq CPP_ZEROMQ
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZEROMQ_PATCH_DIR}/cpp-zeromq ${CMAKE_INSTALL_PREFIX}/include/
+    COMMAND ${CMAKE_COMMAND} -E copy ${ZEROMQ_PATCH_DIR}/cpp-zeromq/zmq.hpp ${CMAKE_INSTALL_PREFIX}/include/
     COMMENT "Install C++ wrapper"
     DEPENDEES install
 )
+add_custom_target(zeromq_cpp_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/include/zmq.hpp
+    COMMENT "Uninstall zeromq C++ wrapper"
+)
+add_dependencies(zeromq_uninstall zeromq_cpp_uninstall)
 
 ExternalProject_Add_Step(zeromq CopyConfigFileToInstall
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindZEROMQ.cmake ${CMAKE_INSTALL_PREFIX}/FindZEROMQ.cmake
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(zeromq_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindZEROMQ.cmake
+    COMMENT "Uninstall zeromq configuration file"
+)
+add_dependencies(zeromq_uninstall zeromq_cmake_uninstall)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fPIC")

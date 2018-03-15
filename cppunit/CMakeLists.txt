@@ -54,3 +54,8 @@ ExternalProject_Add_Step(cppunit CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(cppunit_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindCppUnit.cmake
+    COMMENT "Uninstall cppunit configuration file"
+)
+add_dependencies(cppunit_uninstall cppunit_cmake_uninstall)

@@ -59,3 +59,8 @@ ExternalProject_Add_Step(libarchive CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(libarchive_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-libarchive.cmake
+    COMMENT "Uninstall libarchive configuration file"
+)
+add_dependencies(libarchive_uninstall libarchive_cmake_uninstall)

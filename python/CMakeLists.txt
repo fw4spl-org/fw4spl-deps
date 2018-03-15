@@ -74,3 +74,8 @@ ExternalProject_Add_Step(python CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(python_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-python.cmake
+    COMMENT "Uninstall Python configuration file"
+)
+add_dependencies(python_uninstall python_cmake_uninstall)

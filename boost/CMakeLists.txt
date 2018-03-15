@@ -78,3 +78,8 @@ ExternalProject_Add_Step(boost CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(boost_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake
+    COMMENT "Uninstall Boost configuration file"
+)
+add_dependencies(boost_uninstall boost_cmake_uninstall)

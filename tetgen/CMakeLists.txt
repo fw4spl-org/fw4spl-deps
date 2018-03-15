@@ -26,4 +26,8 @@ ExternalProject_Add_Step(tetgen CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
-
+add_custom_target(tetgen_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindTetgen.cmake
+    COMMENT "Uninstall tetgen CMake find package"
+)
+add_dependencies(tetgen_uninstall tetgen_cmake_uninstall)

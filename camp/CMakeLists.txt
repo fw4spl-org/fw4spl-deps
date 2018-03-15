@@ -34,3 +34,8 @@ ExternalProject_Add_Step(camp CopyConfigFileToInstall
     COMMENT "Install configuration file"
     DEPENDEES install
 )
+add_custom_target(camp_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
+    COMMENT "Uninstall Camp configuration file"
+)
+add_dependencies(camp_uninstall camp_cmake_uninstall)

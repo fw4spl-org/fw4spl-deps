@@ -32,3 +32,8 @@ ExternalProject_Add_Step(jsoncpp CopyConfigFileToInstall
     COMMENT "Install CMake find package"
     DEPENDEES install
 )
+add_custom_target(jsoncpp_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindJSONCPP.cmake
+    COMMENT "Uninstall jsoncpp configuration file"
+)
+add_dependencies(jsoncpp_uninstall jsoncpp_cmake_uninstall)

@@ -49,4 +49,8 @@ ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
     COMMENT "Install Configuration file"
     DEPENDEES install
 )
-
+add_custom_target(dcmtk_cmake_uninstall
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-DCMTK.cmake
+    COMMENT "Uninstall DCMTK configuration file"
+)
+add_dependencies(dcmtk_uninstall dcmtk_cmake_uninstall)
