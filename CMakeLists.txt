@@ -249,11 +249,11 @@ macro(createUninstallTarget SUBDIR )
     # define an uninstall target for each project
     configure_file(
         "${CMAKE_SOURCE_DIR}/cmake_uninstall.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_uninstall.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${SUBDIR}_uninstall.dir/${SUBDIR}_uninstall.cmake"
         IMMEDIATE @ONLY)
 
     add_custom_target(${SUBDIR}_uninstall
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_uninstall.cmake)
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${SUBDIR}_uninstall.dir/${SUBDIR}_uninstall.cmake)
 
     # define the standard location for the intermediate install directory
     set(INSTALL_PREFIX_${SUBDIR} ${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/${SUBDIR}-prefix/src/${SUBDIR}-install-tmp)
@@ -264,11 +264,11 @@ macro(createCleanTarget SUBDIR )
 
     configure_file(
         "${CMAKE_SOURCE_DIR}/cmake_clean.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_clean.cmake"
+        "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${SUBDIR}_clean.dir/${SUBDIR}_clean.cmake"
         IMMEDIATE @ONLY)
 
     add_custom_target(${SUBDIR}_clean
-        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/${SUBDIR}/cmake_clean.cmake)
+        COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${SUBDIR}_clean.dir/${SUBDIR}_clean.cmake)
     add_dependencies(${SUBDIR}_clean ${SUBDIR}_uninstall)
 
 endmacro()
