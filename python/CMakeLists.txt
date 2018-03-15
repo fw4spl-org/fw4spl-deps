@@ -30,7 +30,7 @@ if(WIN32)
         BUILD_IN_SOURCE 1
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_BUILD_CMD}
-        INSTALL_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/manual_win_install.py <SOURCE_DIR> ${CMAKE_INSTALL_PREFIX}/Python-3.5.2 amd64
+        INSTALL_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/manual_win_install.py <SOURCE_DIR> ${INSTALL_PREFIX_python}/Python-3.5.2 amd64
     )
 else()
 
@@ -61,12 +61,13 @@ else()
         BUILD_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile -j${NUMBER_OF_PARALLEL_BUILD}
         INSTALL_COMMAND ${MAKE} -f <SOURCE_DIR>/Makefile DESTDIR=${INSTALL_PREFIX_python} install
     )
-    ExternalProject_Add_Step(python COPY_FILES
-        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_python} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
-        DEPENDEES install
-    )
 endif()
 
+ExternalProject_Add_Step(python COPY_FILES
+    COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_python} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
+    DEPENDEES install
+)
+    
 fwInstallFile(
     BINPKG python
     SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-python.cmake
