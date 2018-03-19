@@ -139,7 +139,6 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES icu4c)
     endif()
 
-    list(APPEND SUBDIRECTORIES python)
     list(APPEND SUBDIRECTORIES boost)
 
     list(APPEND SUBDIRECTORIES glew)

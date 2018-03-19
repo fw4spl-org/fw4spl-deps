@@ -1,5 +1,0 @@
-if(WIN32)
-    set(PYTHON_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/Python-3.5.2/include/)
-else()
-    set(PYTHON_INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include/python3.5)
-endif()

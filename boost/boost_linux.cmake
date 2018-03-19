@@ -11,15 +11,9 @@ elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     set(BOOST_USER_CONFIG "using gcc : : ${CMAKE_CXX_COMPILER} ;")
 endif()
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    list(APPEND BOOST_ARGS ${BOOST_ARGS} python-debugging=on)
-    set(PYTHON_DEBUGGING "<python-debugging>on")
-endif()
-
 set(BOOTSTRAP_CMD bash
                   bootstrap.sh
                   --with-icu=${CMAKE_INSTALL_PREFIX}
-                  --with-python-root=${CMAKE_INSTALL_PREFIX}
 )
 
 configure_file(${BOOST_PATCH_DIR}/user-config.jam.cmake
@@ -28,12 +22,10 @@ configure_file(${BOOST_PATCH_DIR}/user-config.jam.cmake
 
 set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/user-config.jam" "<SOURCE_DIR>/user-config.jam" )
 
-set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&
-           export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:${PYTHON_INCLUDE} &&)
+set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH})
 
 ExternalProject_Add(
     boost
-    DEPENDS python
     URL ${CACHED_URL}
     URL_HASH SHA256=${BOOST_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
@@ -48,4 +40,3 @@ ExternalProject_Add_Step(boost COPY_FILES
     COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_boost} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
     DEPENDEES install
 )
-
