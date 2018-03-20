@@ -11,7 +11,7 @@ function(fwInstallFile)
 
     ExternalProject_Add_Step(${_install_BINPKG} Copy${_install_SRC_FILENAME}ToInstall
         COMMAND ${CMAKE_COMMAND} -E copy ${_install_SRC} ${_install_DEST}
-        COMMENT "-- Installing: ${_install_SRC}"
+        COMMENT "-- Installing: ${_install_DEST}"
         DEPENDEES install
     )
     add_custom_target(${_install_BINPKG}_${_install_SRC_FILENAME}_uninstall
@@ -37,7 +37,7 @@ function(fwInstallDir)
 
     ExternalProject_Add_Step(${_install_BINPKG} Copy${_install_SRC_DIRNAME}ToInstall
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${_install_SRC} ${_install_DEST}
-        COMMENT "-- Installing: ${_install_SRC}"
+        COMMENT "-- Installing: ${_install_DEST}"
         DEPENDEES install
     )
     add_custom_target(${_install_BINPKG}_${_install_SRC_DIRNAME}_uninstall
