@@ -58,24 +58,14 @@ if(APPLE)
      )
 endif()
 
-ExternalProject_Add_Step(qt CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG qt
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
 )
-add_custom_target(qt_cmake_uninstall
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
-    COMMENT "Uninstall Qt configuration file"
-)
-add_dependencies(qt_uninstall qt_cmake_uninstall)
 
-ExternalProject_Add_Step(qt CopyFonts
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/fonts ${CMAKE_INSTALL_PREFIX}/lib/fonts
-    COMMENT "Install fonts"
-    DEPENDEES install
+fwInstallDir(
+    BINPKG qt
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/fonts
+    DEST ${CMAKE_INSTALL_PREFIX}/lib/fonts
 )
-add_custom_target(qt_fonts_uninstall
-    COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_INSTALL_PREFIX}/lib/fonts
-    COMMENT "Uninstall Qt fonts"
-)
-add_dependencies(qt_uninstall qt_fonts_uninstall)

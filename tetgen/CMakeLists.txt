@@ -21,13 +21,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${TETGEN_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(tetgen CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindTetgen.cmake ${CMAKE_INSTALL_PREFIX}/FindTetgen.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG tetgen
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindTetgen.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindTetgen.cmake
 )
-add_custom_target(tetgen_cmake_uninstall
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_INSTALL_PREFIX}/FindTetgen.cmake
-    COMMENT "Uninstall tetgen CMake find package"
-)
-add_dependencies(tetgen_uninstall tetgen_cmake_uninstall)

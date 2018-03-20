@@ -6,6 +6,7 @@ project(BinPkgs)
 #looking for patch command
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/patch.cmake)
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/find_sse.cmake)
+include( ${CMAKE_SOURCE_DIR}/cmake/install/install.cmake)
 
 # Build with SSE support if possible
 fwFindSSE()
