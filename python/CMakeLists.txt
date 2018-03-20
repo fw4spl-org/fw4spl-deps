@@ -31,7 +31,6 @@ if(WIN32)
         CONFIGURE_COMMAND ""
         BUILD_COMMAND ${PYTHON_BUILD_CMD}
         INSTALL_COMMAND python ${CMAKE_CURRENT_SOURCE_DIR}/manual_win_install.py <SOURCE_DIR> ${CMAKE_INSTALL_PREFIX}/Python-3.5.2 amd64
-        STEP_TARGETS CopyConfigFileToInstall
     )
 else()
 
@@ -68,9 +67,8 @@ else()
     )
 endif()
 
-
-ExternalProject_Add_Step(python CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-python.cmake ${CMAKE_INSTALL_PREFIX}/fw-python.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG python
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-python.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-python.cmake
 )

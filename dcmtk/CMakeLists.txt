@@ -44,9 +44,8 @@ ExternalProject_Add(
     DEPENDS ${DCMTK_DEPENDS}
 )
 
-ExternalProject_Add_Step(dcmtk CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-DCMTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-DCMTK.cmake
-    COMMENT "Install Configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG dcmtk
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-DCMTK.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-DCMTK.cmake
 )
-

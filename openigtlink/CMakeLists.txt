@@ -50,8 +50,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${OPENIGTLINK_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(openigtlink CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-IGTL.cmake ${CMAKE_INSTALL_PREFIX}/fw-IGTL.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG openigtlink
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-IGTL.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-IGTL.cmake
 )

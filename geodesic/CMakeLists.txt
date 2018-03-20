@@ -17,7 +17,8 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
 )
 
-ExternalProject_Add_Step(geodesic CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-geodesic.cmake ${CMAKE_INSTALL_PREFIX}/fw-geodesic.cmake
-    COMMENT "Install configuration file"
+fwInstallFile(
+    BINPKG geodesic
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-geodesic.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-geodesic.cmake
 )

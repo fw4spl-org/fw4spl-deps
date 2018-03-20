@@ -65,8 +65,9 @@ if(NOT WIN32)
         DEPENDEES install
     )
 endif()
-ExternalProject_Add_Step(libiconv CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+
+fwInstallFile(
+    BINPKG libiconv
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindIconv.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindIconv.cmake
 )

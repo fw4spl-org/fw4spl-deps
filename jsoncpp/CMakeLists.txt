@@ -27,8 +27,8 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fPIC")
 endif()
 
-ExternalProject_Add_Step(jsoncpp CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindJSONCPP.cmake ${CMAKE_INSTALL_PREFIX}/FindJSONCPP.cmake
-    COMMENT "Install CMake find package"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG jsoncpp
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindJSONCPP.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindJSONCPP.cmake
 )

@@ -73,8 +73,8 @@ else()
     message(SEND_ERROR "Unknown plateform.")
 endif()
 
-ExternalProject_Add_Step(boost CopyConfigFileToInstall
-    COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG boost
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake 
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake
 )

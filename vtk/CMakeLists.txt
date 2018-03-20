@@ -191,8 +191,8 @@ if (ANDROID)
     )
 endif()
 
-ExternalProject_Add_Step(vtk CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VTK.cmake ${CMAKE_INSTALL_PREFIX}/fw-VTK.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG vtk
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-VTK.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-VTK.cmake
 )

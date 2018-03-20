@@ -33,7 +33,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${BULLET_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(bullet CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindBullet.cmake ${CMAKE_INSTALL_PREFIX}/FindBullet.cmake
-    COMMENT "Install configuration file"
+fwInstallFile(
+    BINPKG bullet
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindBullet.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindBullet.cmake
 )
