@@ -25,13 +25,9 @@ set(OPENIGTLINK_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 
 set(CACHED_URL https://github.com/openigtlink/OpenIGTLink/archive/v2.1.tar.gz)
 
-
-if(ANDROID)
-    # Android doesn't need to link with pThread lib so we need to remove it from target link library
-    # Furthermore lib OpenIGTLinkUtil needs to be linked with libm
-    set(PATCH_CMD ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/Source/CMakeLists.txt "<SOURCE_DIR>/Source/CMakeLists.txt"
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/patch/Source/igtlutil/CMakeLists.txt "<SOURCE_DIR>/Source/igtlutil/CMakeLists.txt")
-endif()
+list(APPEND PATCH_CMD
+    COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/fix_install_path.diff -d <SOURCE_DIR>
+)
 
 if(APPLE)
     list(APPEND PATCH_CMD
