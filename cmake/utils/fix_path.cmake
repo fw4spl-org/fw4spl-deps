@@ -34,11 +34,12 @@ endforeach()
 # Fix hardcoded paths in Ceres cmake files
 message("Fix Ceres CMake export files...")
 
-file(GLOB_RECURSE CERES_CMAKE_FILES "${CMAKE_INSTALL_PREFIX}/share/Ceres/CeresTargets*.cmake")
+file(GLOB_RECURSE CERES_CMAKE_FILES "${CMAKE_INSTALL_PREFIX}/lib/cmake/Ceres/Ceres*.cmake")
 
 foreach(CMAKE_FILE ${CERES_CMAKE_FILES})
     file(STRINGS ${CMAKE_FILE} CMAKE_FILE_CONTENT NEWLINE_CONSUME)
     string(REGEX REPLACE "${HOST_INSTALL_PATH}" "\${_IMPORT_PREFIX}" CMAKE_FILE_CONTENT_MODIFIED "${CMAKE_FILE_CONTENT}")
     file(WRITE ${CMAKE_FILE} ${CMAKE_FILE_CONTENT_MODIFIED})
 endforeach()
+
 
