@@ -21,21 +21,11 @@ list(APPEND BOOST_ARGS
 
 set(BOOST_USER_CONFIG)
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    list(APPEND BOOST_ARGS python-debugging=on)
-    set(PYTHON_DEBUGGING "<python-debugging>on")
-endif()
-
-configure_file(${BOOST_PATCH_DIR}/user-config.jam.cmake
-               ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam @ONLY
-)
-
-set(PATCH_CMD ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/user-config.jam" "<SOURCE_DIR>/user-config.jam")
 set(BOOTSTRAP_CMD ./bootstrap.bat)
 
 ExternalProject_Add(
     boost
-    DEPENDS zlib python libiconv
+    DEPENDS zlib libiconv
     URL ${CACHED_URL}
     URL_HASH SHA256=${BOOST_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
