@@ -28,6 +28,8 @@ set(QT_CONFIGURE_CMD ./configure
     -no-glib
     -no-fontconfig
     -no-xcb
+    
+    -c++std c++11
 )
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
@@ -35,6 +37,8 @@ if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
         -no-framework
     )
 endif()
+
+list(APPEND QT_PATCH_CMD COMMAND ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/fix_xcode_9_3.patch -d <SOURCE_DIR>)
 
 set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
 ExternalProject_Add(
