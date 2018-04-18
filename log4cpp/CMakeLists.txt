@@ -34,8 +34,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${LOG4CPP_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(log4cpp CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindLog4Cpp.cmake ${CMAKE_INSTALL_PREFIX}/FindLog4Cpp.cmake
-    COMMENT "Install CMake find package"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG log4cpp
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindLog4Cpp.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindLog4Cpp.cmake
 )

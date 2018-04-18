@@ -42,8 +42,6 @@ if(WIN32)
     include(qt_windows.cmake)
 elseif(APPLE)
     include(qt_apple.cmake)
-elseif(ANDROID)
-    include(qt_android.cmake)
 elseif(UNIX)
     include(qt_linux.cmake)
 else()
@@ -58,14 +56,14 @@ if(APPLE)
      )
 endif()
 
-ExternalProject_Add_Step(qt CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG qt
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-Qt5.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-Qt5.cmake
 )
 
-ExternalProject_Add_Step(qt CopyFonts
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/fonts ${CMAKE_INSTALL_PREFIX}/lib/fonts
-    COMMENT "Install fonts"
-    DEPENDEES install
+fwInstallDir(
+    BINPKG qt
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/fonts
+    DEST ${CMAKE_INSTALL_PREFIX}/lib/fonts
 )

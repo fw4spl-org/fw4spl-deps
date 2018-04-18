@@ -21,10 +21,9 @@ ExternalProject_Add(
     CMAKE_ARGS ${REALSENSE_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(realsense CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/Findlibrealsense.cmake ${CMAKE_INSTALL_PREFIX}/Findlibrealsense.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG realsense
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/Findlibrealsense.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/Findlibrealsense.cmake
 )
-
 

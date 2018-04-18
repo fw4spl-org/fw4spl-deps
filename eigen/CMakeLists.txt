@@ -36,8 +36,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${EIGEN_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(eigen CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/eigen-prefix/src/eigen/cmake/FindEigen3.cmake ${CMAKE_INSTALL_PREFIX}/FindEigen.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG eigen
+    SRC ${CMAKE_CURRENT_BINARY_DIR}/eigen-prefix/src/eigen/cmake/FindEigen3.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindEigen.cmake
 )

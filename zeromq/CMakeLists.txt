@@ -22,16 +22,16 @@ ExternalProject_Add(
     CMAKE_ARGS ${ZEROMQ_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(zeromq CPP_ZEROMQ
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${ZEROMQ_PATCH_DIR}/cpp-zeromq ${CMAKE_INSTALL_PREFIX}/include/
-    COMMENT "Install C++ wrapper"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG zeromq
+    SRC ${ZEROMQ_PATCH_DIR}/cpp-zeromq/zmq.hpp
+    DEST ${CMAKE_INSTALL_PREFIX}/include/zmq.hpp
 )
 
-ExternalProject_Add_Step(zeromq CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindZEROMQ.cmake ${CMAKE_INSTALL_PREFIX}/FindZEROMQ.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG zeromq
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindZEROMQ.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindZEROMQ.cmake
 )
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")

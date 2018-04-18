@@ -54,8 +54,8 @@ if(WIN32)
     )
 endif()
 
-ExternalProject_Add_Step(libarchive CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-libarchive.cmake ${CMAKE_INSTALL_PREFIX}/fw-libarchive.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG libarchive
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/fw-libarchive.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-libarchive.cmake
 )

@@ -67,8 +67,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${ODIL_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(odil CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindODIL.cmake ${CMAKE_INSTALL_PREFIX}/FindODIL.cmake
-    COMMENT "Install CMake find package"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG odil
+    SRC ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/findBinpkgs/FindODIL.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindODIL.cmake
 )

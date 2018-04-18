@@ -1,0 +1,12 @@
+diff -uNr a/qtbase/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm b/qtbase/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm
+--- a/qtbase/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm	2018-04-06 17:23:39.000000000 +0200
++++ b/qtbase/src/platformsupport/fontdatabases/mac/qfontengine_coretext.mm	2018-04-06 17:26:32.000000000 +0200
+@@ -830,7 +830,7 @@
+ 
+ QFixed QCoreTextFontEngine::emSquareSize() const
+ {
+-    return QFixed::QFixed(int(CTFontGetUnitsPerEm(ctfont)));
++    return QFixed(int(CTFontGetUnitsPerEm(ctfont)));
+ }
+ 
+ QFontEngine *QCoreTextFontEngine::cloneWithSize(qreal pixelSize) const

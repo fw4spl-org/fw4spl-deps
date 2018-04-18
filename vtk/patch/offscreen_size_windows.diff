@@ -1,0 +1,12 @@
+diff -uNr a/Rendering/OpenGL2/vtkWin32OpenGLRenderWindow.cxx b/Rendering/OpenGL2/vtkWin32OpenGLRenderWindow.cxx
+--- a/Rendering/OpenGL2/vtkWin32OpenGLRenderWindow.cxx	2018-03-18 09:43:43.923709300 +0100
++++ b/Rendering/OpenGL2/vtkWin32OpenGLRenderWindow.cxx	2018-03-18 09:43:03.001368700 +0100
+@@ -1095,7 +1095,7 @@
+ int *vtkWin32OpenGLRenderWindow::GetSize(void)
+ {
+   // if we aren't mapped then just return the ivar
+-  if (this->Mapped)
++  if (this->Mapped && !this->OffScreenRendering)
+   {
+     RECT rect;
+ 

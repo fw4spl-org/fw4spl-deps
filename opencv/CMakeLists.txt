@@ -56,6 +56,7 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_latentsvm:BOOL=OFF
     -DBUILD_opencv_line_descriptor:BOOL=OFF
     -DBUILD_opencv_optflow:BOOL=OFF
+    -DBUILD_opencv_ovis:BOOL=OFF
     -DBUILD_opencv_reg:BOOL=OFF
     -DBUILD_opencv_rgbd:BOOL=OFF
     -DBUILD_opencv_saliency:BOOL=OFF
@@ -69,6 +70,12 @@ set(OPENCV_CMAKE_ARGS
     -DBUILD_opencv_dpm:BOOL=OFF
     -DBUILD_opencv_dnn_modern:BOOL=OFF
 )
+
+if(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    # RelWithDebInfo is not officially supported by OpenCV and might cause subtle and/or hard to debug issues.
+    # Building in release is probably the best thing to do until OpenCV officially supports it, if ever.
+    string(REPLACE "CMAKE_BUILD_TYPE=RelWithDebInfo" "CMAKE_BUILD_TYPE=Release" OPENCV_CMAKE_ARGS "${OPENCV_CMAKE_ARGS}")
+endif()
 
 if(ENABLE_OPENCV_CUDA)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -169,9 +176,9 @@ else() #ANDROID
     list(APPEND OPENCV_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${OPENCV_PATCH_DIR}/android.diff -d <SOURCE_DIR> )
 endif()
 
-set(OPENCV_VERSION 3.3.0)
+set(OPENCV_VERSION 3.4.0)
 set(CACHED_URL https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.tar.gz)
-set(OPENCV_HASHSUM 8bb312b9d9fd17336dc1f8b3ac82f021ca50e2034afc866098866176d985adc6)
+set(OPENCV_HASHSUM 678cc3d2d1b3464b512b084a8cca1fad7de207c7abdf2caa1fed636c13e916da)
 set(OPENCV_NAME "opencv_${OPENCV_VERSION}.tar.gz")
 
 configure_file(
@@ -202,10 +209,9 @@ ExternalProject_Add(
     CMAKE_ARGS ${OPENCV_CMAKE_ARGS}
 )
 
-
 ExternalProject_Add_Step(opencv OpenCVContrib
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/scripts/opencvContrib.cmake
     DEPENDEES download
     DEPENDERS build
     COMMENT "Download opencv contribution repository"
-)
+)

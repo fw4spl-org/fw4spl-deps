@@ -29,8 +29,8 @@ ExternalProject_Add(
     CMAKE_ARGS ${CAMP_CMAKE_ARGS}
 )
 
-ExternalProject_Add_Step(camp CopyConfigFileToInstall
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCAMP.cmake ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG camp
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/FindCAMP.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/FindCAMP.cmake
 )

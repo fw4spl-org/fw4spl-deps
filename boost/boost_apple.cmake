@@ -10,33 +10,23 @@ list(APPEND BOOST_ARGS
 set( BOOST_USER_CONFIG "using clang : : ${CMAKE_CXX_COMPILER} ;")
 list(APPEND BOOST_ARGS toolset=clang)
 
-if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-    list(APPEND BOOST_ARGS python-debugging=on)
-    set(PYTHON_DEBUGGING "<python-debugging>on")
-endif()
-
 set(BOOTSTRAP_CMD bash
                   bootstrap.sh
                   --with-icu=${CMAKE_INSTALL_PREFIX}
-                  --with-python=${PYTHON_BIN}/python3 
-                  --with-python-version=3.5
-                  --with-python-root=${PYTHON_DIR}
 )
 
-set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH} &&
-           export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}:${PYTHON_INCLUDE} &&)
+set(SETENV export PATH=${CMAKE_INSTALL_PREFIX}/bin:${CMAKE_INSTALL_PREFIX}/lib:${CMAKE_INSTALL_PREFIX}/include:$ENV{PATH})
 
 ExternalProject_Add(
     boost
-    DEPENDS zlib python
+    DEPENDS zlib
     URL ${CACHED_URL}
     URL_HASH SHA256=${BOOST_HASHSUM}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     BUILD_IN_SOURCE 1
     PATCH_COMMAND ${PATCH_CMD}
-    CONFIGURE_COMMAND ${SETENV} ${BOOTSTRAP_CMD}
-    STEP_TARGETS CopyConfigFileToInstall
-    BUILD_COMMAND ${SETENV} <SOURCE_DIR>/b2 -j${NUMBER_OF_PARALLEL_BUILD} ${BOOST_ARGS} -sHOME=<SOURCE_DIR> install
+    CONFIGURE_COMMAND ${SETENV} && ${BOOTSTRAP_CMD}
+    BUILD_COMMAND ${SETENV} && <SOURCE_DIR>/b2 -j${NUMBER_OF_PARALLEL_BUILD} ${BOOST_ARGS} -sHOME=<SOURCE_DIR> install
     INSTALL_COMMAND ""
 )
 

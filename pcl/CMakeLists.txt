@@ -4,7 +4,7 @@ project(pclBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/PointCloudLibrary/pcl/archive/pcl-1.8.1.tar.gz)
+set(CACHED_URL https://github.com/PointCloudLibrary/pcl/archive/9dae1eaa6750932db23d157cd624ef61ccd5544f.tar.gz)
 
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
@@ -49,6 +49,7 @@ set(PCL_CMAKE_ARGS      ${COMMON_CMAKE_ARGS}
                         -DWITH_OPENNI:BOOL=OFF
                         -DWITH_RSSDK:BOOL=OFF
                         -DPCL_ENABLE_SSE:BOOL=${ENABLE_SSE_SUPPORT}
+                        -DWITH_QHULL:BOOL=OFF
 )
 
 set(PCL_DEPENDS eigen boost flann)
@@ -119,21 +120,18 @@ endif()
 
 set(PCL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(PCL_PATCH_CMD   "${PATCH_EXECUTABLE}" -p1 -i "${PCL_PATCH_DIR}/kinfu.diff" -d "<SOURCE_DIR>"
+            COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_eigen.diff -d <SOURCE_DIR>
             COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_gpu_error.diff -d <SOURCE_DIR>
             COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/clang_macos.diff -d <SOURCE_DIR>)
 
 if(ANDROID)
     list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/pcl_targets.diff -d <SOURCE_DIR>)
 endif()
-if(WIN32)
-    # Fix compilation on Windows for Ensenso grabber
-    list (APPEND PCL_PATCH_CMD && "${PATCH_EXECUTABLE}" -p1 -i ${PCL_PATCH_DIR}/ensenso_grabber.diff -d <SOURCE_DIR>)
-endif()
 
 ExternalProject_Add(
     pcl
     URL ${CACHED_URL}
-    URL_HASH SHA256=5a102a2fbe2ba77c775bf92c4a5d2e3d8170be53a68c3a76cfc72434ff7b9783
+    URL_HASH SHA256=3c14baf073f974a9d351fedc04c333049fc91b2070733ecc0ac0595e462a1b1e
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS ${PCL_DEPENDS}
     PATCH_COMMAND ${PCL_PATCH_CMD}

@@ -25,21 +25,6 @@ elseif(${CMAKE_BUILD_TYPE} STREQUAL "MinSizeRel")
     set(BOOST_OPTIMIZATION space)
 endif()
 
-if(WIN32)
-    set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX}/Python-3.5.2)
-    set(PYTHON_BIN ${PYTHON_DIR})
-    set(PYTHON_INCLUDE ${PYTHON_DIR}/include)
-    set(PYTHON_LIB ${PYTHON_DIR}/libs)
-else()
-    set(PYTHON_DIR ${CMAKE_INSTALL_PREFIX})
-    set(PYTHON_BIN ${PYTHON_DIR}/bin)
-    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python3.5dm)
-    else()
-        set(PYTHON_INCLUDE ${PYTHON_DIR}/include/python3.5m)
-    endif()
-    set(PYTHON_LIB ${PYTHON_DIR}/lib)
-endif()
 set(BOOST_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 math(EXPR BITS "8*${CMAKE_SIZEOF_VOID_P}")
@@ -53,6 +38,7 @@ set(BOOST_ARGS
     --layout=system
     --build-type=minimal
     --without-test
+    --without-python
     variant=${BOOST_BUILD_TYPE}
     debug-symbols=${BOOST_DEBUG_SYMBOLS}
     optimization=${BOOST_OPTIMIZATION}
@@ -73,8 +59,8 @@ else()
     message(SEND_ERROR "Unknown plateform.")
 endif()
 
-ExternalProject_Add_Step(boost CopyConfigFileToInstall
-    COMMAND  ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake
-    COMMENT "Install configuration file"
-    DEPENDEES install
+fwInstallFile(
+    BINPKG boost
+    SRC ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake
+    DEST ${CMAKE_INSTALL_PREFIX}/fw-boost.cmake
 )

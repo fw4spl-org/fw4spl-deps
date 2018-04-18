@@ -27,12 +27,12 @@ set(QT_CONFIGURE_CMD ./configure.bat
     -no-fontconfig
     -opengl desktop
     ${QT_SKIP_MODULES_LIST}
-    -prefix ${CMAKE_INSTALL_PREFIX}
+    -prefix ${INSTALL_PREFIX_qt}
     -I ${CMAKE_INSTALL_PREFIX}/include
     -L ${CMAKE_INSTALL_PREFIX}/lib
     -${QT_BUILD_TYPE}
     -I ${CMAKE_INSTALL_PREFIX}/include/icu
-    -plugindir ${CMAKE_INSTALL_PREFIX}/bin/qt5/plugins
+    -plugindir ${INSTALL_PREFIX_qt}/bin/qt5/plugins
     -no-angle
     -platform ${PLATFORM}
     -mediaplayer-backend wmf
@@ -55,4 +55,9 @@ ExternalProject_Add(
     CONFIGURE_COMMAND ${QT_CONFIGURE_CMD}
     BUILD_COMMAND ${MAKE_QT} -f Makefile
     INSTALL_COMMAND ${MAKE_QT} -f Makefile install
+)
+
+ExternalProject_Add_Step(qt COPY_FILES
+    COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_qt} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
+    DEPENDEES install
 )

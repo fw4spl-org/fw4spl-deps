@@ -31,7 +31,7 @@ if(ANDROID)
 elseif(WIN32)
     set(LIBXML2_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/libxml-prefix/src/libxml)
 
-    file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX} LIBXML_INSTALL_DIR_WIN32)
+    file(TO_NATIVE_PATH ${INSTALL_PREFIX_libxml} LIBXML_INSTALL_DIR_WIN32)
     #patch zlib name and prefix
     configure_file(${LIBXML2_PATCH_DIR}/Makefile.msvc.cmake
                    ${CMAKE_CURRENT_BINARY_DIR}/Makefile.msvc @ONLY
@@ -39,7 +39,7 @@ elseif(WIN32)
 
     set(CONFIGURE_CMD cscript configure.js
                       zlib=yes iconv=yes compiler=msvc
-                      prefix="${CMAKE_INSTALL_PREFIX}"
+                      prefix="${INSTALL_PREFIX_libxml}"
                       include=${CMAKE_INSTALL_PREFIX}/include
                       lib=${CMAKE_INSTALL_PREFIX}/lib
     )
@@ -78,7 +78,10 @@ elseif(WIN32)
         BUILD_COMMAND ${LIBXML2_BUILD_CMD}
         INSTALL_COMMAND ${LIBXML2_INSTALL_CMD}
     )
-
+    ExternalProject_Add_Step(libxml COPY_FILES
+        COMMAND ${CMAKE_COMMAND} -D SRC:PATH=${INSTALL_PREFIX_libxml} -D DST:PATH=${CMAKE_INSTALL_PREFIX} -P ${CMAKE_SOURCE_DIR}/Install.cmake
+        DEPENDEES install
+    )
 else()
     set(CONFIGURE_CMD ${SET_COMPILER_ENV} <SOURCE_DIR>/configure
                       --enable-shared --disable-static --without-libintl --enable-extra-encodings
