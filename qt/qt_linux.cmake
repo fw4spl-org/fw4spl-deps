@@ -37,8 +37,6 @@ set(QT_CONFIGURE_CMD ./configure
 
 set(INSTALL_ROOT "INSTALL_ROOT=${INSTALL_PREFIX_qt}")
 
-set(QT_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${QT_PATCH_DIR}/fix-gst-webcams.diff -d <SOURCE_DIR>)
-
 ExternalProject_Add(
     qt
     URL ${CACHED_URL}
