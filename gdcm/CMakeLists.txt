@@ -17,20 +17,19 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DGDCM_BUILD_TESTING:BOOL=OFF
                     -DGDCM_BUILD_EXAMPLES:BOOL=OFF
                     -DGDCM_BUILD_APPLICATIONS:BOOL=OFF
-                    -DGDCM_USE_WXWIDGETS:BOOL=OFF
                     # Do not build man pages, troubles were reported on MacOsX
                     # https://github.com/fw4spl-org/fw4spl/issues/8
                     -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF
-                    -DUSE_ITK:BOOL=OFF
 )
 
-set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.4.tar.gz)
-set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/vtk_8_1.diff -d <SOURCE_DIR>)
+set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.6.tar.gz)
+set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/vtk_8_1.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/gdcmDefaultDicts.cxx.patch -d <SOURCE_DIR> )
 
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
-    URL_HASH SHA256=c0859b306865c689cb570f5e2450417642cd95988960682cff0c675e0ff0732d
+    URL_HASH SHA256=f4e611c74ea2b16c9aa28d7fdf3a8678ce926909606705b7cd08c9a5b05d34fc
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS vtk
     PATCH_COMMAND ${GDCM_PATCH_CMD}
