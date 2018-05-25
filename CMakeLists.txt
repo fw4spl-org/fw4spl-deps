@@ -7,6 +7,7 @@ project(BinPkgs)
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/patch.cmake)
 include( ${CMAKE_SOURCE_DIR}/cmake/utils/find_sse.cmake)
 include( ${CMAKE_SOURCE_DIR}/cmake/install/install.cmake)
+include( CMakeDependentOption )
 
 # Build with SSE support if possible
 fwFindSSE()
@@ -89,7 +90,7 @@ else()
         set(MAKE $(MAKE))
     endif()
     if(NOT APPLE)
-        # Do not set the runtime path in the install step, this allows to get "portable" libraries
+        # Do not set the runtime path in the install step, this allows to get "portable" libraries
         list(APPEND COMMON_CMAKE_ARGS
             -DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON
             -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
@@ -103,20 +104,26 @@ endif()
 
 set(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
 
-option(ENABLE_OPEN_MP "Set to ON use allow the use of OpenMP" OFF)
-option(ENABLE_OGRE "Set to ON to build ogre" OFF)
+option(ENABLE_AR "Set to ON to build fw4spl-ar dependencies (OpenCV, PCL,...)" OFF)
+
+cmake_dependent_option(ENABLE_OGRE "Build Ogre3D (necessary for fw4spl-ogre)" OFF "ENABLE_AR" OFF)
+cmake_dependent_option(ENABLE_EXTRAS "Build dependencies that are not used currently in the open-source repositories (Odil, Bullet, realsense, libSGM,...)" OFF "ENABLE_AR;ENABLE_OGRE" OFF)
+cmake_dependent_option(ENABLE_CUDA "Set to ON to build packages with CUDA support (OpenCV, PCL, libSGM)" OFF "ENABLE_AR" OFF)
+
 option(ENABLE_SOFA "Set to ON to build sofa" OFF)
-option(ENABLE_PCL "Set to ON to build PCL" OFF)
-option(ENABLE_REALSENSE "Set to ON to build librealsense" OFF)
-option(ENABLE_ODIL "Set to ON to build Odil dependencies" OFF)
-option(ENABLE_LIBSGM "Set to ON to build libSGM dependencies" OFF)
-option(ENABLE_OPENCV_CUDA "Set to ON to build OpenCV with CUDA support" OFF)
-if(ENABLE_PCL)
-    option(ENABLE_PCL_CUDA "Set to ON to build PCL with CUDA support" OFF)
+
+
+if(ENABLE_OGRE)
+    set(ENABLE_AR FORCE CACHE BOOL ON)
+endif()
+
+if(ENABLE_EXTRAS)
+    set(ENABLE_AR FORCE CACHE BOOL ON)
+    set(ENABLE_OGRE FORCE CACHE BOOL ON)
 endif()
 
 ## CUDA stuff
-if(ENABLE_LIBSGM OR ENABLE_OPENCV_CUDA OR ENABLE_PCL_CUDA)
+if(ENABLE_CUDA)
     set(BINPKGS_CUDA_ARCHS "3.0 3.5 3.7 5.0 5.2 6.0 6.1" CACHE STRING "CUDA architectures to build fw4spl dependencies for.")
     find_package(CUDA REQUIRED)
     # Strip any quotes from the CUDA toolkit directory if manually specified
@@ -148,48 +155,35 @@ if(NOT ANDROID)
     list(APPEND SUBDIRECTORIES qt)
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES gdcm)
+    list(APPEND SUBDIRECTORIES eigen)
     list(APPEND SUBDIRECTORIES itk)
     list(APPEND SUBDIRECTORIES camp)
     list(APPEND SUBDIRECTORIES cppunit)
-    list(APPEND SUBDIRECTORIES ann)
     list(APPEND SUBDIRECTORIES dcmtk)
 
-    list(APPEND SUBDIRECTORIES tetgen)
     list(APPEND SUBDIRECTORIES json-spirit)
     list(APPEND SUBDIRECTORIES glm)
 
-    list(APPEND SUBDIRECTORIES opencv)
-    list(APPEND SUBDIRECTORIES eigen)
-    list(APPEND SUBDIRECTORIES flann)
-    list(APPEND SUBDIRECTORIES bullet)
-    list(APPEND SUBDIRECTORIES geodesic)
+    list(APPEND SUBDIRECTORIES cgogn)
 
-    list(APPEND SUBDIRECTORIES libarchive)
-    list(APPEND SUBDIRECTORIES openigtlink)
-    list(APPEND SUBDIRECTORIES zeromq)
+    if(ENABLE_AR)
+        list(APPEND SUBDIRECTORIES libarchive)
+        list(APPEND SUBDIRECTORIES openigtlink)
+        list(APPEND SUBDIRECTORIES zeromq)
 
-    list(APPEND SUBDIRECTORIES openni)
-    list(APPEND SUBDIRECTORIES glog)
-    list(APPEND SUBDIRECTORIES CXSparse)
-    list(APPEND SUBDIRECTORIES ceresSolver)
+        list(APPEND SUBDIRECTORIES glog)
+        list(APPEND SUBDIRECTORIES CXSparse)
+        list(APPEND SUBDIRECTORIES ceresSolver)
+        list(APPEND SUBDIRECTORIES flann)
 
-    if(ENABLE_PCL)
+        list(APPEND SUBDIRECTORIES openni)
         if(UNIX)
             list(APPEND SUBDIRECTORIES libfreenect)
         endif()
 
+        list(APPEND SUBDIRECTORIES opencv)
+
         list(APPEND SUBDIRECTORIES pcl)
-    endif()
-
-    if(ENABLE_REALSENSE)
-        list(APPEND SUBDIRECTORIES realsense)
-    endif()
-
-    if(ENABLE_SOFA)
-        if (NOT APPLE)
-            list(APPEND SUBDIRECTORIES freeglut)
-        endif()
-        list(APPEND SUBDIRECTORIES sofa)
     endif()
 
     if(ENABLE_OGRE)
@@ -198,14 +192,30 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES ogre)
     endif()
 
-    if(ENABLE_ODIL)
+    if(ENABLE_EXTRAS)
+        list(APPEND SUBDIRECTORIES bullet)
+        list(APPEND SUBDIRECTORIES cryptopp)
+        list(APPEND SUBDIRECTORIES geodesic)
+        list(APPEND SUBDIRECTORIES realsense)
+
         list(APPEND SUBDIRECTORIES jsoncpp)
         list(APPEND SUBDIRECTORIES log4cpp)
         list(APPEND SUBDIRECTORIES odil)
+
+        list(APPEND SUBDIRECTORIES tetgen)
+        list(APPEND SUBDIRECTORIES orbslam2)
+        list(APPEND SUBDIRECTORIES vlc)
     endif()
 
-    if(ENABLE_LIBSGM)
+    if(ENABLE_CUDA)
         list(APPEND SUBDIRECTORIES libSGM)
+    endif()
+
+    if(ENABLE_SOFA)
+        if (NOT APPLE)
+            list(APPEND SUBDIRECTORIES freeglut)
+        endif()
+        list(APPEND SUBDIRECTORIES sofa)
     endif()
 
 ##ANDROID DEPS##
@@ -228,20 +238,18 @@ else()
 
     list(APPEND SUBDIRECTORIES vtk)
     list(APPEND SUBDIRECTORIES camp)
-    list(APPEND SUBDIRECTORIES ann)
     list(APPEND SUBDIRECTORIES json-spirit)
     list(APPEND SUBDIRECTORIES android_native_app)
     list(APPEND SUBDIRECTORIES glm)
-    list(APPEND SUBDIRECTORIES opencv)
-    if(ENABLE_PCL)
+    if(ENABLE_AR)
+        list(APPEND SUBDIRECTORIES opencv)
         list(APPEND SUBDIRECTORIES flann)
         list(APPEND SUBDIRECTORIES eigen)
         list(APPEND SUBDIRECTORIES pcl)
+        list(APPEND SUBDIRECTORIES libarchive)
+        list(APPEND SUBDIRECTORIES openigtlink)
+        list(APPEND SUBDIRECTORIES zeromq)
     endif()
-
-    list(APPEND SUBDIRECTORIES libarchive)
-    list(APPEND SUBDIRECTORIES openigtlink)
-    list(APPEND SUBDIRECTORIES zeromq)
 
 endif()
 

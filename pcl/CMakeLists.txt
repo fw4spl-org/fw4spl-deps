@@ -84,7 +84,7 @@ else()
 endif()
 
 #CUDA
-if(ENABLE_PCL_CUDA)
+if(ENABLE_CUDA)
     if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
         # Microsoft Visual Studio 2015 is supported in CUDA version > 8.0
         if(CUDA_VERSION_MAJOR LESS 8)
