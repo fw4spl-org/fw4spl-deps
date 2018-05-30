@@ -1,0 +1,21 @@
+diff --git a/Source/DataDictionary/gdcmDefaultDicts.cxx b/Source/DataDictionary/gdcmDefaultDicts.cxx
+--- a/Source/DataDictionary/gdcmDefaultDicts.cxx
++++ b/Source/DataDictionary/gdcmDefaultDicts.cxx
+@@ -159,13 +164,17 @@ static const DICT_ENTRY DICOMV3DataDict [] = {
+   {0x0008,0x0092,VR::ST,VM::VM1,"Referring Physician's Address","ReferringPhysicianAddress",false },
+   {0x0008,0x0094,VR::SH,VM::VM1_n,"Referring Physician's Telephone Numbers","ReferringPhysicianTelephoneNumbers",false },
+   {0x0008,0x0096,VR::SQ,VM::VM1,"Referring Physician Identification Sequence","ReferringPhysicianIdentificationSequence",false },
++  {0x0008,0x009c,VR::PN,VM::VM1_n,"Consulting Physician's Name","ConsultingPhysicianName",false },
++  {0x0008,0x009d,VR::SQ,VM::VM1,"Consulting Physician Identification Sequence","ConsultingPhysicianIdentificationSequence",false },
+   {0x0008,0x0100,VR::SH,VM::VM1,"Code Value","CodeValue",false },
++  {0x0008,0x0101,VR::LO,VM::VM1,"Extended Code Value","ExtendedCodeValue",false },
+   {0x0008,0x0102,VR::SH,VM::VM1,"Coding Scheme Designator","CodingSchemeDesignator",false },
+   {0x0008,0x0103,VR::SH,VM::VM1,"Coding Scheme Version","CodingSchemeVersion",false },
+   {0x0008,0x0104,VR::LO,VM::VM1,"Code Meaning","CodeMeaning",false },
+   {0x0008,0x0105,VR::CS,VM::VM1,"Mapping Resource","MappingResource",false },
+   {0x0008,0x0106,VR::DT,VM::VM1,"Context Group Version","ContextGroupVersion",false },
+   {0x0008,0x0107,VR::DT,VM::VM1,"Context Group Local Version","ContextGroupLocalVersion",false },
++  {0x0008,0x0108,VR::LT,VM::VM1,"Extended Code Meaning","ExtendedCodeMeaning",false },
+   {0x0008,0x010b,VR::CS,VM::VM1,"Context Group Extension Flag","ContextGroupExtensionFlag",false },
+   {0x0008,0x010c,VR::UI,VM::VM1,"Coding Scheme UID","CodingSchemeUID",false },
+   {0x0008,0x010d,VR::UI,VM::VM1,"Context Group Extension Creator UID","ContextGroupExtensionCreatorUID",false },
