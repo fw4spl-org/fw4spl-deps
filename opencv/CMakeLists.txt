@@ -77,7 +77,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     string(REPLACE "CMAKE_BUILD_TYPE=RelWithDebInfo" "CMAKE_BUILD_TYPE=Release" OPENCV_CMAKE_ARGS "${OPENCV_CMAKE_ARGS}")
 endif()
 
-if(ENABLE_OPENCV_CUDA)
+if(ENABLE_CUDA)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0)
             message(WARNING "Your gcc version might not be supported by CUDA, please see http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html for compatibility.")
@@ -86,7 +86,7 @@ if(ENABLE_OPENCV_CUDA)
 endif()
 
 list(APPEND OPENCV_CMAKE_ARGS
-    -DWITH_CUDA:BOOL=${ENABLE_OPENCV_CUDA}
+    -DWITH_CUDA:BOOL=${ENABLE_CUDA}
 )
 
 if(ENABLE_OPENCV_NONFREE)
@@ -110,7 +110,7 @@ if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
     set(OPENCV_DEPENDS libpng zlib tiff)
 endif()
 
-if(ENABLE_OPENCV_CUDA)
+if(ENABLE_CUDA)
     if(WIN32)
         # Workaround error C1041
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /FS")
@@ -214,4 +214,4 @@ ExternalProject_Add_Step(opencv OpenCVContrib
     DEPENDEES download
     DEPENDERS build
     COMMENT "Download opencv contribution repository"
-)
+)

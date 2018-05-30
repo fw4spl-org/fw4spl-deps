@@ -69,7 +69,7 @@ if(NOT ANDROID)
         -DOPENNI2_INCLUDE_DIRS:PATH=${CMAKE_INSTALL_PREFIX}/include/openni2
         -DQT_QMAKE_EXECUTABLE:PATH=${CMAKE_INSTALL_PREFIX}/bin/qmake
         -DBUILD_ml:BOOL=ON
-        -DBUILD_simulation:BOOL=ON
+        -DBUILD_simulation:BOOL=OFF
         -DBUILD_segmentation:BOOL=ON
         -DBUILD_registration:BOOL=ON
     )
@@ -84,7 +84,7 @@ else()
 endif()
 
 #CUDA
-if(ENABLE_PCL_CUDA)
+if(ENABLE_CUDA)
     if(MSVC AND (NOT (MSVC_VERSION LESS 1900)))
         # Microsoft Visual Studio 2015 is supported in CUDA version > 8.0
         if(CUDA_VERSION_MAJOR LESS 8)
