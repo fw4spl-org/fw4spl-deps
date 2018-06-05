@@ -1,0 +1,193 @@
+diff --git a/SofaKernel/SofaFramework/SofaMacros.cmake b/SofaKernel/SofaFramework/SofaMacros.cmake
+index 83b82fb323..f680626c06 100644
+--- a/SofaKernel/SofaFramework/SofaMacros.cmake
++++ b/SofaKernel/SofaFramework/SofaMacros.cmake
+@@ -161,7 +161,7 @@ endmacro()
+ 
+ macro(sofa_add_generic directory name type)
+ 
+-    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/${directory}" AND IS_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/${directory}")
++    if(EXISTS ${directory} AND IS_DIRECTORY ${directory})
+ 
+         string(TOUPPER ${type}_${name} option)
+ 
+@@ -188,7 +188,7 @@ macro(sofa_add_generic directory name type)
+         set_property(GLOBAL APPEND PROPERTY __GlobalTargetList__ ${name})
+         set_property(GLOBAL APPEND PROPERTY __GlobalTargetNameList__ ${option})
+     else()
+-        message("${type} ${name} (${CMAKE_CURRENT_LIST_DIR}/${directory}) does not exist and will be ignored.")
++        message("${type} ${name} (${directory}) does not exist and will be ignored.")
+     endif()
+ endmacro()
+ 
+@@ -226,12 +226,12 @@ macro(sofa_set_python_directory plugin_name directory)
+ endmacro()
+ 
+ macro(sofa_add_plugin directory plugin_name)
+-    sofa_add_generic( ${directory} ${plugin_name} "Plugin" ${ARGV2} )
++    sofa_add_generic( "${CMAKE_CURRENT_LIST_DIR}/${directory}" ${plugin_name} "Plugin" ${ARGV2} )
+ endmacro()
+ 
+ 
+ macro(sofa_add_application directory app_name)
+-    sofa_add_generic( ${directory} ${app_name} "Application" ${ARGV2} )
++    sofa_add_generic( "${CMAKE_CURRENT_LIST_DIR}/${directory}" ${app_name} "Application" ${ARGV2} )
+ endmacro()
+ 
+ 
+diff --git a/SofaKernel/framework/framework_test/CMakeLists.txt b/SofaKernel/framework/framework_test/CMakeLists.txt
+index 80c7084bef..9bb3053981 100644
+--- a/SofaKernel/framework/framework_test/CMakeLists.txt
++++ b/SofaKernel/framework/framework_test/CMakeLists.txt
+@@ -20,7 +20,6 @@ set(SOURCE_FILES
+     helper/Quater_test.cpp
+     helper/SVector_test.cpp
+     helper/vector_test.cpp
+-    helper/gl/GLSLShader_test.cpp
+     helper/io/MeshOBJ_test.cpp
+     helper/io/MeshSTL_test.cpp
+     helper/system/FileMonitor_test.cpp
+@@ -33,6 +32,10 @@ set(SOURCE_FILES
+     main.cpp
+ )
+ 
++if(NOT SOFA_NO_OPENGL AND SOFA_HAVE_GLEW)
++    list(APPEND SOURCE_FILES helper/gl/GLSLShader_test.cpp)
++endif()
++
+ #Plugin tests
+ #add_subdirectory(plugin-system) ## TODO: check if deprecated or... ?
+ add_subdirectory(plugins)
+diff --git a/SofaKernel/framework/sofa/core/CMakeLists.txt b/SofaKernel/framework/sofa/core/CMakeLists.txt
+index ee3f411047..9083bfed99 100644
+--- a/SofaKernel/framework/sofa/core/CMakeLists.txt
++++ b/SofaKernel/framework/sofa/core/CMakeLists.txt
+@@ -237,7 +237,7 @@ set(SOURCE_FILES
+     logging/PerComponentLoggingMessageHandler.cpp
+ )
+ 
+-if(NOT SOFA_NO_OPENGL)
++if(NOT SOFA_NO_OPENGL AND SOFA_HAVE_GLEW)
+     list(APPEND HEADER_FILES visual/DrawToolGL.h)
+     list(APPEND SOURCE_FILES visual/DrawToolGL.cpp)
+ endif()
+diff --git a/SofaKernel/framework/sofa/helper/CMakeLists.txt b/SofaKernel/framework/sofa/helper/CMakeLists.txt
+index aaf8294d4e..d5c0174810 100644
+--- a/SofaKernel/framework/sofa/helper/CMakeLists.txt
++++ b/SofaKernel/framework/sofa/helper/CMakeLists.txt
+@@ -251,8 +251,6 @@ if(NOT SOFA_NO_OPENGL)
+         system/glu.h
+         gl/Axis.h
+         gl/BasicShapes.h
+-        gl/BasicShapesGL.h
+-        gl/BasicShapesGL.inl
+         gl/Cylinder.h
+         gl/Texture.h
+         gl/Trackball.h
+@@ -262,7 +260,6 @@ if(NOT SOFA_NO_OPENGL)
+     )
+     list(APPEND SOURCE_FILES
+         gl/Axis.cpp
+-        gl/BasicShapesGL.cpp
+         gl/Cylinder.cpp
+         gl/glText.cpp
+         gl/Capture.cpp
+@@ -280,11 +277,14 @@ if(NOT SOFA_NO_OPENGL)
+ 
+     if(SOFA_HAVE_GLEW)
+         list(APPEND HEADER_FILES
++            gl/BasicShapesGL.h
++            gl/BasicShapesGL.inl
+             gl/FrameBufferObject.h
+             gl/GLSLShader.h
+             gl/Texture.h
+         )
+         list(APPEND SOURCE_FILES
++            gl/BasicShapesGL.cpp
+             gl/FrameBufferObject.cpp
+             gl/GLSLShader.cpp
+         )
+diff --git a/SofaKernel/framework/sofa/helper/testing/TestMessageHandler.h b/SofaKernel/framework/sofa/helper/testing/TestMessageHandler.h
+index ae9579b5b2..558da51e00 100644
+--- a/SofaKernel/framework/sofa/helper/testing/TestMessageHandler.h
++++ b/SofaKernel/framework/sofa/helper/testing/TestMessageHandler.h
+@@ -87,7 +87,7 @@ public:
+     MessageAsTestFailure(Message::Type t,
+                            const char* filename="unknown", int lineno=0) ;
+ 
+-    virtual ~MessageAsTestFailure() ;
++    ~MessageAsTestFailure() ;
+ 
+ private:
+     GtestMessageFrame* m_frame ;
+@@ -105,7 +105,7 @@ public:
+     ExpectMessage(Message::Type t,
+                    const char* filename="unknown", int lineno=0) ;
+ 
+-    virtual ~ExpectMessage() ;
++    ~ExpectMessage() ;
+ 
+ private:
+     GtestMessageFrame* m_frame ;
+@@ -121,7 +121,7 @@ class SOFA_HELPER_API IgnoreMessage
+ {
+ public:
+     IgnoreMessage(Message::Type t) ;
+-    virtual ~IgnoreMessage() ;
++    ~IgnoreMessage() ;
+ 
+ private:
+     GtestMessageFrame* m_frame ;
+diff --git a/SofaKernel/modules/SofaSimulationGraph/SimpleApi.h b/SofaKernel/modules/SofaSimulationGraph/SimpleApi.h
+index 701fc9f282..21fd55b53e 100644
+--- a/SofaKernel/modules/SofaSimulationGraph/SimpleApi.h
++++ b/SofaKernel/modules/SofaSimulationGraph/SimpleApi.h
+@@ -26,7 +26,7 @@
+ #ifndef SOFA_SIMPLEAPI_H
+ #define SOFA_SIMPLEAPI_H
+ 
+-#include <SceneCreator/config.h>
++#include <SofaSimulationGraph/graph.h>
+ #include <string>
+ #include <sstream>
+ #include <map>
+@@ -44,20 +44,20 @@ using sofa::core::objectmodel::BaseObject ;
+ using sofa::simulation::Simulation ;
+ using sofa::simulation::Node ;
+ 
+-void SOFA_SCENECREATOR_API importPlugin(const std::string& name) ;
++void SOFA_SIMULATION_GRAPH_API importPlugin(const std::string& name) ;
+ 
+-Simulation::SPtr SOFA_SCENECREATOR_API createSimulation(const std::string& type="DAG") ;
++Simulation::SPtr SOFA_SIMULATION_GRAPH_API createSimulation(const std::string& type="DAG") ;
+ 
+-Node::SPtr SOFA_SCENECREATOR_API createRootNode( Simulation::SPtr, const std::string& name,
++Node::SPtr SOFA_SIMULATION_GRAPH_API createRootNode( Simulation::SPtr, const std::string& name,
+     const std::map<std::string, std::string>& params = std::map<std::string, std::string>{} );
+ 
+-BaseObject::SPtr SOFA_SCENECREATOR_API createObject( Node::SPtr parent, const std::string& type,
++BaseObject::SPtr SOFA_SIMULATION_GRAPH_API createObject( Node::SPtr parent, const std::string& type,
+     const std::map<std::string, std::string>& params = std::map<std::string, std::string>{} );
+ 
+-Node::SPtr SOFA_SCENECREATOR_API createChild( Node::SPtr& node, const std::string& name,
++Node::SPtr SOFA_SIMULATION_GRAPH_API createChild( Node::SPtr& node, const std::string& name,
+     const std::map<std::string, std::string>& params = std::map<std::string, std::string>{} );
+ 
+-void SOFA_SCENECREATOR_API dumpScene(Node::SPtr root) ;
++void SOFA_SIMULATION_GRAPH_API dumpScene(Node::SPtr root) ;
+ 
+ template<class T>
+ std::string str(const T& t)
+diff --git a/modules/SofaMiscFem/TriangularFEMForceField.inl b/modules/SofaMiscFem/TriangularFEMForceField.inl
+index d690a7c6eb..584c27941c 100644
+--- a/modules/SofaMiscFem/TriangularFEMForceField.inl
++++ b/modules/SofaMiscFem/TriangularFEMForceField.inl
+@@ -30,7 +30,7 @@
+ #include "TriangularFEMForceField.h"
+ 
+ #include <sofa/core/visual/VisualParams.h>
+-#include <SofaOpenglVisual/OglColorMap.h>
++#include <sofa/helper/ColorMap.h>
+ #include <sofa/helper/gl/template.h>
+ #include <sofa/helper/system/gl.h>
+ 

@@ -1,0 +1,94 @@
+diff -uNr a/SofaKernel/modules/SofaEigen2Solver/CMakeLists.txt b/SofaKernel/modules/SofaEigen2Solver/CMakeLists.txt
+--- a/SofaKernel/modules/SofaEigen2Solver/CMakeLists.txt	2018-04-05 17:21:40.000000000 +0200
++++ b/SofaKernel/modules/SofaEigen2Solver/CMakeLists.txt	2018-06-05 11:03:48.095284822 +0200
+@@ -3,7 +3,7 @@
+ 
+ set(HEADER_FILES
+     EigenBaseSparseMatrix.h
+-    EigenBaseSparseMatrix_MT.h
++    # EigenBaseSparseMatrix_MT.h
+     EigenMatrixManipulator.h
+     EigenSparseMatrix.h
+     # EigenSparseSquareMatrix.h
+diff -uNr a/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h b/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h
+--- a/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h	2018-04-05 17:21:40.000000000 +0200
++++ b/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h	2018-06-05 11:08:37.619275436 +0200
+@@ -30,11 +30,6 @@
+ #include <map>
+ #include <Eigen/Sparse>
+ 
+-#ifdef _OPENMP
+-#include "EigenBaseSparseMatrix_MT.h"
+-#endif
+-
+-
+ 
+ 
+ namespace sofa
+diff -uNr a/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h b/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h
+--- a/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h	2018-06-05 11:10:10.051272000 +0200
++++ b/SofaKernel/modules/SofaEigen2Solver/EigenBaseSparseMatrix.h	2018-06-05 11:13:28.071266020 +0200
+@@ -306,11 +306,7 @@
+     void mult_MT( VectorEigen& result, const VectorEigen& data )
+     {
+         compress();
+-#ifdef _OPENMP
+-        result = linearsolver::mul_EigenSparseDenseMatrix_MT( compressedMatrix, data );
+-#else
+         result = compressedMatrix * data;
+-#endif
+     }
+ 
+     /// Matrix-Vector product (dense vector with contiguous memory layout)
+@@ -430,15 +426,7 @@
+     /// @warning res MUST NOT be the same variable as this or rhs
+     void mul_MT(EigenBaseSparseMatrix<Real>& res, const EigenBaseSparseMatrix<Real>& rhs) const
+     {
+-    #ifdef _OPENMP
+-        assert( &res != this );
+-        assert( &res != &rhs );
+-        ((EigenBaseSparseMatrix<Real>*)this)->compress();  /// \warning this violates the const-ness of the method
+-        ((EigenBaseSparseMatrix<Real>*)&rhs)->compress();  /// \warning this violates the const-ness of the parameter
+-        conservative_sparse_sparse_product_selector_MT<CompressedMatrix,CompressedMatrix,CompressedMatrix>::run(compressedMatrix, rhs.compressedMatrix, res.compressedMatrix);
+-    #else
+         mul( res, rhs );
+-    #endif
+     }
+ 
+     /// Sparse x Dense Matrix product
+@@ -451,11 +439,7 @@
+     void mul_MT( Eigen::Matrix<Real,Eigen::Dynamic,Eigen::Dynamic>& res, const Eigen::Matrix<Real,Eigen::Dynamic,Eigen::Dynamic>& rhs )
+     {
+         compress();
+-#ifdef _OPENMP
+-        res = linearsolver::mul_EigenSparseDenseMatrix_MT( compressedMatrix, rhs );
+-#else
+         res = compressedMatrix * rhs;
+-#endif
+     }
+ 
+ 
+diff -uNr a/SofaKernel/modules/SofaEigen2Solver/EigenSparseMatrix.h b/SofaKernel/modules/SofaEigen2Solver/EigenSparseMatrix.h
+--- a/SofaKernel/modules/SofaEigen2Solver/EigenSparseMatrix.h	2018-06-05 11:15:48.159261479 +0200
++++ b/SofaKernel/modules/SofaEigen2Solver/EigenSparseMatrix.h	2018-06-05 11:17:14.151258691 +0200
+@@ -322,7 +322,7 @@
+     }
+ 
+ #ifdef _OPENMP
+-#define EIGENSPARSEMATRIX_PARALLEL
++//#define EIGENSPARSEMATRIX_PARALLEL
+ #endif
+ 
+ protected:
+diff -uNr a/extlibs/CMakeLists.txt b/extlibs/CMakeLists.txt
+--- a/extlibs/CMakeLists.txt	2018-06-05 11:15:48.439261470 +0200
++++ b/extlibs/CMakeLists.txt	2018-06-05 11:27:08.727239417 +0200
+@@ -9,7 +9,7 @@
+ ## Necessary ones
+ add_subdirectory(SuiteSparse)
+ add_subdirectory(csparse)
+-add_subdirectory(${SOFA_KERNEL_SOURCE_DIR}/extlibs/eigen-3.2.7 eigen)
++#add_subdirectory(${SOFA_KERNEL_SOURCE_DIR}/extlibs/eigen-3.2.7 eigen)
+ add_subdirectory(${SOFA_KERNEL_SOURCE_DIR}/extlibs/newmat newmat)
+ add_subdirectory(${SOFA_KERNEL_SOURCE_DIR}/extlibs/tinyxml tinyxml)
+ add_subdirectory(${SOFA_KERNEL_SOURCE_DIR}/extlibs/json json)
