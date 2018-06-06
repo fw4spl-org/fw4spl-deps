@@ -102,8 +102,6 @@ else()
     endif()
 endif()
 
-set(ADDITIONAL_DEPS CACHE PATH "Paths to the additional deps")
-
 option(ENABLE_AR "Set to ON to build fw4spl-ar dependencies (OpenCV, PCL,...)" OFF)
 
 cmake_dependent_option(ENABLE_OGRE "Build Ogre3D (necessary for fw4spl-ogre)" OFF "ENABLE_AR" OFF)
@@ -299,11 +297,39 @@ endforeach()
 
 set(SUBDIRECTORIES "")
 
-if(ADDITIONAL_DEPS)
+# Automatic detection of additional repositories using .fw4spl files
+file(GLOB_RECURSE ADDITIONAL_REPOSITORIES_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../*/.fw4spl)
 
-    foreach(DEPS ${ADDITIONAL_DEPS})
-        get_filename_component(DEPS_NAME ${DEPS} NAME)
-        add_subdirectory(${DEPS} ${CMAKE_BINARY_DIR}/additional_deps/${DEPS_NAME})
+foreach(REPOSITORY ${ADDITIONAL_REPOSITORIES_FILES})
+    file(READ ${REPOSITORY} REPO_RAW_NAME)
+    string(STRIP ${REPO_RAW_NAME} REPO_RAW_NAME)
+    string(TOUPPER ${REPO_RAW_NAME} REPO_NAME)
+
+    if(NOT ${REPO_NAME} STREQUAL "FW4SPL-DEPS")
+
+        get_filename_component(REPO_DIR ${REPOSITORY} DIRECTORY)
+        get_filename_component(REPO_DIR ${REPO_DIR} ABSOLUTE)
+
+        option(BUILD_${REPO_NAME} "Enable ${REPO_NAME} repository" ON)
+        list(APPEND ADDITIONAL_REPOSITORIES_OPTION BUILD_${REPO_NAME})
+        list(APPEND ADDITIONAL_REPOSITORIES_NAME ${REPO_RAW_NAME})
+        list(APPEND ADDITIONAL_REPOSITORIES ${REPO_DIR})
+    endif()
+endforeach()
+
+# parse additional CMakeLists
+if(ADDITIONAL_REPOSITORIES)
+    list(LENGTH ADDITIONAL_REPOSITORIES ADDITIONAL_REPOSITORIES_LEN)
+
+    math(EXPR ADDITIONAL_REPOSITORIES_LEN ${ADDITIONAL_REPOSITORIES_LEN}-1)
+    foreach(REPO_INDEX RANGE ${ADDITIONAL_REPOSITORIES_LEN})
+        list(GET ADDITIONAL_REPOSITORIES ${REPO_INDEX} ADDITIONAL_REPO)
+        list(GET ADDITIONAL_REPOSITORIES_OPTION ${REPO_INDEX} ADDITIONAL_REPO_OPTION)
+
+        if(EXISTS ${ADDITIONAL_REPO}/CMakeLists.txt AND ${ADDITIONAL_REPO_OPTION})
+            get_filename_component(DIR_NAME ${ADDITIONAL_REPO} NAME)
+            add_subdirectory(${ADDITIONAL_REPO} ${CMAKE_BINARY_DIR}/additional_deps/${DIR_NAME})
+        endif()
     endforeach()
 
 endif()
