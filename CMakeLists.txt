@@ -205,11 +205,14 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES tetgen)
         list(APPEND SUBDIRECTORIES orbslam2)
         list(APPEND SUBDIRECTORIES vlc)
+
+        if(ENABLE_CUDA)
+            list(APPEND SUBDIRECTORIES libSGM)
+        else()
+            message(WARNING "CUDA support is disabled, libSGM will not be built.")
+        endif()
     endif()
 
-    if(ENABLE_CUDA)
-        list(APPEND SUBDIRECTORIES libSGM)
-    endif()
 
     if(ENABLE_SOFA)
         if (NOT APPLE)
