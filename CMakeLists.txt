@@ -104,21 +104,11 @@ endif()
 
 option(ENABLE_AR "Set to ON to build fw4spl-ar dependencies (OpenCV, PCL,...)" OFF)
 
-cmake_dependent_option(ENABLE_OGRE "Build Ogre3D (necessary for fw4spl-ogre)" OFF "ENABLE_AR" OFF)
-cmake_dependent_option(ENABLE_EXTRAS "Build dependencies that are not used currently in the open-source repositories (Odil, Bullet, realsense, libSGM,...)" OFF "ENABLE_AR;ENABLE_OGRE" OFF)
+option(ENABLE_OGRE "Build Ogre3D (necessary for fw4spl-ogre)" OFF)
+option(ENABLE_EXTRAS "Build dependencies that are not used currently in the open-source repositories (Odil, Bullet, realsense, libSGM,...)" OFF)
 cmake_dependent_option(ENABLE_CUDA "Set to ON to build packages with CUDA support (OpenCV, PCL, libSGM)" OFF "ENABLE_AR" OFF)
 
 option(ENABLE_SOFA "Set to ON to build sofa" OFF)
-
-
-if(ENABLE_OGRE)
-    set(ENABLE_AR FORCE CACHE BOOL ON)
-endif()
-
-if(ENABLE_EXTRAS)
-    set(ENABLE_AR FORCE CACHE BOOL ON)
-    set(ENABLE_OGRE FORCE CACHE BOOL ON)
-endif()
 
 ## CUDA stuff
 if(ENABLE_CUDA)
@@ -201,7 +191,6 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES odil)
 
         list(APPEND SUBDIRECTORIES tetgen)
-        list(APPEND SUBDIRECTORIES orbslam2)
         list(APPEND SUBDIRECTORIES vlc)
 
         if(ENABLE_CUDA)
@@ -209,8 +198,11 @@ if(NOT ANDROID)
         else()
             message(WARNING "CUDA support is disabled, libSGM will not be built.")
         endif()
-    endif()
 
+        if(ENABLE_AR)
+            list(APPEND SUBDIRECTORIES orbslam2)
+        endif()
+    endif()
 
     if(ENABLE_SOFA)
         if (NOT APPLE)
