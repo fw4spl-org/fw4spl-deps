@@ -297,8 +297,8 @@ endforeach()
 
 set(SUBDIRECTORIES "")
 
-# Automatic detection of additional repositories using .fw4spl files
-file(GLOB_RECURSE ADDITIONAL_REPOSITORIES_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../*/.fw4spl)
+# Automatic detection of additional repositories using .fw4spl-deps files
+file(GLOB ADDITIONAL_REPOSITORIES_FILES ${CMAKE_CURRENT_SOURCE_DIR}/../*/.fw4spl-deps)
 
 foreach(REPOSITORY ${ADDITIONAL_REPOSITORIES_FILES})
     file(READ ${REPOSITORY} REPO_RAW_NAME)
