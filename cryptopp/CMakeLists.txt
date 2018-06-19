@@ -4,7 +4,7 @@ project(cryptoppBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://www.cryptopp.com/cryptopp562.zip)
+set(CACHED_URL http://www.cryptopp.com/cryptopp700.zip)
 
 set(CRYPTOPP_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(CRYPTOPP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
@@ -16,7 +16,7 @@ set(CRYPTOPP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 ExternalProject_Add(
     cryptopp
     URL ${CACHED_URL}
-    URL_HASH SHA1=ddc18ae41c2c940317cd6efe81871686846fa293
+    URL_HASH SHA1=1288682ae2f3062ea3a82ca2e90bd06d147568a4
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${CRYPTOPP_PATCH_DIR}/" "<SOURCE_DIR>/"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
