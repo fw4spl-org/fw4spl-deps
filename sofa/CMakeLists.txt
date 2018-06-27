@@ -50,7 +50,8 @@ if(WIN32)
     endif()
 endif()
 
-if(${ENABLE_OPEN_MP})
+find_package(OpenMP)
+if(OPENMP_FOUND)
     list(APPEND SOFA_CMAKE_ARGS
                 -DSOFA_OPENMP:BOOL=ON
         )
