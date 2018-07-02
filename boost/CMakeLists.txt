@@ -4,8 +4,8 @@ project(boostBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz)
-set(BOOST_HASHSUM a13de2c8fbad635e6ba9c8f8714a0e6b4264b60a29b964b940a22554705b6b60)
+set(CACHED_URL https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2)
+set(BOOST_HASHSUM 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba)
 
 if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     set(BOOST_BUILD_TYPE debug)

@@ -32,9 +32,11 @@ if(WIN32)
                         -DCMAKE_CXX_FLAGS:STRING=${ODIL_CMAKE_CXX_FLAGS}
     )
     set(ODIL_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
-    # In Windows 10 Creators Update, ICU was integrated into Windows
-    # FindICU is patched to use our version of ICU first (temporarily, because everyone doesn't use Windows10 Creators Update)
-    set(ODIL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${ODIL_PATCH_DIR}/FindICU.cmake.patch -d <SOURCE_DIR>)
+    # - In Windows 10 Creators Update, ICU was integrated into Windows
+    #   FindICU is patched to use our version of ICU first (temporarily, because everyone doesn't use Windows10 Creators Update)
+    # - Boost >= 1.67 changes the default random provider on Windows to use BCrypt (required to use Boost::UUID)
+    set(ODIL_PATCH_CMD ${PATCH_EXECUTABLE} -p1 -i ${ODIL_PATCH_DIR}/FindICU.cmake.patch -d <SOURCE_DIR>
+               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${ODIL_PATCH_DIR}/CMakeLists.txt.patch -d <SOURCE_DIR>)
 else()
     set(ODIL_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                         -DBUILD_PYTHON_WRAPPERS=OFF
