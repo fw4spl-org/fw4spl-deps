@@ -4,7 +4,7 @@ project(ogre)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/fw4spl-org/ogre/archive/fix-cocoa-window-size-getter.zip)
+set(CACHED_URL https://github.com/fw4spl-org/ogre/archive/fix-cocoa-window-size-getter-1.11.zip)
 set(OGRE_HASH 34bcb237f5295f4f452db27051c3678516d4763f9f327e73e6523dce5b107e49)
 
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
