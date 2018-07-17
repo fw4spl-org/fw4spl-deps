@@ -4,8 +4,8 @@ project(ogre)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/fw4spl-org/ogre/archive/fix-cocoa-window-size-getter-1.11.zip)
-set(OGRE_HASH 34bcb237f5295f4f452db27051c3678516d4763f9f327e73e6523dce5b107e49)
+set(CACHED_URL https://github.com/fw4spl-org/ogre/archive/ogre-1.11+macos-cocoa-fix.zip)
+set(OGRE_HASH 50710705204ba88a97c05af2fa2b41a580023368dd4777b692a106dcb18d0bd5)
 
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
@@ -66,7 +66,7 @@ ExternalProject_Add(
     URL ${CACHED_URL}
     URL_HASH SHA256=${OGRE_HASH}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME ogre-1.11+fix-cocoa-window-size-getter+pass-colour-mask.zip
+    DOWNLOAD_NAME ogre-1.11+macos-cocoa-fix.zip
     DEPENDS ${OGRE_DEPENDS}
     PATCH_COMMAND ${OGRE_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
