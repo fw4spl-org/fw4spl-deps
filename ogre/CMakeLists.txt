@@ -48,7 +48,6 @@ set(OGRE_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 
 if(APPLE)
     list(APPEND OGRE_PATCH_CMD COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${OGRE_PATCH_DIR}/macos_paths.diff -d <SOURCE_DIR>)
-    list(APPEND OGRE_PATCH_CMD COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${OGRE_PATCH_DIR}/macos_libc++.diff -d <SOURCE_DIR>)
     list(APPEND OGRE_PATCH_CMD COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${OGRE_PATCH_DIR}/macos_ninja.diff -d <SOURCE_DIR>)
 endif()
 
