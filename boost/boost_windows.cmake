@@ -16,7 +16,7 @@ list(APPEND BOOST_ARGS
     --without-mpi
     --toolset=${TOOLSET}
     architecture=x86
-    -sZLIB_BINARY=${ZLIB_LIB_NAME}
+    -sZLIB_BINARY=zdll
 )
 
 set(BOOST_USER_CONFIG)

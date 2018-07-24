@@ -24,25 +24,24 @@ ExternalProject_Add(
 
 if(WIN32)
     if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        set(ZLIB_LIB_NAME "zlibd" PARENT_SCOPE)
+        set(ZLIB_LIB_NAME "zlibd")
     else()
-        set(ZLIB_LIB_NAME "zlib" PARENT_SCOPE)
+       set(ZLIB_LIB_NAME "zlib")
     endif()
 else()
-    set(ZLIB_LIB_NAME "z" PARENT_SCOPE)
+    set(ZLIB_LIB_NAME "z")
 endif()
+
+set(ZLIB_LIB_NAME ${ZLIB_LIB_NAME} PARENT_SCOPE)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fPIC")
 endif()
 
 if(WIN32)
-    if(${CMAKE_BUILD_TYPE} STREQUAL "Debug")
-        set(RENAME_ZLIB_CMD ${CMAKE_COMMAND} -E copy_if_different zlibd.lib zdll.lib
-                            COMMAND ${CMAKE_COMMAND} -E copy_if_different zlibd.lib zlib.lib)
-    else()
-        set(RENAME_ZLIB_CMD ${CMAKE_COMMAND} -E copy_if_different zlib.lib zdll.lib)
-    endif()
+    # HACK: rename zlib because Qt searches for zdll.lib on windows.
+    # This lib can be found through FindZlib so doing this shouldn't break other BinPkgs.
+    set(RENAME_ZLIB_CMD ${CMAKE_COMMAND} -E rename "${ZLIB_LIB_NAME}.lib" zdll.lib)
 
     ExternalProject_Add_Step(zlib RENAME_ZLIB
         COMMAND ${RENAME_ZLIB_CMD}

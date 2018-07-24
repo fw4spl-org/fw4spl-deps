@@ -57,7 +57,7 @@ endif()
 
 set(OGRE_DEPENDS zzip freeimage)
 if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
-    list(APPEND OGRE_DEPENDS freetype boost)
+    list(APPEND OGRE_DEPENDS freetype boost zlib)
 endif()
 
 ExternalProject_Add(
