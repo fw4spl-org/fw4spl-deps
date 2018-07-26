@@ -1,3 +1,28 @@
+# fw4spl-deps 17.1.0
+
+## Bug fixes:
+
+### ogre
+
+*Disable python component build.*
+
+## New features:
+
+### boost
+
+*Update boost to version 1.67.*
+
+Previous boost 1.65 with newer apple clang seems to be unstable with serialization.
+
+## Refactor:
+
+### CMakeLists.txt
+
+*Move RealSense and VLC to fw4spl-ar.*
+
+
+
+
 # fw4spl-deps 17.0.0
 
 ## Bug fixes:
