@@ -35,6 +35,7 @@ set(OGRE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DOGRE_BUILD_COMPONENT_RTSHADERSYSTEM:BOOL=OFF
                     -DOGRE_BUILD_COMPONENT_VOLUME:BOOL=OFF
                     -DOGRE_BUILD_COMPONENT_BITES:BOOL=OFF
+                    -DOGRE_BUILD_COMPONENT_PYTHON:BOOL=OFF
                     -DOGRE_USE_STD11:BOOL=ON
                     -DOGRE_CONFIG_THREAD_PROVIDER:STRING=std
                     -DOGRE_BUILD_LIBS_AS_FRAMEWORKS=OFF # No, we don't want framework, even on macOS

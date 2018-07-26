@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+﻿cmake_minimum_required(VERSION 3.0)
 
 project(BinPkgs)
 
@@ -172,6 +172,9 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES opencv)
 
         list(APPEND SUBDIRECTORIES pcl)
+
+        list(APPEND SUBDIRECTORIES realsense)
+        list(APPEND SUBDIRECTORIES vlc)
     endif()
 
     if(ENABLE_OGRE)
@@ -184,14 +187,12 @@ if(NOT ANDROID)
         list(APPEND SUBDIRECTORIES bullet)
         list(APPEND SUBDIRECTORIES cryptopp)
         list(APPEND SUBDIRECTORIES geodesic)
-        list(APPEND SUBDIRECTORIES realsense)
 
         list(APPEND SUBDIRECTORIES jsoncpp)
         list(APPEND SUBDIRECTORIES log4cpp)
         list(APPEND SUBDIRECTORIES odil)
 
         list(APPEND SUBDIRECTORIES tetgen)
-        list(APPEND SUBDIRECTORIES vlc)
 
         if(ENABLE_CUDA)
             list(APPEND SUBDIRECTORIES libSGM)
