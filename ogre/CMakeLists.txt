@@ -4,8 +4,8 @@ project(ogre)
 
 include(ExternalProject)
 
-set(CACHED_URL https://github.com/fw4spl-org/ogre/archive/v1.11.2-f4s.zip)
-set(OGRE_HASH fccaf4f50687d5cec5d78dfe7d206ee15f994feafc59db0113c619006a4f0cfd)
+set(CACHED_URL https://github.com/OGRECave/ogre/archive/v1.11.2.zip)
+set(OGRE_HASH 30486251081daa89770dc8d00dde7ca7ebe89cf65c3b87f1653991b110645574)
 
 include( ${CMAKE_SOURCE_DIR}/cmake/findBinpkgs/fw-boost.cmake )
 
@@ -65,7 +65,7 @@ ExternalProject_Add(
     URL ${CACHED_URL}
     URL_HASH SHA256=${OGRE_HASH}
     DOWNLOAD_DIR ${ARCHIVE_DIR}
-    DOWNLOAD_NAME ogre-1.11.2-f4s.zip
+    DOWNLOAD_NAME ogre-1.11.2.zip
     DEPENDS ${OGRE_DEPENDS}
     PATCH_COMMAND ${OGRE_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
