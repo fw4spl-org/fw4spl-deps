@@ -82,9 +82,7 @@ LIBS = $(LIBS) iconv.lib
 LIBS = $(LIBS) icu.lib
 !endif
 !if "$(WITH_ZLIB)" == "1"
-# could be named differently zdll or zlib
-# LIBS = $(LIBS) zdll.lib
-LIBS = $(LIBS) @ZLIB_LIB_NAME@.lib
+LIBS = $(LIBS) zdll.lib
 !endif
 !if "$(WITH_LZMA)" == "1"
 LIBS = $(LIBS) liblzma.lib
