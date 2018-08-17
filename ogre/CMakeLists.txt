@@ -24,7 +24,7 @@ set(OGRE_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DOGRE_INSTALL_DOCS:BOOL=OFF
                     -DOGRE_BUILD_PLUGIN_BSP:BOOL=OFF
                     -DOGRE_BUILD_PLUGIN_CG:BOOL=OFF
-                    -DOGRE_BUILD_PLUGIN_FREEIMAGE:BOOL=ON
+                    -DOGRE_BUILD_PLUGIN_FREEIMAGE:BOOL=OFF
                     -DOGRE_BUILD_PLUGIN_OCTREE:BOOL=OFF
                     -DOGRE_BUILD_PLUGIN_PCZ:BOOL=OFF
                     -DOGRE_BUILD_PLUGIN_PFX:BOOL=OFF
@@ -55,7 +55,7 @@ if(WIN32)
     set(OGRE_CMAKE_ARGS ${OGRE_CMAKE_ARGS} -DOGRE_INSTALL_PDB:BOOL=OFF)
 endif()
 
-set(OGRE_DEPENDS zzip freeimage)
+set(OGRE_DEPENDS zzip)
 if(NOT CMAKE_SYSTEM_NAME STREQUAL Linux)
     list(APPEND OGRE_DEPENDS freetype boost zlib)
 endif()
