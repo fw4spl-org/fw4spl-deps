@@ -23,7 +23,8 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
 )
 
 set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.7.tar.gz)
-set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/gdcmDefaultDicts.cxx.patch -d <SOURCE_DIR> )
+set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/fix_writer_leak.diff -d <SOURCE_DIR>
+           COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/gdcmDefaultDicts.cxx.patch -d <SOURCE_DIR> )
 
 ExternalProject_Add(
     gdcm
