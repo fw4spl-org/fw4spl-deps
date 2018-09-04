@@ -22,19 +22,17 @@ set(GDCM_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
                     -DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF
 )
 
-set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.6.tar.gz)
-set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/vtk_8_1.diff -d <SOURCE_DIR>
+set(CACHED_URL https://github.com/malaterre/GDCM/archive/v2.8.7.tar.gz)
+set(GDCM_PATCH_CMD "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/fix_writer_leak.diff -d <SOURCE_DIR>
            COMMAND "${PATCH_EXECUTABLE}" -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch/gdcmDefaultDicts.cxx.patch -d <SOURCE_DIR> )
 
 ExternalProject_Add(
     gdcm
     URL ${CACHED_URL}
-    URL_HASH SHA256=f4e611c74ea2b16c9aa28d7fdf3a8678ce926909606705b7cd08c9a5b05d34fc
+    URL_HASH SHA256=7a5c48153532a0e6c6f3d1b306beb27066de90b135dd3c7c3cb845447aeff5ec
     DOWNLOAD_DIR ${ARCHIVE_DIR}
     DEPENDS vtk
     PATCH_COMMAND ${GDCM_PATCH_CMD}
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${GDCM_CMAKE_ARGS}
 )
-
-
