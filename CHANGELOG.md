@@ -1,3 +1,40 @@
+# fw4spl-deps 17.2.0
+
+## Bug fixes:
+
+### gdcm
+
+*Update and fix GDCMwriter leak.*
+
+GDCM has been updated to v2.8.7 which allows removing some of our patches. A memory leak has been fixed in the GDCM `Writer` class, and [the patch was submitted upstream](https://github.com/malaterre/GDCM/pull/54).
+
+## Refactor:
+
+### FreeImage
+
+*Remove dependency.*
+
+## New features:
+
+### glm
+
+*Update to version 0.9.9.0.*
+
+Update glm version to 0.9.9.0 (fixes compilation with gcc 7 on Linux)
+
+### Ogre
+
+*Update Ogre to version 1.11.*
+
+Updates Ogre to version 1.11 with a new custom color mask feature ([accepted in the main repo](https://github.com/OGRECave/ogre/pull/811)).
+
+Cleans up the script by removing useless variables and disabling unused components.
+
+Fixes the zlib hack on windows so we don't end up with two zlibs which breaks `FindZLib.cmake`.
+
+
+
+
 # fw4spl-deps 17.1.0
 
 ## Bug fixes:
