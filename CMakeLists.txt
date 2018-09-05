@@ -179,7 +179,6 @@ if(NOT ANDROID)
 
     if(ENABLE_OGRE)
         list(APPEND SUBDIRECTORIES zzip)
-        list(APPEND SUBDIRECTORIES freeimage)
         list(APPEND SUBDIRECTORIES ogre)
     endif()
 

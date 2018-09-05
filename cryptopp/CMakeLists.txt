@@ -4,21 +4,22 @@ project(cryptoppBuilder)
 
 include(ExternalProject)
 
-set(CACHED_URL http://www.cryptopp.com/cryptopp562.zip)
+set(CRYPTOPP_TAG "CRYPTOPP_7_0_0")
 
-set(CRYPTOPP_PATCH_DIR ${CMAKE_CURRENT_SOURCE_DIR}/patch)
 set(CRYPTOPP_CMAKE_ARGS ${COMMON_CMAKE_ARGS}
-                        -DCRYPTOPP_BUILD_SHARED_LIBS=ON
-                        -DCRYPTOPP_BUILD_STATIC_LIBS=ON
-                        -DCRYPTOPP_BUILD_TESTS=OFF
+                        -DBUILD_SHARED=ON
+                        -DBUILD_STATIC=ON
+                        -DBUILD_TESTING=OFF
 )
 
 ExternalProject_Add(
     cryptopp
-    URL ${CACHED_URL}
-    URL_HASH SHA1=ddc18ae41c2c940317cd6efe81871686846fa293
-    DOWNLOAD_DIR ${ARCHIVE_DIR}
-    PATCH_COMMAND ${CMAKE_COMMAND} -E  copy_directory "${CRYPTOPP_PATCH_DIR}/" "<SOURCE_DIR>/"
+    GIT_REPOSITORY https://github.com/weidai11/cryptopp
+    GIT_TAG ${CRYPTOPP_TAG}
+    PATCH_COMMAND
+    COMMAND ${CMAKE_COMMAND} -E remove_directory "<SOURCE_DIR>/cmake/"
+    COMMAND git clone -b ${CRYPTOPP_TAG} https://github.com/noloader/cryptopp-cmake "<SOURCE_DIR>/cmake"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "<SOURCE_DIR>/cmake/" "<SOURCE_DIR>/"
     INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
     CMAKE_ARGS ${CRYPTOPP_CMAKE_ARGS}
 )

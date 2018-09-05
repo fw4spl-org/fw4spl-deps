@@ -81,6 +81,12 @@ if(ENABLE_CUDA)
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 6.0)
             message(WARNING "Your gcc version might not be supported by CUDA, please see http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html for compatibility.")
+
+            # Fixes a CUDA error: calling a constexpr __host__ function from a __device__ function for abs
+            # Appears with gcc 6.0
+            list(APPEND OPENCV_CMAKE_ARGS
+                -DCUDA_NVCC_FLAGS:STRING=--expt-relaxed-constexpr
+            )
         endif()
     endif()
 endif()
